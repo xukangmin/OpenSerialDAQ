@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QTimer>
+#include <QQueue>
 
 class SingleChannel : public QThread
 {
@@ -12,7 +13,7 @@ class SingleChannel : public QThread
 
 public:
     explicit SingleChannel(QObject *parent = nullptr);
-    ~SingleChannel();
+    ~SingleChannel() override;
 
     void startChannel();
 
@@ -20,8 +21,14 @@ public:
 
 private:
     void run() override;
-    QTimer m_timer;
+    QTimer* m_timer1;
+    QTimer* m_timer2;
     QMutex m_mutex;
+    QQueue<QString> m_dataQueue;
+
+private slots:
+    void trigger1();
+    void trigger2();
 };
 
 #endif // SINGLECHANNEL_H
