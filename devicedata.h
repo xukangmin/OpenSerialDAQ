@@ -8,9 +8,15 @@ class DeviceData
 public:
     DeviceData();
 
-    QVector<double> historyData;
-    double currentData;
+    QVector<QVector<double>> historyData;
 
+    QVector<QVector<unsigned long>> timeStamp;
+
+    QVector<double> currentData;
+
+    int dataTypeCount;
+
+    int totalDataCount;
 };
 
 #endif // DEVICEDATA_H

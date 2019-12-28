@@ -1,0 +1,9 @@
+{
+    "ProtocolName": "ALICAT",
+    "Version" : 0.1,
+    "DataQueryString": "[NODE_ID_STR]\r",
+    "DataResponseTimeout": 500,
+    "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
+    "DataResponseRegex": "[0-9./+-]+\g",
+    "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"]
+}

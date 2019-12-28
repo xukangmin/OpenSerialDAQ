@@ -6,6 +6,7 @@
 #include <QWaitCondition>
 #include <QTimer>
 #include <QQueue>
+#include <device.h>
 
 class SingleChannel : public QThread
 {
@@ -14,6 +15,8 @@ class SingleChannel : public QThread
 public:
     explicit SingleChannel(QObject *parent = nullptr);
     ~SingleChannel() override;
+
+    void addDevice(Device dev); // add device to current channel
 
     void startChannel();
 
@@ -25,6 +28,9 @@ private:
     QTimer* m_timer2;
     QMutex m_mutex;
     QQueue<QString> m_dataQueue;
+    void loadProtocol(QString protocolName);
+
+    QVector<Device> m_devicePool;
 
 private slots:
     void trigger1();

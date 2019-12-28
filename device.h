@@ -16,9 +16,6 @@ public:
     Device();
 
 
-
-private:
-
     QString serialNum;
 
     int node_int;
@@ -32,6 +29,8 @@ private:
     QSerialPort::DataBits m_databits;
 
     DeviceData m_data;
+
+    QString protocol;
 
 };
 
