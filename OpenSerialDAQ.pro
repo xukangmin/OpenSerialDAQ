@@ -20,12 +20,14 @@ SOURCES += \
     devicedata.cpp \
     main.cpp \
     mainwindow.cpp \
+    packet.cpp \
     singlechannel.cpp
 
 HEADERS += \
     device.h \
     devicedata.h \
     mainwindow.h \
+    packet.h \
     singlechannel.h
 
 FORMS += \
