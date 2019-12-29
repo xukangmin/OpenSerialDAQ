@@ -30,6 +30,7 @@ private:
     QQueue<QString> m_dataQueue;
     void loadProtocol(QString protocolName);
 
+    QVector<QTimer*> m_timerPool;
     QVector<Device> m_devicePool;
 
 private slots:

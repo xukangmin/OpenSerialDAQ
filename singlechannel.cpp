@@ -8,10 +8,13 @@
 SingleChannel::SingleChannel(QObject *parent) :
     QThread(parent)
 {
-    Device alicat;
+    Device alicat, alicat1;
+
+    alicat.node_str = "A";
+    alicat1.node_str = "B";
 
     addDevice(alicat);
-
+    addDevice(alicat1);
 //    loadProtocol("ASCII_ALICAT");
 //    m_timer1 = new QTimer(this);
 //    m_timer2 = new QTimer(this);
@@ -38,9 +41,10 @@ void SingleChannel::addDevice(Device dev) {
     QTimer *m_timer = new QTimer(this);
     m_timer->setInterval(2000);
     connect(m_timer, &QTimer::timeout, this, [=]() {
-        m_dataQueue.enqueue("tr2_" + QString::number(rand()));
+        m_dataQueue.enqueue(dev.node_str);
     });
     m_timer->start();
+    m_timerPool.append(m_timer);
 }
 
 void SingleChannel::loadProtocol(QString protocolName){
