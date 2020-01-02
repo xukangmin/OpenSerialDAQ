@@ -113,7 +113,7 @@ void SingleChannel::run()
 {
     QSerialPort serial;
 
-    serial.setPortName("COM97");
+    serial.setPortName("/dev/ttyUSB0");
     serial.setBaudRate(QSerialPort::Baud9600);
 
     if (!serial.open(QIODevice::ReadWrite)) {
