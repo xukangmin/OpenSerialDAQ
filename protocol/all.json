@@ -1,9 +1,48 @@
 {
-    "ProtocolName": "ALICAT",
-    "Version" : 0.1,
-    "DataQueryString": "[NODE_ID_STR]\r",
-    "DataResponseTimeout": 500,
-    "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
-    "DataResponseRegex": "[0-9./+-]+\g",
-    "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"]
+    "Protocols":
+    [
+        {
+            "ProtocolName": "ALICAT",
+            "Version" : 0.1,
+            "Type": "ASCII",
+            "DataQueryString": "[NODE_ID_STR]\r",
+            "DataResponseTimeout": 500,
+            "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
+            "DataResponseRegex": "[0-9./+-]+\g",
+            "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"],
+            "ConfigQueryString": "[NODE_ID_STR] R [CONFIG_NUM]\r",
+            "ConfigSetString": "[NODE_ID_STR W [CONFIG_NUM] = [SET_NUM]\r",
+            "Configurations": [
+                {
+                    "Name": "Span",
+                    "Num": 47
+                },
+                {
+                    "Name": "Offset",
+                    "Num": 44
+                }
+            ]
+
+        },
+        {
+            "ProtocolName": "RED_BOARD_TRAFAG",
+            "Version" : 0.1,
+            "Type": "BINARY",
+            "Header": "0x83",
+            "HeaderSize": 1,
+            "LengthSize": 2,
+            "LengthRules" : "[Api],[Node],[Cmd],[CheckSum]",
+            "ApiSize": 1,
+            "NodeSize": 1,
+            "CheckSumSize": 1,
+            "CheckSumRules": "",
+            "DataQueryDefinition": "[Header],[Length],[Api],[Node],[Cmd],[CheckSum]",
+            "QueryCommandSize": 1,
+            "DataQueryString": "[NODE_ID_STR]\r",
+            "DataResponseTimeout": 500,
+            "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
+            "DataResponseRegex": "[0-9./+-]+\g",
+            "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"]
+        }
+    ]
 }
