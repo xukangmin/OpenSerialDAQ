@@ -25,24 +25,142 @@
 
         },
         {
-            "ProtocolName": "RED_BOARD_TRAFAG",
+            "ProtocolName": "LFE",
             "Version" : 0.1,
             "Type": "BINARY",
-            "Header": "0x83",
+            "Header": "0x8E",
             "HeaderSize": 1,
-            "LengthSize": 2,
-            "LengthRules" : "[Api],[Node],[Cmd],[CheckSum]",
+            "LengthSize": 1,
+            "CmdSize": 1,
+            "LengthRules" : "[Api][Node][Cmd][Data][CheckSum]",
             "ApiSize": 1,
             "NodeSize": 1,
             "CheckSumSize": 1,
-            "CheckSumRules": "",
-            "DataQueryDefinition": "[Header],[Length],[Api],[Node],[Cmd],[CheckSum]",
-            "QueryCommandSize": 1,
-            "DataQueryString": "[NODE_ID_STR]\r",
+            "CheckSumRules": "[Api][Node][Cmd][Data]",
+            "DataQueryFormat": "[Header][Length][Api][Node][Cmd][Data][CheckSum]",
             "DataResponseTimeout": 500,
-            "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
-            "DataResponseRegex": "[0-9./+-]+\g",
-            "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"]
+            "DataResponseFormat": "[Header][Length][Api][Node][Cmd][Data][CheckSum]",
+            "CheckSumCalculation": "0xFF - ([Api]+[Node]+[Cmd]+[Data]+[CheckSum]) & 0xFF",
+            "DeviceSpecific": [
+                {
+                    "Name": "Alicat",
+                    "Header": "0x8E",
+                    "CmdList": [
+                        {
+                            "Name": "READDATA",
+                            "DAQ": 1,
+                            "Cmd": "0x01",
+                            "Description": "Read Data",
+                            "ResponseDataSize": 4,
+                            "ResponseDataType": ["float","float","float","float"],
+                            "ResponseDataPhysics": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"],
+                            "ResponseDataUnits": ["psia","C","sccm","sccm"]
+                        },
+                        {
+                            "Name": "ZERO",
+                            "DAQ": 0,
+                            "Cmd" : "0x03",
+                            "Description": "Read Parameter",
+                            "ResponseDataType": ["float","float","float","float"],
+                            "ResponseDataPhysics": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"],
+                            "ResponseDataUnits": ["psia","C","sccm","sccm"]
+                        },
+                        {
+                            "Name": "READPARA",
+                            "DAQ": 0,
+                            "Cmd" : "0x05",
+                            "ReadDataSize": 1,
+                            "ReadDataFormat": "[Parameter]",
+                            "Description": "Read Parameter",
+
+                        },
+                        {
+                            "Name": "WRITEPARA",
+                            "Cmd" : "0x07",
+                            "ReadDataSize": 1,
+                            "ReadDataFormat": "[Parameter]",
+                            "Description": "Read Parameter"
+                        }
+                    ],
+                    "ParameterList": [
+                        {
+                            "Name": "Span25",
+                            "Parameter": "0x1A",
+                            "Description": "Flow Span 25%",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "Span100",
+                            "Parameter": "0x2B",
+                            "Description": "Flow Span 100%",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "AbsolutePressureHealth",
+                            "Parameter": "0x08",
+                            "Description": "Absolute Pressure Health",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "Differential_Pressure_Health",
+                            "Parameter": "0x0A",
+                            "Description": "Differential Pressure Health",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "TareIndicator",
+                            "Parameter": "0x1F",
+                            "Description": "Tare Indicator",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "SerialNumber",
+                            "Parameter": "0x4C",
+                            "Description": "Flow Span 25%",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "TemperatureOffset",
+                            "Parameter": "0x29",
+                            "Description": "Temperature Offset",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "AbsolutePressureOffset",
+                            "Parameter": "0x21",
+                            "Description": "Absolute Pressure Offset",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        },
+                        {
+                            "Name": "AbsolutePressureSpan",
+                            "Parameter": "0x22",
+                            "Description": "Absolute Pressure Span",
+                            "DataType": "unsigned long",
+                            "DataSize": 1
+                        }
+                    ]
+                },
+                {
+                    "Name": "DP",
+                    "Header": "0x8F",
+                    "CmdList": [
+                        {
+
+                        },
+                        {
+
+                        }
+                    ]
+                 },
+            ]
         }
     ]
 }

@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    m_singleChannel.stopChannel();
     delete ui;
 }
 

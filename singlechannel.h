@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QQueue>
 #include <device.h>
+#include <packet.h>
 
 class SingleChannel : public QThread
 {
@@ -22,16 +23,19 @@ public:
 
     void stopChannel();
 
+
 private:
     void run() override;
     QTimer* m_timer1;
     QTimer* m_timer2;
     QMutex m_mutex;
+    QQueue<Packet*> m_packet_queue;
     QQueue<QString> m_dataQueue;
     void loadProtocol(QString protocolName);
 
     QVector<QTimer*> m_timerPool;
     QVector<Device> m_devicePool;
+
 
 private slots:
     void trigger1();

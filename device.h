@@ -10,27 +10,37 @@ enum protocol {
   MODBUS
 };
 
+struct Parameter {
+    QString name;
+    int query_value;
+    int value_int;
+    QString value_string;
+    QString description;
+
+};
+
 class Device
 {
 public:
     Device();
 
-
-    QString serialNum;
+    QString serial_number;
 
     int node_int;
 
     QString node_str;
 
-    QSerialPort::BaudRate m_baud_rate;
+    DeviceData m_daq_data;
 
-    QSerialPort::Parity m_parity;
+    QByteArray m_daq_cmd;
 
-    QSerialPort::DataBits m_databits;
+    QByteArray m_zero_cmd;
 
-    DeviceData m_data;
+    QVector<QByteArray> m_parameter_cmd;
 
-    QString protocol;
+    QVector<Parameter> m_parameters;
+
+    void loadFromConfig(QString protocol_name, QString device_name, int node_id);
 
 };
 
