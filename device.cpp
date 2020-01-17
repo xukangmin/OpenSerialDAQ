@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 Device::Device()
 {
@@ -27,8 +28,19 @@ void Device::loadFromConfig(QString protocol_name, QString device_name, int node
 
     QString proName, queryStr, regexStr;
 
-    if (json.contains("ProtocolName") && json["ProtocolName"].isString()) {
-        proName = json["ProtocolName"].toString();
+    if (json.contains("Protocols")) {
+        QJsonObject protocols = json["Protocols"].toObject();
+        QJsonArray pArr = json["Protocols"].toArray();
+        QJsonObject jb;
+        for(int i = 0; i < pArr.size(); i++){
+           jb = pArr[i].toObject();
+
+           if (jb.contains("ProtocolName")) {
+               if (jb["ProtocolName"].toString() == "LFE") {
+                    qDebug() << "test";
+               }
+           }
+        }
     }
 
     if (json.contains("DataQueryString") && json["DataQueryString"].isString()) {

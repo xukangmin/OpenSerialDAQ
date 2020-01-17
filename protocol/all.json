@@ -8,7 +8,7 @@
             "DataQueryString": "[NODE_ID_STR]\r",
             "DataResponseTimeout": 500,
             "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
-            "DataResponseRegex": "[0-9./+-]+\g",
+            "DataResponseRegex": "[0-9./+-]+",
             "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"],
             "ConfigQueryString": "[NODE_ID_STR] R [CONFIG_NUM]\r",
             "ConfigSetString": "[NODE_ID_STR W [CONFIG_NUM] = [SET_NUM]\r",
@@ -71,8 +71,7 @@
                             "Cmd" : "0x05",
                             "ReadDataSize": 1,
                             "ReadDataFormat": "[Parameter]",
-                            "Description": "Read Parameter",
-
+                            "Description": "Read Parameter"
                         },
                         {
                             "Name": "WRITEPARA",
@@ -159,7 +158,7 @@
 
                         }
                     ]
-                 },
+                 }
             ]
         }
     ]

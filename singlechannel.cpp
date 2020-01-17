@@ -10,14 +10,18 @@ SingleChannel::SingleChannel(QObject *parent) :
 {
     Device alicat, alicat1;
 
-    alicat.m_daq_cmd.clear();
+    alicat.loadFromConfig("LFE","ALICAT",0);
 
-    alicat.m_daq_cmd.append(0x8E);
-    alicat.m_daq_cmd.append(0x04);
-    alicat.m_daq_cmd.append((uint8_t)0x00);
-    alicat.m_daq_cmd.append((uint8_t)0x00);
-    alicat.m_daq_cmd.append(0x01);
-    alicat.m_daq_cmd.append(0xFE);
+    qDebug() << alicat.m_daq_cmd;
+
+//    alicat.m_daq_cmd.clear();
+
+//    alicat.m_daq_cmd.append(0x8E);
+//    alicat.m_daq_cmd.append(0x04);
+//    alicat.m_daq_cmd.append((uint8_t)0x00);
+//    alicat.m_daq_cmd.append((uint8_t)0x00);
+//    alicat.m_daq_cmd.append(0x01);
+//    alicat.m_daq_cmd.append(0xFE);
 
     alicat1.node_str = "B";
 
