@@ -18,6 +18,7 @@ public:
     QString device_id;
     QString m_parse_regex;
     QVector<double> result;
+    int m_cmd_id;
 
 };
 

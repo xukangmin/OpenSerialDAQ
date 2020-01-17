@@ -4,25 +4,338 @@
         {
             "ProtocolName": "ALICAT",
             "Version" : 0.1,
-            "Type": "ASCII",
-            "DataQueryString": "[NODE_ID_STR]\r",
-            "DataResponseTimeout": 500,
-            "DataResponseFormat": "[STRING] [NUMBER] [NUMBER] [NUMBER] [NUMBER]\r",
-            "DataResponseRegex": "[0-9./+-]+",
-            "DataResponseDataType": ["Pressure","Temperature","VolumetricFlowrate","MassFlowrate"],
-            "ConfigQueryString": "[NODE_ID_STR] R [CONFIG_NUM]\r",
-            "ConfigSetString": "[NODE_ID_STR W [CONFIG_NUM] = [SET_NUM]\r",
-            "Configurations": [
+            "CmdLists": [
                 {
-                    "Name": "Span",
-                    "Num": 47
+                    "Name": "ReadData",
+                    "Description": "Read data",
+                    "DAQ": 1,
+                    "QueryCmdList": ["[Node]","\r"],
+                    "ParseMethod": "Delimited",
+                    "Delimiter": " ",
+                    "DataFormat": [
+                        {
+                            "Type": "string",
+                            "Name": "Node",
+                            "Unit": "N/A"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "Pressure",
+                            "Unit": "psia"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "Temperature",
+                            "Unit": "F"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "VolumetricFlowrate",
+                            "Unit": "sccm"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "MassFlowrate",
+                            "Unit": "sccm"
+                        }
+                    ]
                 },
                 {
-                    "Name": "Offset",
-                    "Num": 44
+                    "Name": "Zero",
+                    "Description": "Zero data",
+                    "DAQ": 0,
+                    "QueryCmd": "[Node]$$V\r",
+                    "ParseMethod": "Delimited",
+                    "Delimiter": " ",
+                    "DataFormat": [
+                        {
+                            "Type": "string",
+                            "Name": "Node",
+                            "Unit": "N/A"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "Pressure",
+                            "Unit": "psia"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "Temperature",
+                            "Unit": "F"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "VolumetricFlowrate",
+                            "Unit": "sccm"
+                        },
+                        {
+                            "Type": "float",
+                            "Name": "MassFlowrate",
+                            "Unit": "sccm"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Read Parameter 1",
+                    "Description": "Read Parameter data",
+                    "DAQ": 0,
+                    "ParameterIndex": 21,
+                    "QueryCmd": "[Node]$$R[ParameterIndex]\r",
+                    "ParseMethod": "Delimited",
+                    "Delimiter": " ",
+                    "DataFormat": [
+                        {
+                            "Type": "string",
+                            "Name": "Node",
+                            "Unit": "N/A"
+                        },
+                        {
+                            "Type": "int",
+                            "Name": "ParameterIndex",
+                            "Unit": "psia"
+                        },
+                        {
+                            "Type": "unsigned long",
+                            "Name": "ParameterValue",
+                            "Unit": "F"
+                        }
+                    ]
                 }
             ]
+        },
+        {
+            "ProtocolName": "LFE-ALICAT",
+            "Version" : 0.1,
+            "CmdLists": [
+                    {
+                        "Name": "ReadData",
+                        "Description": "Read data",
+                        "Type": "Data",
+                        "DAQ": 1,
+                        "Header": "0x8F",
+                        "Length": "0x04",
+                        "Cmd": "0x01",
+                        "CheckSumRule": "Simple",
+                        "QueryCmdList": [
+                            "[Header]","0x04","[Api]","[Node]","[Cmd]","[CheckSum]"
+                        ],
+                        "ParseMethod": "Exact",
+                        "DataFormat": [
+                            {
+                                "Type": "byte",
+                                "Name": "Header",
+                                "Usage": "Validation",
+                                "Location": 0
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Length",
+                                "Usage": "Validation",
+                                "Location": 1
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Api",
+                                "Usage": "Validation",
+                                "Location": 2
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Node",
+                                "Usage": "Validation",
+                                "Location": 3
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Cmd",
+                                "Usage": "Validation",
+                                "Location": 4
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "Pressure",
+                                "Unit": "psia",
+                                "Usage": "Data",
+                                "Location": 5
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "Temperature",
+                                "Unit": "F",
+                                "Usage": "Data",
+                                "Location": 9
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "VolumetricFlowrate",
+                                "Unit": "sccm",
+                                "Usage": "Data",
+                                "Location": 13
 
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "MassFlowrate",
+                                "Unit": "sccm",
+                                "Usage": "Data",
+                                "Location": 17
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "CheckSum",
+                                "Unit": "N/A",
+                                "Usage": "Validation",
+                                "Location": 21
+                            }
+                        ]
+                    },
+                    {
+                        "Name": "Zero",
+                        "Description": "Zero Meter",
+                        "Type": "Control",
+                        "DAQ": 1,
+                        "Header": "0x8E",
+                        "Cmd": "0x03",
+                        "QueryCmdList": [
+                            "0x8E","0x04","[Api]","[Node]","[Cmd]","[CheckSum]"
+                        ],
+                        "ParseMethod": "Exact",
+                        "DataFormat": [
+                            {
+                                "Type": "byte",
+                                "Name": "header",
+                                "Usage": "Validation",
+                                "Location": 0
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "length",
+                                "Usage": "Validation",
+                                "Location": 1
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Api",
+                                "Usage": "Validation",
+                                "Location": 2
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Node",
+                                "Usage": "Validation",
+                                "Location": 3
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Cmd",
+                                "Usage": "Validation",
+                                "Location": 4
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "Pressure",
+                                "Unit": "psia",
+                                "Usage": "Data",
+                                "Location": 5
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "Temperature",
+                                "Unit": "F",
+                                "Usage": "Data",
+                                "Location": 9
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "VolumetricFlowrate",
+                                "Unit": "sccm",
+                                "Usage": "Data",
+                                "Location": 13
+
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "MassFlowrate",
+                                "Unit": "sccm",
+                                "Usage": "Data",
+                                "Location": 17
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "CheckSum",
+                                "Unit": "N/A",
+                                "Usage": "Validation",
+                                "Location": 21
+                            }
+                        ]
+                    },
+                    {
+                        "Name": "ReadParameter26",
+                        "Description": "Read Parameter 26",
+                        "Type": "Data",
+                        "DAQ": 1,
+                        "Header": "0x8E",
+                        "Cmd": "0x05",
+                        "ParameterIndex": 26,
+                        "QueryCmdList": [
+                            "0x8E","0x04","[Api]","[Node]","[Cmd]","[ParameterIndex]","[CheckSum]"
+                        ],
+                        "ParseMethod": "Exact",
+                        "DataFormat": [
+                            {
+                                "Type": "byte",
+                                "Name": "header",
+                                "Usage": "Validation",
+                                "Location": 0
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "length",
+                                "Usage": "Validation",
+                                "Location": 1
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Api",
+                                "Usage": "Validation",
+                                "Location": 2
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Node",
+                                "Usage": "Validation",
+                                "Location": 3
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Cmd",
+                                "Usage": "Validation",
+                                "Location": 4
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "ParameterIndex",
+                                "Usage": "Validation",
+                                "Location": 5
+                            },
+                            {
+                                "Type": "unsigned long",
+                                "Name": "ParameterValue",
+                                "Unit": "N/A",
+                                "Usage": "Data",
+                                "Location": 6
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "CheckSum",
+                                "Unit": "N/A",
+                                "Usage": "Validation",
+                                "Location": 21
+                            }
+                        ]
+                    }
+
+            ]
         },
         {
             "ProtocolName": "LFE",

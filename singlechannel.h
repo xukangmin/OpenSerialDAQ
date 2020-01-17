@@ -17,7 +17,7 @@ public:
     explicit SingleChannel(QObject *parent = nullptr);
     ~SingleChannel() override;
 
-    void addDevice(Device dev); // add device to current channel
+    void addDevice(Device* dev); // add device to current channel
 
     void startChannel();
 
@@ -33,13 +33,10 @@ private:
     QQueue<QString> m_dataQueue;
     void loadProtocol(QString protocolName);
 
-    QVector<QTimer*> m_timerPool;
-    QVector<Device> m_devicePool;
+    QVector<QTimer*> m_timer_pool;
+    QVector<Device*> m_device_pool;
 
 
-private slots:
-    void trigger1();
-    void trigger2();
 };
 
 #endif // SINGLECHANNEL_H
