@@ -8,6 +8,7 @@
 #include <QQueue>
 #include <device.h>
 #include <packet.h>
+#include <dataprocessor.h>
 
 class SingleChannel : public QThread
 {
@@ -37,6 +38,7 @@ private:
     QVector<Device*> m_device_pool;
 
 
+    DataProcessor dataWorker;
 };
 
 #endif // SINGLECHANNEL_H

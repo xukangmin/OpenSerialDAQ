@@ -52,7 +52,7 @@ void SingleChannel::run()
 {
     QSerialPort serial;
 
-    serial.setPortName("COM49");
+    serial.setPortName("COM97");
     serial.setBaudRate(QSerialPort::Baud115200);
 
     if (!serial.open(QIODevice::ReadWrite)) {
@@ -81,8 +81,9 @@ void SingleChannel::run()
 
                 pac->m_response_bytes = requestData;
 
-                m_device_pool[0]->parseRxData(pac->m_response_bytes, 0);
+                //m_device_pool[0]->parseRxData(pac->m_response_bytes, 0);
 
+                dataWorker.processData(pac->m_response_bytes, m_device_pool[0]);
                 // use queue to process data find related device, parse data and save data to db
 
                 delete pac;
