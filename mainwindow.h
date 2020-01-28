@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 #include "singlechannel.h"
+#include "databasemanager.h"
+#include "device.h"
+#include "devicedata.h"
+#include "dataprocessor.h"
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,12 +19,16 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void updateData();
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    SingleChannel m_singleChannel;
+    SingleChannel* m_singleChannel;
+    DatabaseManager m_db;
+    QVector<Device*> m_dev_list;
 
-
+public slots:
+    void getData(currentData data, int ch_id);
 };
 #endif // MAINWINDOW_H

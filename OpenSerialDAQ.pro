@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui serialport sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    databasemanager.cpp \
     dataprocessor.cpp \
     device.cpp \
     devicedata.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
     singlechannel.cpp
 
 HEADERS += \
+    databasemanager.h \
     dataprocessor.h \
     device.h \
     devicedata.h \

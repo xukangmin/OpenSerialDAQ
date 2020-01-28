@@ -9,6 +9,7 @@
                     "Name": "ReadData",
                     "Description": "Read data",
                     "DAQ": 1,
+                    "Interval": 500,
                     "QueryCmdList": ["[Node]","\r"],
                     "ParseMethod": "Delimited",
                     "Delimiter": " ",
@@ -112,6 +113,7 @@
                         "Description": "Read data",
                         "Type": "Data",
                         "DAQ": 1,
+                        "Interval": 500,
                         "Header": "0x8F",
                         "Length": "0x04",
                         "Cmd": "0x01",
@@ -193,8 +195,8 @@
                         "Name": "Zero",
                         "Description": "Zero Meter",
                         "Type": "Control",
-                        "DAQ": 1,
-                        "Header": "0x8E",
+                        "DAQ": 0,
+                        "Header": "0x8F",
                         "Cmd": "0x03",
                         "QueryCmdList": [
                             "0x8E","0x04","[Api]","[Node]","[Cmd]","[CheckSum]"
@@ -273,8 +275,8 @@
                         "Name": "ReadParameter26",
                         "Description": "Read Parameter 26",
                         "Type": "Data",
-                        "DAQ": 1,
-                        "Header": "0x8E",
+                        "DAQ": 0,
+                        "Header": "0x8F",
                         "Cmd": "0x05",
                         "ParameterIndex": 26,
                         "QueryCmdList": [

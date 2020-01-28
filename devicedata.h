@@ -1,7 +1,18 @@
 #ifndef DEVICEDATA_H
 #define DEVICEDATA_H
 
+#include <QDateTime>
 #include <QVector>
+#include <QMetaType>
+
+struct currentData{
+    QVector<double> values;
+    QDateTime timestamp;
+    QVector<QString> name;
+    QVector<QString> unit;
+};
+
+Q_DECLARE_METATYPE(currentData)
 
 class DeviceData
 {
@@ -10,11 +21,15 @@ public:
 
     QVector<QVector<double>> historyData;
 
-    QVector<QVector<unsigned long>> timeStamp;
+    QVector<QDateTime> timeStamp;
 
     QVector<double> currentData;
 
-    int dataTypeCount;
+    QDateTime currentTimeStamp;
+
+    QVector<QString> dataName;
+
+    QVector<QString> dataUnit;
 
     int totalDataCount;
 };

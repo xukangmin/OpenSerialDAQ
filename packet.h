@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QVector>
+#include "device.h"
 
 class Packet
 {
@@ -19,7 +20,7 @@ public:
     QString m_parse_regex;
     QVector<double> result;
     int m_cmd_id;
-
+    Device *dev;
 };
 
 #endif // PACKET_H

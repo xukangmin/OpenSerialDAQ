@@ -24,8 +24,12 @@ public:
 
     void stopChannel();
 
+    void startDAQ();
+    void stopDAQ();
 
 private:
+    QObject* par;
+    bool m_stop;
     void run() override;
     QTimer* m_timer1;
     QTimer* m_timer2;
@@ -37,8 +41,15 @@ private:
     QVector<QTimer*> m_timer_pool;
     QVector<Device*> m_device_pool;
 
+    DataProcessor* dataWorker;
 
-    DataProcessor dataWorker;
+    int m_ch_id;
+
+signals:
+    void sendData(currentData data, int ch_id);
+
+private slots:
+    void getData(currentData data);
 };
 
 #endif // SINGLECHANNEL_H

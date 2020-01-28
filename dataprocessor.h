@@ -2,27 +2,29 @@
 #define DATAPROCESSOR_H
 
 
-#include <QMutex>
-#include <QThread>
-#include <QWaitCondition>
+#include <QRunnable>
 #include <device.h>
+#include <packet.h>
+#include "devicedata.h"
 
-class DataProcessor : public QThread
+class DataProcessor : public QObject, public QRunnable
 {
 
 Q_OBJECT
 
 public:
-    explicit DataProcessor(QObject *parent = nullptr);
-    ~DataProcessor() override;
+    DataProcessor(Packet* pac);
+    ~DataProcessor();
 
     void run() override;
 
-    void processData(QByteArray data, Device *dev);
+signals:
+    void sendData(currentData data);
 
 private:
     Device* m_dev;
     QByteArray m_rx_data;
+    int m_cmd_id;
 };
 
 #endif // DATAPROCESSOR_H

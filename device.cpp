@@ -8,7 +8,7 @@
 
 Device::Device(int node_id):
         m_node_id(node_id)
-{
+{   
     m_device_id = 1;
 }
 
@@ -19,17 +19,19 @@ Device::Device(int node_id, QString protocol_name):
 }
 
 
-QByteArray Device::buildQueryCmd(QString cmdName) {
-    bool parse_ok;
-    int index = 0;
-    for(int i = 0; i < m_commands.size(); i++) {
-        if (cmdName == m_commands[i].name) {
-            index = i;
-            break;
-        }
-    }
+Device::Device(int id, int node_id, QString protocol_name):
+        m_node_id(node_id), m_device_id(id)
+{
+    loadFromConfig(protocol_name);
+}
 
-    Command &cmd = m_commands[index];
+void Device::setID(int id) {
+    m_device_id = id;
+}
+
+QByteArray Device::buildQueryCmd(Command cmd) {
+
+    bool parse_ok;
 
     cmd.query_cmd.clear();
 
@@ -79,7 +81,20 @@ QByteArray Device::buildQueryCmd(QString cmdName) {
         }
     }
 
-    return m_commands[index].query_cmd;
+    return cmd.query_cmd;
+}
+
+
+QByteArray Device::buildQueryCmd(QString cmdName) {
+    int index = 0;
+    for(int i = 0; i < m_commands.size(); i++) {
+        if (cmdName == m_commands[i].name) {
+            index = i;
+            break;
+        }
+    }
+
+    return buildQueryCmd(m_commands[index]);
 }
 
 
@@ -121,7 +136,7 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
 
             }
-            else if (fm.usage == "Data") {
+            else if (fm.usage == "Data" && isValidated) {
                 // save data to memory & db
                 if (fm.type == "float") {
                     float data = 0;
@@ -134,9 +149,18 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
                     memcpy(&data, tmp_float, sizeof(float));
                     qDebug() << data << " " << fm.name;
+
+                    m_deviceData.dataName.append(fm.name);
+                    m_deviceData.currentData.append(data);
                 }
             }
         }
+
+        QDateTime now = QDateTime::currentDateTime();
+        m_deviceData.historyData.append(m_deviceData.currentData);
+        m_deviceData.currentTimeStamp = now;
+        m_deviceData.timeStamp.append(now);
+
     }
 }
 
@@ -174,6 +198,7 @@ void Device::loadFromConfig(QString protocol_name) {
                     for(int j = 0; j < cmdArr.size(); j++) {
                         Command cmd;
                         bool parse_ok;
+                        cmd.cmd_id = j;
                         QJsonObject singleCmd = cmdArr[j].toObject();
                         if (singleCmd.contains("Name") && singleCmd["Name"].isString()) {
                             cmd.name = singleCmd["Name"].toString();
@@ -199,9 +224,15 @@ void Device::loadFromConfig(QString protocol_name) {
                             cmd.parse_method = singleCmd["ParseMethod"].toString();
                         }
 
+
                         if (singleCmd.contains("DAQ") && singleCmd["DAQ"].isDouble()) {
                             if (singleCmd["DAQ"].toInt() == 1) {
                                 cmd.isDAQ = true;
+
+                                if (singleCmd.contains("Interval") && singleCmd["Interval"].isDouble()) {
+                                    cmd.interval = singleCmd["Interval"].toDouble();
+                                }
+
                             } else {
                                 cmd.isDAQ = false;
                             }

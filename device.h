@@ -41,6 +41,7 @@ struct Command {
     QString check_sum_rule;
     uint8_t length;
     bool isDAQ;
+    int interval;
     QVector<DataFormat> data_formats;
 };
 
@@ -51,6 +52,12 @@ public:
 
     Device(int node_id, QString protocol_name);
 
+    Device(int id, int node_id, QString protocol_name);
+
+    QString m_name;
+
+    QString m_protocol;
+
     QString m_serial_number;
 
     int m_node_id;
@@ -59,11 +66,15 @@ public:
 
     QVector<Command> m_commands;
 
+    void setID(int id);
     void loadFromConfig(QString protocol_name);
 
+    QByteArray buildQueryCmd(Command cmd);
     QByteArray buildQueryCmd(QString cmdName);
 
     void parseRxData(QByteArray rx_data, int cmd_id);
+
+    DeviceData m_deviceData;
 
 };
 
