@@ -102,6 +102,10 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
     Command cmd = m_commands[cmd_id];
 
+    m_deviceData.currentData.clear();
+    m_deviceData.dataName.clear();
+    m_deviceData.dataUnit.clear();
+
     if (cmd.parse_method == "Exact") {
 
         bool isValidated = true;
@@ -118,9 +122,9 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
                         isValidated = false;
                     }
                 }
-                else if (fm.name == "Api") {
+                else if (fm.name == "Api") { // to do, compare with request data
                     if (!((uint8_t)rx_data.at(fm.location) == cmd.api)) {
-                        isValidated = false;
+                        //isValidated = false;
                     }
                 }
                 else if (fm.name == "Node") {
@@ -155,6 +159,8 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
                 }
             }
         }
+
+
 
         QDateTime now = QDateTime::currentDateTime();
         m_deviceData.historyData.append(m_deviceData.currentData);
