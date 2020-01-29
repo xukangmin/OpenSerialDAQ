@@ -25,7 +25,6 @@ public:
 private:
     Ui::MainWindow *ui;
     SingleChannel* m_singleChannel;
-    DatabaseManager m_db;
     QVector<Device*> m_dev_list;
 
 public slots:

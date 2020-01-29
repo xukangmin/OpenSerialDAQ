@@ -3,6 +3,12 @@
 
 #include <QSqlError>
 
+DatabaseManager&DatabaseManager::instance()
+{
+    static DatabaseManager singleton;
+    return singleton;
+}
+
 DatabaseManager::DatabaseManager(const QString& path) :
     m_database(QSqlDatabase::addDatabase("QSQLITE"))
 {
@@ -15,6 +21,18 @@ DatabaseManager::DatabaseManager(const QString& path) :
 
 DatabaseManager::~DatabaseManager() {
     m_database.close();
+}
+
+void DatabaseManager::insertData(DeviceData da, int devid) {
+    QSqlQuery query(m_database);
+    query.prepare("INSERT INTO Data (DeviceID, DataTypeID, TimeStamp, Value) VALUES (:DeviceID, :DataTypeID, :TimeStamp, :Value)");
+    query.bindValue(":DeviceID", devid);
+    query.bindValue(":DataTypeID", da.m_dataIndex);
+    query.bindValue(":TimeStamp", da.m_currentTimeStamp);
+    query.bindValue(":Value", da.m_currentData);
+    query.exec();
+    debugQuery(query);
+
 }
 
 void DatabaseManager::initDevice() {
@@ -49,8 +67,8 @@ void DatabaseManager::initData() {
         query.exec("CREATE TABLE Data ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "DeviceID INTEGER, "
+                   "DataTypeID INTEGER,"
                    "TimeStamp DATETIME DEFAULT CURRENT_TIMESTAMP, "
-                   "DataType INTEGER, "
                    "Value DOUBLE)");
 
         debugQuery(query);

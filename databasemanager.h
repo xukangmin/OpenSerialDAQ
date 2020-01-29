@@ -11,9 +11,8 @@ const QString DATABASE_FILENAME = "SerialDAQData.db";
 class DatabaseManager
 {
 public:
-    DatabaseManager(const QString& path = DATABASE_FILENAME);
-    ~DatabaseManager();
-
+     static DatabaseManager& instance();
+     ~DatabaseManager();
     void initDevice();
 
     void initData();
@@ -22,7 +21,7 @@ public:
 
     void init();
 
-    void insertData();
+    void insertData(DeviceData da, int devid);
 
 
     int insertDevice(int node, QString protocol);
@@ -30,6 +29,9 @@ public:
     void queryData();
     void removeDevice(int id) const;
     QVector<Device*> getAllDevice();
+
+protected:
+    DatabaseManager(const QString& path = DATABASE_FILENAME);
 
 private:
     void debugQuery(const QSqlQuery& query) const;

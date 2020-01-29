@@ -1,5 +1,6 @@
 #include "dataprocessor.h"
 #include <QDebug>
+#include "databasemanager.h"
 
 DataProcessor::DataProcessor(Packet* pac) :
     m_dev(pac->dev),
@@ -27,18 +28,24 @@ void DataProcessor::run() {
 
     qDebug() << "data process started";
 
-    m_dev->parseRxData(m_rx_data, m_cmd_id);
+    QVector<DeviceData> parData;
 
+    parData = m_dev->parseRxData(m_rx_data, m_cmd_id);
     // log to database
 
 
+    if (!parData.empty()) {
+        for(auto da : parData) {
+            DatabaseManager::instance().insertData(da, m_dev->m_device_id);
+        }
+    }
 
     currentData data;
 
-    data.values = m_dev->m_deviceData.currentData;
-    data.timestamp = m_dev->m_deviceData.currentTimeStamp;
-    data.name = m_dev->m_deviceData.dataName;
-    data.unit = m_dev->m_deviceData.dataUnit;
+    //data.values = m_dev->m_devData
+    //data.timestamp = m_dev->m_deviceData.currentTimeStamp;
+    //data.name = m_dev->m_deviceData.dataName;
+    //data.unit = m_dev->m_deviceData.dataUnit;
     // send to front end
     emit sendData(data);
 

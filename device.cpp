@@ -98,13 +98,13 @@ QByteArray Device::buildQueryCmd(QString cmdName) {
 }
 
 
-void Device::parseRxData(QByteArray rx_data, int cmd_id) {
+QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
     Command cmd = m_commands[cmd_id];
 
-    m_deviceData.currentData.clear();
-    m_deviceData.dataName.clear();
-    m_deviceData.dataUnit.clear();
+    QDateTime now = QDateTime::currentDateTime();
+
+    QVector<DeviceData> parsedData;
 
     if (cmd.parse_method == "Exact") {
 
@@ -154,21 +154,30 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
                     memcpy(&data, tmp_float, sizeof(float));
                     qDebug() << data << " " << fm.name;
 
-                    m_deviceData.dataName.append(fm.name);
-                    m_deviceData.currentData.append(data);
+
+//                    for(int i = 0; i < m_devData.size(); i++) {
+//                        if (m_devData[i].m_dataName == fm.name) {
+//                            m_devData[i].addData(data, now);
+//                            parsedData.append(m_devData[i]);
+//                        }
+//                    }
+
+                    for(auto& da : m_devData) {
+                        if (da.m_dataName == fm.name) {
+                            da.addData(data, now);
+                            parsedData.append(da);
+                        }
+                    }
                 }
             }
         }
 
-
-
-        QDateTime now = QDateTime::currentDateTime();
-        m_deviceData.historyData.append(m_deviceData.currentData);
-        m_deviceData.currentTimeStamp = now;
-        m_deviceData.timeStamp.append(now);
-
     }
+
+    return parsedData;
 }
+
+
 
 
 
@@ -178,6 +187,8 @@ void Device::loadFromConfig(QString protocol_name) {
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
     }
+
+    int dataIndex = 0;
 
     QByteArray saveData = loadFile.readAll();
 
@@ -254,6 +265,7 @@ void Device::loadFromConfig(QString protocol_name) {
                             QJsonArray data_format_arr = singleCmd["DataFormat"].toArray();
                             for (int k = 0; k < data_format_arr.size(); k++) {
                                 QJsonObject singleDataFormat = data_format_arr[k].toObject();
+
                                 DataFormat data_format;
                                 if (singleDataFormat.contains("Name") && singleDataFormat["Name"].isString()) {
                                     data_format.name = singleDataFormat["Name"].toString();
@@ -273,6 +285,57 @@ void Device::loadFromConfig(QString protocol_name) {
 
                                 if (singleDataFormat.contains("Usage") && singleDataFormat["Usage"].isString()) {
                                     data_format.usage = singleDataFormat["Usage"].toString();
+                                }
+
+                                if (singleDataFormat.contains("Physics") && singleDataFormat["Physics"].isString()) {
+                                    data_format.physics = singleDataFormat["Physics"].toString();
+                                }
+
+                                if (data_format.usage == "Data") {
+
+                                    DataPhysics ph = None;
+                                    TemperatureUnits tu = C;
+                                    PressureUnits pu = psia;
+                                    FlowUnits fu = sccm;
+
+                                    if (data_format.physics == "Temperature") {
+                                        ph = Temperature;
+                                        for(int i = 0; i < strTemperatureUnits->length(); i++) {
+
+                                            if (strTemperatureUnits[i] == data_format.unit) {
+                                                tu = (TemperatureUnits)i;
+                                            }
+                                        }
+                                    }
+                                    else if (data_format.physics == "Pressure") {
+                                        ph = Pressure;
+                                        for(int i = 0; i < strPressureUnits->length(); i++) {
+
+                                            if (strPressureUnits[i] == data_format.unit) {
+                                                pu = (PressureUnits)i;
+                                            }
+                                        }
+                                    }
+                                    else if (data_format.physics == "FlowRate") {
+                                        ph = Flow;
+                                        for(int i = 0; i < strFlowRateUnits->length(); i++) {
+
+                                            if (strFlowRateUnits[i] == data_format.unit) {
+                                                fu = (FlowUnits)i;
+                                            }
+                                        }
+                                    }
+
+                                    bool exists = false;
+                                    for(auto da : m_devData) {
+                                        if (da.m_dataName == data_format.name) {
+                                            exists = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!exists)
+                                    m_devData.append(DeviceData(dataIndex++,data_format.name,cmd.cmd_id,ph,fu,tu,pu));
                                 }
 
                                 cmd.data_formats.append(data_format);

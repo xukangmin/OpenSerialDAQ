@@ -9,14 +9,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     qRegisterMetaType<currentData>("currentData");
-    m_db.init();
 
-    m_dev_list = m_db.getAllDevice();
+    DatabaseManager::instance().init();
+
+    m_dev_list = DatabaseManager::instance().getAllDevice();
 
     while (m_dev_list.empty()) {
         // insert demo device
-        m_db.insertDevice(0,"LFE-ALICAT");
-        m_dev_list = m_db.getAllDevice();
+        DatabaseManager::instance().insertDevice(0,"LFE-ALICAT");
+        m_dev_list = DatabaseManager::instance().getAllDevice();
     }
 
 
@@ -41,7 +42,7 @@ void MainWindow::getData(currentData data, int ch_id){
     {
         qDebug() << data.values[0];
         qDebug() << data.values[1];
-        ui->lineEdit->text() = data.values[3];
+        ui->lineEdit->setText(QString::number(data.values[1]));
     }
 
     qDebug() << "get data from main window" << ch_id;

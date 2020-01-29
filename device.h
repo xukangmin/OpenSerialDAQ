@@ -25,6 +25,7 @@ struct DataFormat {
     int location;
     QString usage;
     QString unit;
+    QString physics;
 };
 
 struct Command {
@@ -54,6 +55,8 @@ public:
 
     Device(int id, int node_id, QString protocol_name);
 
+    QVector<DeviceData> m_devData;
+
     QString m_name;
 
     QString m_protocol;
@@ -72,7 +75,7 @@ public:
     QByteArray buildQueryCmd(Command cmd);
     QByteArray buildQueryCmd(QString cmdName);
 
-    void parseRxData(QByteArray rx_data, int cmd_id);
+    QVector<DeviceData> parseRxData(QByteArray rx_data, int cmd_id);
 
     DeviceData m_deviceData;
 
