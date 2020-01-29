@@ -120,7 +120,7 @@ void SingleChannel::run()
     }
 }
 
-void SingleChannel::getData(currentData data) {
+void SingleChannel::getData(QVector<DeviceData> data) {
     qDebug() << "get data from thread";
     emit sendData(data, m_ch_id);
 }

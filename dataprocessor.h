@@ -19,7 +19,7 @@ public:
     void run() override;
 
 signals:
-    void sendData(currentData data);
+    void sendData(QVector<DeviceData> data);
 
 private:
     Device* m_dev;

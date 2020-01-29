@@ -46,10 +46,10 @@ private:
     int m_ch_id;
 
 signals:
-    void sendData(currentData data, int ch_id);
+    void sendData(QVector<DeviceData> data, int ch_id);
 
 private slots:
-    void getData(currentData data);
+    void getData(QVector<DeviceData> data);
 };
 
 #endif // SINGLECHANNEL_H

@@ -35,14 +35,13 @@ MainWindow::MainWindow(QWidget *parent)
     m_singleChannel->startDAQ();
 }
 
-void MainWindow::getData(currentData data, int ch_id){
+void MainWindow::getData(QVector<DeviceData> data, int ch_id){
 
-    qDebug() << data.values.size();
-    if (data.values.size() == 4)
+    qDebug() << data.size();
+    if (data.size() == 4)
     {
-        qDebug() << data.values[0];
-        qDebug() << data.values[1];
-        ui->lineEdit->setText(QString::number(data.values[1]));
+        qDebug() << data[0].m_currentData;
+        ui->lineEdit->setText(QString::number(data[0].m_currentData));
     }
 
     qDebug() << "get data from main window" << ch_id;

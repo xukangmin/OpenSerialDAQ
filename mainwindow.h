@@ -28,6 +28,6 @@ private:
     QVector<Device*> m_dev_list;
 
 public slots:
-    void getData(currentData data, int ch_id);
+    void getData(QVector<DeviceData> data, int ch_id);
 };
 #endif // MAINWINDOW_H
