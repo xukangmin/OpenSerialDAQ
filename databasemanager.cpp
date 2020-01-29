@@ -30,6 +30,19 @@ void DatabaseManager::initDevice() {
 
 }
 
+void DatabaseManager::initDataType() {
+
+    if (!m_database.tables().contains("DataType")) {
+        QSqlQuery query(m_database);
+        query.exec("CREATE TABLE DataType ("
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "DeviceID INTEGER"
+                   "Name TEXT, "
+                   "Unit TEXT)");
+        debugQuery(query);
+    }
+}
+
 void DatabaseManager::initData() {
     if (!m_database.tables().contains("Data")) {
         QSqlQuery query(m_database);
@@ -47,6 +60,7 @@ void DatabaseManager::initData() {
 void DatabaseManager::init() {
     initDevice();
     initData();
+    initDataType();
 }
 
 int DatabaseManager::insertDevice(int node, QString protocol) {

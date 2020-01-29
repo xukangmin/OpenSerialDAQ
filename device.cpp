@@ -147,7 +147,7 @@ void Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
                     uint8_t tmp_float[sizeof(float)];
 
-                    for(int i = 0; i < sizeof(float);i++) {
+                    for(int i = 0; i < (int)sizeof(float);i++) {
                         tmp_float[i] = rx_data.at(fm.location + i);
                     }
 

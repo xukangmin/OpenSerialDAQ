@@ -18,9 +18,12 @@ public:
 
     void initData();
 
+    void initDataType();
+
     void init();
 
     void insertData();
+
 
     int insertDevice(int node, QString protocol);
 
