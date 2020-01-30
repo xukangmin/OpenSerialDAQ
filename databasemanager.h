@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include "device.h"
 #include "devicedata.h"
+#include "channel.h"
 
 const QString DATABASE_FILENAME = "SerialDAQData.db";
 
@@ -18,6 +19,8 @@ public:
     void initData();
 
     void initDataType();
+
+    void initChannel();
 
     void init();
 

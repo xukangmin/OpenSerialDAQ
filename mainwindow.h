@@ -29,5 +29,8 @@ private:
 
 public slots:
     void getData(QVector<DeviceData> data, int ch_id);
+    void showOverViewPage();
+    void showDevicePage();
+
 };
 #endif // MAINWINDOW_H

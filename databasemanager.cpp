@@ -48,6 +48,27 @@ void DatabaseManager::initDevice() {
 
 }
 
+void DatabaseManager::initChannel() {
+
+    if (!m_database.tables().contains("Channels")) {
+        QSqlQuery query(m_database);
+        query.exec("CREATE TABLE Channels ("
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "Name TEXT, "
+                   "Type TEXT, "
+                   "ComPort TEXT,"
+                   "Baud INTEGER,"
+                   "Parity INTEGER,"
+                   "DataBits INTEGER,"
+                   "StopBits INTEGER,"
+                   "Source TEXT,"
+                   "Port INTEGER"
+                   ")");
+        debugQuery(query);
+    }
+
+}
+
 void DatabaseManager::initDataType() {
 
     if (!m_database.tables().contains("DataType")) {
@@ -79,6 +100,7 @@ void DatabaseManager::init() {
     initDevice();
     initData();
     initDataType();
+    initChannel();
 }
 
 int DatabaseManager::insertDevice(int node, QString protocol) {
@@ -108,6 +130,23 @@ QVector<Device*> DatabaseManager::getAllDevice() {
     query.exec();
 
     QVector<Device*> list;
+
+    while(query.next()) {
+        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
+        list.append(dev);
+    }
+
+    return list;
+
+}
+
+
+QVector<Channel*> DatabaseManager::getAllChannel() {
+    QSqlQuery query("SELECT * FROM Channels", m_database);
+
+    query.exec();
+
+    QVector<Channel*> list;
 
     while(query.next()) {
         Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());

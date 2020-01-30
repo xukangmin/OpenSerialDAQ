@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    channel.cpp \
     databasemanager.cpp \
     dataprocessor.cpp \
     device.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     singlechannel.cpp
 
 HEADERS += \
+    channel.h \
     databasemanager.h \
     dataprocessor.h \
     device.h \
@@ -35,6 +37,8 @@ HEADERS += \
     singlechannel.h
 
 FORMS += \
+    channel.ui \
+    device.ui \
     mainwindow.ui
 
 # Default rules for deployment.
@@ -42,7 +46,38 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+DISTFILES += \
+    icons/China-flag-16.png \
+    icons/Close-16.png \
+    icons/Header16.png \
+    icons/TV-16.png \
+    icons/Taiwan-flag-16.png \
+    icons/bullet-green-16.png \
+    icons/bullet-red-16.png \
+    icons/close8-black.png \
+    icons/close8-red.png \
+    icons/connect-24.png \
+    icons/cyclic-process-16.png \
+    icons/data-sort-16.png \
+    icons/document-export-16.png \
+    icons/document-import-16.png \
+    icons/edit-16.png \
+    icons/edit-clear-16.png \
+    icons/ethernet-port-16.png \
+    icons/exit-16.png \
+    icons/help-desk-icon-16.png \
+    icons/info-sign-16.png \
+    icons/options-16.png \
+    icons/play-16.png \
+    icons/plug-connect-16.png \
+    icons/plug-disconnect-16.png \
+    icons/reset-16.png \
+    icons/save-16.png \
+    icons/serial-pot-16.png \
+    icons/text-x-log-16.png \
+    icons/tools-16.png \
+    icons/usa-flag-16.png
 
 RESOURCES += \
+    icons/icons.qrc \
     res.qrc

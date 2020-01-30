@@ -344,6 +344,74 @@
             ]
         },
         {
+            "ProtocolName": "LFE-DP",
+            "Version" : 0.1,
+            "CmdLists": [
+                    {
+                        "Name": "ReadData",
+                        "Description": "Read data",
+                        "Type": "Data",
+                        "DAQ": 1,
+                        "Interval": 1000,
+                        "Header": "0x8E",
+                        "Length": "0x04",
+                        "Cmd": "0x01",
+                        "CheckSumRule": "Simple",
+                        "QueryCmdList": [
+                            "[Header]","0x04","[Api]","[Node]","[Cmd]","[CheckSum]"
+                        ],
+                        "ParseMethod": "Exact",
+                        "DataFormat": [
+                            {
+                                "Type": "byte",
+                                "Name": "Header",
+                                "Usage": "Validation",
+                                "Location": 0
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Length",
+                                "Usage": "Validation",
+                                "Location": 1
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Api",
+                                "Usage": "Validation",
+                                "Location": 2
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Node",
+                                "Usage": "Validation",
+                                "Location": 3
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "Cmd",
+                                "Usage": "Validation",
+                                "Location": 4
+                            },
+                            {
+                                "Type": "float",
+                                "Name": "DP",
+                                "Unit": "psig",
+                                "Usage": "Data",
+                                "Physics": "Pressure",
+                                "Location": 5
+                            },
+                            {
+                                "Type": "byte",
+                                "Name": "CheckSum",
+                                "Unit": "N/A",
+                                "Usage": "Validation",
+                                "Location": 9
+                            }
+                        ]
+                    }
+            ]
+        },
+        {
             "ProtocolName": "LFE",
             "Version" : 0.1,
             "Type": "BINARY",
