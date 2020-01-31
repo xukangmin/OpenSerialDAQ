@@ -9,25 +9,23 @@
 #include <device.h>
 #include <packet.h>
 #include <dataprocessor.h>
+#include "channel.h"
 
 class SingleChannel : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit SingleChannel(QObject *parent = nullptr);
+    explicit SingleChannel(Channel ch, QObject *parent = nullptr);
     ~SingleChannel() override;
 
     void addDevice(Device* dev); // add device to current channel
 
-    void startChannel();
 
-    void stopChannel();
-
-    void startDAQ();
-    void stopDAQ();
-
+    int m_ch_id;
+    Channel m_ch;
 private:
+
     QObject* par;
     bool m_stop;
     void run() override;
@@ -43,13 +41,19 @@ private:
 
     DataProcessor* dataWorker;
 
-    int m_ch_id;
+
 
 signals:
     void sendData(QVector<DeviceData> data, int ch_id);
 
-private slots:
+public slots:
     void getData(QVector<DeviceData> data);
+    void startChannel();
+    void stopChannel();
+
+    void startDAQ();
+    void stopDAQ();
+
 };
 
 #endif // SINGLECHANNEL_H

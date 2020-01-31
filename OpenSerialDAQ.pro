@@ -17,29 +17,39 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     channel.cpp \
+    channelwidget.cpp \
+    commandwidget.cpp \
     databasemanager.cpp \
     dataprocessor.cpp \
     device.cpp \
     devicedata.cpp \
+    devicewidget.cpp \
     main.cpp \
     mainwindow.cpp \
+    newchannel.cpp \
     packet.cpp \
     singlechannel.cpp
 
 HEADERS += \
     channel.h \
+    channelwidget.h \
+    commandwidget.h \
     databasemanager.h \
     dataprocessor.h \
     device.h \
     devicedata.h \
+    devicewidget.h \
     mainwindow.h \
+    newchannel.h \
     packet.h \
     singlechannel.h
 
 FORMS += \
-    channel.ui \
-    device.ui \
-    mainwindow.ui
+    channelwidget.ui \
+    commandwidget.ui \
+    devicewidget.ui \
+    mainwindow.ui \
+    newchannel.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

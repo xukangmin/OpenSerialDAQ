@@ -41,8 +41,10 @@ void DatabaseManager::initDevice() {
         QSqlQuery query(m_database);
         query.exec("CREATE TABLE Devices ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "Name TEXT,"
                    "Node INTEGER, "
-                   "Protocol TEXT )");
+                   "Protocol TEXT,"
+                   "ChannelID INTEGER)");
         debugQuery(query);
     }
 
@@ -57,8 +59,8 @@ void DatabaseManager::initChannel() {
                    "Name TEXT, "
                    "Type TEXT, "
                    "ComPort TEXT,"
-                   "Baud INTEGER,"
-                   "Parity INTEGER,"
+                   "BaudRate INTEGER,"
+                   "Parity TEXT,"
                    "DataBits INTEGER,"
                    "StopBits INTEGER,"
                    "Source TEXT,"
@@ -103,17 +105,47 @@ void DatabaseManager::init() {
     initChannel();
 }
 
-int DatabaseManager::insertDevice(int node, QString protocol) {
+int DatabaseManager::insertDevice(QString name, int node, QString protocol, int ch_id) {
     QSqlQuery query(m_database);
 
-    query.prepare("INSERT INTO Devices (Node,Protocol) VALUES (:Node,:Protocol)");
+    query.prepare("INSERT INTO Devices (Name,Node,Protocol,ChannelID) VALUES (:Name,:Node,:Protocol,:ChannelID)");
+    query.bindValue(":Name",name);
     query.bindValue(":Node",node);
     query.bindValue(":Protocol", protocol);
+    query.bindValue(":ChannelID", ch_id);
     query.exec();
     debugQuery(query);
     return query.lastInsertId().toInt();
 
 }
+
+
+int DatabaseManager::insertChannel(Channel ch) {
+    QSqlQuery query(m_database);
+
+    query.prepare("INSERT INTO Channels (Type,ComPort,BaudRate,Parity,DataBits,StopBits) VALUES (:Type,:ComPort,:BaudRate,:Parity,:DataBits,:StopBits)");
+
+    query.bindValue(":Type",(ch.m_type == Serial ? "Serial" : "IP"));
+    query.bindValue(":ComPort", ch.m_portName);
+    query.bindValue(":BaudRate", ch.m_baudRate);
+    query.bindValue(":Parity", ch.m_parityStr);
+    query.bindValue(":DataBits", ch.m_dataBits);
+    query.bindValue(":StopBits", ch.m_stopBits);
+    query.exec();
+    debugQuery(query);
+    return query.lastInsertId().toInt();
+
+}
+
+void DatabaseManager::removeChannel(int id) const
+{
+    QSqlQuery query(m_database);
+    query.prepare("DELETE FROM Channels WHERE id = (:id)");
+    query.bindValue(":id", id);
+    query.exec();
+    debugQuery(query);
+}
+
 
 void DatabaseManager::removeDevice(int id) const
 {
@@ -141,16 +173,22 @@ QVector<Device*> DatabaseManager::getAllDevice() {
 }
 
 
-QVector<Channel*> DatabaseManager::getAllChannel() {
+QVector<Channel> DatabaseManager::getAllChannel() {
     QSqlQuery query("SELECT * FROM Channels", m_database);
 
     query.exec();
 
-    QVector<Channel*> list;
+    QVector<Channel> list;
 
     while(query.next()) {
-        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
-        list.append(dev);
+        Channel ch = Channel(query.value("id").toInt(),
+                             query.value("ComPort").toString(),
+                              query.value("BaudRate").toInt(),
+                              query.value("DataBits").toInt(),
+                              query.value("Parity").toString(),
+                              query.value("StopBits").toInt());
+
+        list.append(ch);
     }
 
     return list;

@@ -27,12 +27,15 @@ public:
     void insertData(DeviceData da, int devid);
 
 
-    int insertDevice(int node, QString protocol);
+    int insertDevice(QString name, int node, QString protocol, int ch_id = 0);
+
+    int insertChannel(Channel ch);
 
     void queryData();
+    void removeChannel(int id) const;
     void removeDevice(int id) const;
     QVector<Device*> getAllDevice();
-
+    QVector<Channel> getAllChannel();
 protected:
     DatabaseManager(const QString& path = DATABASE_FILENAME);
 

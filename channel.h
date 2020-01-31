@@ -27,18 +27,24 @@ enum SerialBaudRate {
 class Channel
 {
 public:
-    Channel(QString portName,
+    Channel(int id,
+            QString portName,
             SerialBaudRate baudRate = Baud9600,
             QSerialPort::DataBits dataBits = QSerialPort::Data8,
             QSerialPort::Parity parity = QSerialPort::NoParity,
             QSerialPort::StopBits stopBits = QSerialPort::OneStop);
 
 
-    Channel(QString portName,
+    Channel(int id,
+            QString portName,
             int baudRate = 9600,
             int dataBits = 8,
             QString parity = "None",
             int stopBits = 1);
+
+    int m_id;
+
+    QString m_channelName;
 
     QString m_portName;
 
@@ -48,9 +54,14 @@ public:
 
     QSerialPort::Parity m_parity;
 
+    QString m_parityStr;
+
     QSerialPort::StopBits m_stopBits;
 
 
+    QString m_baudRateStr;
+    QString m_dataBitsStr;
+    QString m_stopBitsStr;
 
 
     QString m_ipAddress;

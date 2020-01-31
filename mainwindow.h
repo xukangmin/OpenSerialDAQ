@@ -8,6 +8,8 @@
 #include "devicedata.h"
 #include "dataprocessor.h"
 #include <QDebug>
+#include "newchannel.h"
+#include "channelwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,13 +26,21 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    SingleChannel* m_singleChannel;
+
+    // UI - dialogs
+    NewChannel* m_dlgNewChennel;
+
+    QVector<SingleChannel*> m_Channels;
     QVector<Device*> m_dev_list;
+    QVector<ChannelWidget*> m_ChannelWidgets;
+
 
 public slots:
     void getData(QVector<DeviceData> data, int ch_id);
     void showOverViewPage();
     void showDevicePage();
+    void showNewChannelDialog();
+    void deleteChannel(int id);
 
 };
 #endif // MAINWINDOW_H

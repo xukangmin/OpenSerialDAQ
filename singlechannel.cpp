@@ -6,15 +6,23 @@
 #include <QJsonObject>
 #include <QThreadPool>
 #include "mainwindow.h"
+#include "databasemanager.h"
 
-SingleChannel::SingleChannel(QObject *parent) :
-    QThread(parent), m_stop(false), m_ch_id(1)
+SingleChannel::SingleChannel(Channel ch, QObject *parent) :
+     QThread(parent),
+     m_ch(ch),
+     m_stop(false),
+     m_ch_id(ch.m_id)
 {
 }
 
 
 SingleChannel::~SingleChannel()
 {
+    qDebug() << "channel " << m_ch_id << " destroyed";
+    //DatabaseManager::instance().removeChannel(m_ch_id);
+    m_stop = true;
+
 
 }
 
@@ -43,6 +51,7 @@ void SingleChannel::startChannel() {
     if (!isRunning()){
         m_stop = false;
         start();
+        startDAQ();
     }
 }
 
@@ -70,8 +79,15 @@ void SingleChannel::run()
 {
     QSerialPort serial;
 
-    serial.setPortName("COM49");
-    serial.setBaudRate(QSerialPort::Baud115200);
+    serial.setPortName(m_ch.m_portName);
+
+    serial.setBaudRate(m_ch.m_baudRate);
+
+    serial.setParity(m_ch.m_parity);
+
+    serial.setDataBits(m_ch.m_dataBits);
+
+    serial.setStopBits(m_ch.m_stopBits);
 
     if (!serial.open(QIODevice::ReadWrite)) {
         //Todo: emit a signal here
