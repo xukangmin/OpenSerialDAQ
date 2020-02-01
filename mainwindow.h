@@ -8,8 +8,10 @@
 #include "devicedata.h"
 #include "dataprocessor.h"
 #include <QDebug>
+#include <QVBoxLayout>
 #include "newchannel.h"
 #include "channelwidget.h"
+#include "devicewidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,7 +35,10 @@ private:
     QVector<SingleChannel*> m_Channels;
     QVector<Device*> m_dev_list;
     QVector<ChannelWidget*> m_ChannelWidgets;
+    QVector<DeviceWidget*> m_DeviceWidgets;
+    QVector<Channel> m_channle_list;
 
+    QVBoxLayout* scrollVLayout;
 
 public slots:
     void getData(QVector<DeviceData> data, int ch_id);
@@ -41,6 +46,9 @@ public slots:
     void showDevicePage();
     void showNewChannelDialog();
     void deleteChannel(int id);
+    //void deviceSelected(QModelIndex index);
+
+private slots:
 
 };
 #endif // MAINWINDOW_H

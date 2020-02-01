@@ -17,7 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     while (m_dev_list.empty()) {
         // insert demo device
         DatabaseManager::instance().insertDevice("ALICAT",0,"LFE-ALICAT");
-        DatabaseManager::instance().insertDevice("ALICAT",0,"LFE-DP");
+        DatabaseManager::instance().insertDevice("DP",0,"LFE-DP");
+        DatabaseManager::instance().insertDevice("DP",1,"LFE-DP");
         m_dev_list = DatabaseManager::instance().getAllDevice();
     }
 
@@ -42,9 +43,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAddNewChannel, SIGNAL(triggered()), this, SLOT(showNewChannelDialog()));
 
 
-    QVector<Channel> ch_list = DatabaseManager::instance().getAllChannel();
+    m_channle_list = DatabaseManager::instance().getAllChannel();
 
-    foreach(Channel ch, ch_list){
+    foreach(Channel ch, m_channle_list){
         SingleChannel* ch_thread = new SingleChannel(ch,this);
         ChannelWidget* cw = new ChannelWidget(ch, this);
 
@@ -60,6 +61,26 @@ MainWindow::MainWindow(QWidget *parent)
         m_Channels.append(ch_thread);
         m_ChannelWidgets.append(cw);
     }
+
+    scrollVLayout = new QVBoxLayout;
+
+    foreach(Device* dev, m_dev_list) {
+
+        QListWidgetItem* lineItem = new QListWidgetItem(dev->m_name + "_" + QString::number(dev->m_node_id),ui->listDevice);
+
+        lineItem->setData(Qt::UserRole, dev->m_device_id);
+
+        ui->listDevice->addItem(lineItem);
+
+        //connect(ui->listDevice,SIGNAL(clicked(const QModelIndex & index)),this,SLOT(deviceSelected(QModelIndex index)));
+        DeviceWidget* dw = new DeviceWidget(dev, m_channle_list, this);
+        dw->hide();
+        m_DeviceWidgets.append(dw);
+
+    }
+
+    //ui->scrollAreaWidgetContents->setLayout(scrollVLayout);
+
 
 //    DatabaseManager::instance().init();
 
@@ -93,6 +114,12 @@ MainWindow::~MainWindow()
 {
     //m_singleChannel->stopChannel();
     //m_singleChannel->wait();
+
+    foreach(SingleChannel* ch, m_Channels) {
+        ch->stopChannel();
+        ch->wait();
+    }
+
     delete ui;
 }
 
@@ -174,3 +201,26 @@ void MainWindow::deleteChannel(int id) {
 
        DatabaseManager::instance().removeChannel(id);
 }
+
+//void MainWindow::deviceSelected(QModelIndex index) {
+//    qDebug() << index.row();
+//}
+
+//void MainWindow::on_listDevice_clicked(const QModelIndex &index)
+//{
+//    int dev_id = index.data(Qt::UserRole).toInt();
+
+//    bool found = false;
+
+
+//    foreach(DeviceWidget* dw, m_DeviceWidgets) {
+//        ui->layDevice->removeWidget(dw);
+//        if (dw->m_dev->m_device_id == dev_id) {
+//            found = true;
+//            dw->show();
+//            ui->scrDevice->setLayout(ui->layDevice);
+//            ui->layDevice->addWidget(dw);
+//        }
+//    }
+
+//}

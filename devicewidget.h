@@ -2,6 +2,8 @@
 #define DEVICEWIDGET_H
 
 #include <QWidget>
+#include "device.h"
+#include "channel.h"
 
 namespace Ui {
 class DeviceWidget;
@@ -12,8 +14,12 @@ class DeviceWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DeviceWidget(QWidget *parent = nullptr);
+    explicit DeviceWidget(Device* dev, QVector<Channel> ch_list, QWidget *parent = nullptr);
     ~DeviceWidget();
+
+    Device* m_dev;
+
+    QVector<Channel> m_ch_list;
 
 private:
     Ui::DeviceWidget *ui;

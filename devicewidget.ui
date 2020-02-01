@@ -24,11 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="cmbChannel"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">

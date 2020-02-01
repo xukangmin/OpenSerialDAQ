@@ -55,17 +55,25 @@ public:
 
     Device(int id, int node_id, QString protocol_name);
 
+    Device(int id, QString name, int node_id, QString protocol_name);
+
     QVector<DeviceData> m_devData;
 
+    int m_device_id;
+
     QString m_name;
+
+    int m_node_id;
+
+
 
     QString m_protocol;
 
     QString m_serial_number;
 
-    int m_node_id;
 
-    int m_device_id;
+
+
 
     QVector<Command> m_commands;
 
