@@ -24,8 +24,10 @@ SOURCES += \
     device.cpp \
     devicedata.cpp \
     devicewidget.cpp \
+    dialogadddevicetochannel.cpp \
     main.cpp \
     mainwindow.cpp \
+    minidevicewidget.cpp \
     newchannel.cpp \
     packet.cpp \
     singlechannel.cpp
@@ -39,7 +41,9 @@ HEADERS += \
     device.h \
     devicedata.h \
     devicewidget.h \
+    dialogadddevicetochannel.h \
     mainwindow.h \
+    minidevicewidget.h \
     newchannel.h \
     packet.h \
     singlechannel.h
@@ -48,7 +52,9 @@ FORMS += \
     channelwidget.ui \
     commandwidget.ui \
     devicewidget.ui \
+    dialogadddevicetochannel.ui \
     mainwindow.ui \
+    minidevicewidget.ui \
     newchannel.ui
 
 # Default rules for deployment.

@@ -10,8 +10,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // init DB
     DatabaseManager::instance().init();
 
+    // get all device from db
     m_dev_list = DatabaseManager::instance().getAllDevice();
 
     while (m_dev_list.empty()) {
@@ -40,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_dlgNewChennel = new NewChannel(this);
 
-    connect(ui->actionAddNewChannel, SIGNAL(triggered()), this, SLOT(showNewChannelDialog()));
 
+    connect(ui->actionAddNewChannel, SIGNAL(triggered()), this, SLOT(showNewChannelDialog()));
 
     m_channle_list = DatabaseManager::instance().getAllChannel();
 
@@ -53,7 +55,19 @@ MainWindow::MainWindow(QWidget *parent)
 
         connect(cw,&ChannelWidget::startChannel,ch_thread,&SingleChannel::startChannel);
 
-        foreach(Device* dev, m_dev_list) {
+        connect(cw,&ChannelWidget::stopChannel,ch_thread,&SingleChannel::stopChannel);
+
+        connect(cw,&ChannelWidget::addDeviceToChannel,this,&MainWindow::showAddDeviceToChannelDialog);
+
+        QVector<Device*> tmpDevList = DatabaseManager::instance().getDeviceWithChannelID(ch.m_id);
+
+
+
+        foreach(Device* dev, tmpDevList) {
+            MiniDeviceWidget* mw = new MiniDeviceWidget(dev->m_name,dev->m_device_id,cw);
+            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,cw,&ChannelWidget::removeMiniDeviceWidget);
+            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,ch_thread,&SingleChannel::removeDeviceFromChannel);
+            cw->addMiniDeviceWidget(mw);
             ch_thread->addDevice(dev);
         }
 
@@ -66,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     foreach(Device* dev, m_dev_list) {
 
-        QListWidgetItem* lineItem = new QListWidgetItem(dev->m_name + "_" + QString::number(dev->m_node_id),ui->listDevice);
+        QListWidgetItem* lineItem = new QListWidgetItem(dev->m_name, ui->listDevice);
 
         lineItem->setData(Qt::UserRole, dev->m_device_id);
 
@@ -133,6 +147,8 @@ void MainWindow::showOverViewPage() {
 }
 
 
+
+
 void MainWindow::showNewChannelDialog() {
     m_dlgNewChennel->getAvailablePorts();
     if (m_dlgNewChennel->exec() == QDialog::Accepted) {
@@ -175,6 +191,44 @@ void MainWindow::showNewChannelDialog() {
 
 
     }
+}
+
+void MainWindow::showAddDeviceToChannelDialog(int id) {
+
+     m_dlgAddDeviceToChannel = new DialogAddDeviceToChannel(id, this);
+    if (m_dlgAddDeviceToChannel->exec() == QDialog::Accepted) {
+        QVector<int> selectedDevID = m_dlgAddDeviceToChannel->getSelectedDeviceID();
+
+        foreach(int dev_id, selectedDevID) {
+            DatabaseManager::instance().updateDeviceWithChannelID(dev_id, id);
+
+            foreach(ChannelWidget* wg, m_ChannelWidgets) {
+                if (wg->getChannelID() == id) {
+                    MiniDeviceWidget* mw = new MiniDeviceWidget(QString::number(dev_id), dev_id, wg);
+                    wg->addMiniDeviceWidget(mw);
+                    connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,wg,&ChannelWidget::removeMiniDeviceWidget);
+
+                    foreach(SingleChannel* sg, m_Channels) {
+                        if (sg->m_ch_id == id) {
+                            foreach(Device *dev, m_dev_list) {
+                                if (dev->m_device_id == dev_id) {
+                                    sg->addDevice(dev);
+                                    connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,sg,&SingleChannel::removeDeviceFromChannel);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+//            foreach(SingleChannel* sc, m_Channels) {
+//                if (sc->m_ch_id
+//            }
+        }
+    }
+
 }
 
 void MainWindow::deleteChannel(int id) {

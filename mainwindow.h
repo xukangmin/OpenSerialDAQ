@@ -12,6 +12,8 @@
 #include "newchannel.h"
 #include "channelwidget.h"
 #include "devicewidget.h"
+#include "dialogadddevicetochannel.h"
+#include "minidevicewidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,6 +33,7 @@ private:
 
     // UI - dialogs
     NewChannel* m_dlgNewChennel;
+    DialogAddDeviceToChannel* m_dlgAddDeviceToChannel;
 
     QVector<SingleChannel*> m_Channels;
     QVector<Device*> m_dev_list;
@@ -45,6 +48,7 @@ public slots:
     void showOverViewPage();
     void showDevicePage();
     void showNewChannelDialog();
+    void showAddDeviceToChannelDialog(int id);
     void deleteChannel(int id);
     //void deviceSelected(QModelIndex index);
 

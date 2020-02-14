@@ -31,7 +31,8 @@ void SingleChannel::addDevice(Device* dev) {
 
     foreach(Command cmd, dev->m_commands) {
         if (cmd.isDAQ) {
-            QTimer *m_timer = new QTimer(this);
+            QTimer *m_timer = new QTimer(dev);
+
             m_timer->setInterval(cmd.interval);
             connect(m_timer, &QTimer::timeout,this,[=]() {
                 Packet *pac = new Packet();
@@ -39,13 +40,25 @@ void SingleChannel::addDevice(Device* dev) {
                 pac->m_query_bytes = dev->buildQueryCmd(cmd);
                 pac->dev = dev;
                 pac->m_cmd_id = cmd.cmd_id;
+                qDebug() << "enqueu";
                 m_packet_queue.enqueue(pac);
             });
-            m_timer_pool.append(m_timer);
+            dev->m_timer_pool.append(m_timer);
         }
     }
 }
 
+void SingleChannel::removeDeviceFromChannel(int dev_id) {
+    foreach(Device *dev, m_device_pool) {
+        if (dev->m_device_id == dev_id) {
+            foreach(QTimer* tm, dev->m_timer_pool) {
+                tm->stop();
+            }
+            m_device_pool.removeOne(dev);
+            dev->deleteLater();
+        }
+    }
+}
 
 void SingleChannel::startChannel() {
     if (!isRunning()){
@@ -59,19 +72,24 @@ void SingleChannel::startChannel() {
 void SingleChannel::stopChannel() {
     if (isRunning()) {
         m_stop = true;
-        quit();
+        stopDAQ();
+        //quit();
     }
 }
 
 void SingleChannel::startDAQ() {
-    foreach(QTimer *tm, m_timer_pool) {
-        tm->start();
+    foreach(Device* dev, m_device_pool) {
+        foreach(QTimer* tm, dev->m_timer_pool) {
+            tm->start();
+        }
     }
 }
 
 void SingleChannel::stopDAQ() {
-    foreach(QTimer *tm, m_timer_pool) {
-        tm->stop();
+    foreach(Device* dev, m_device_pool) {
+        foreach(QTimer* tm, dev->m_timer_pool) {
+            tm->stop();
+        }
     }
 }
 
@@ -88,6 +106,8 @@ void SingleChannel::run()
     serial.setDataBits(m_ch.m_dataBits);
 
     serial.setStopBits(m_ch.m_stopBits);
+
+    qDebug() << "channel started";
 
     if (!serial.open(QIODevice::ReadWrite)) {
         //Todo: emit a signal here
@@ -134,6 +154,8 @@ void SingleChannel::run()
         }
         msleep(1);
     }
+
+    serial.close();
 }
 
 void SingleChannel::getData(QVector<DeviceData> data) {

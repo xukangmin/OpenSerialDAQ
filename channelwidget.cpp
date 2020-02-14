@@ -1,6 +1,7 @@
 #include "channelwidget.h"
 #include "ui_channelwidget.h"
 #include <QDebug>
+#include "databasemanager.h"
 
 ChannelWidget::ChannelWidget(Channel ch, QWidget *parent) :
     QWidget(parent),m_ch(ch),
@@ -8,17 +9,11 @@ ChannelWidget::ChannelWidget(Channel ch, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    qDebug() << ch.m_portName;
-
-    qDebug() << ch.m_baudRate;
-
-    qDebug() << ch.m_dataBits;
-
-    qDebug() << ch.m_parity;
-
     ui->ChannelInfo->setText(ch.m_portName + " " + ch.m_baudRateStr + " " + ch.m_dataBitsStr + "-" + ch.m_parityStr + "-" + ch.m_stopBitsStr);
 
 }
+
+
 
 ChannelWidget::~ChannelWidget()
 {
@@ -35,4 +30,43 @@ void ChannelWidget::on_btnDelete_clicked()
 void ChannelWidget::on_btnStart_clicked()
 {
     emit startChannel(m_ch.m_id);
+}
+
+void ChannelWidget::on_btnStop_clicked()
+{
+    emit stopChannel(m_ch.m_id);
+}
+
+void ChannelWidget::on_btnAddDevice_clicked()
+{
+    emit addDeviceToChannel(m_ch.m_id);
+}
+
+int ChannelWidget::getChannelID() {
+    return m_ch.m_id;
+}
+
+void ChannelWidget::addMiniDeviceWidget(MiniDeviceWidget* dev) {
+    ui->verticalLayout->addWidget(dev);
+}
+
+
+void ChannelWidget::removeMiniDeviceWidget(int dev_id) {
+
+        QList<MiniDeviceWidget *> mwg_list = this->findChildren<MiniDeviceWidget*>();
+
+        foreach(MiniDeviceWidget * mwg, mwg_list) {
+            if (mwg->m_devID == dev_id) {
+                ui->verticalLayout->removeWidget(mwg);
+                mwg->deleteLater();
+                DatabaseManager::instance().resetDeviceBinding(dev_id);
+                // reset associated channel id
+            }
+        }
+//    foreach(QWidget* wg, (MiniDeviceWidget*)ui->verticalLayout->widget()) {
+//        MiniDeviceWidget* mwg = dynamic_cast<MiniDeviceWidget*>(wg);
+//        if (mwg->m_devID == dev_id) {
+//            ui->verticalLayout->removeWidget(mwg);
+//        }
+//    }
 }

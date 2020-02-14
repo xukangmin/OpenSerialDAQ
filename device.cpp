@@ -15,6 +15,7 @@ Device::Device(int node_id):
 Device::Device(int node_id, QString protocol_name):
         m_node_id(node_id), m_protocol(protocol_name)
 {
+    m_name = protocol_name + "_" + QString::number(node_id);
     loadFromConfig(protocol_name);
 }
 
@@ -22,6 +23,7 @@ Device::Device(int node_id, QString protocol_name):
 Device::Device(int id, int node_id, QString protocol_name):
         m_device_id(id), m_node_id(node_id), m_protocol(protocol_name)
 {
+    m_name = protocol_name + "_" + QString::number(node_id);
     loadFromConfig(protocol_name);
 }
 

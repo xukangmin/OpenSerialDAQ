@@ -2,6 +2,7 @@
 #define DEVICE_H
 
 #include <QSerialPort>
+#include <QTimer>
 #include "devicedata.h"
 
 enum protocol {
@@ -46,8 +47,11 @@ struct Command {
     QVector<DataFormat> data_formats;
 };
 
-class Device
+class Device : public QObject
 {
+
+Q_OBJECT
+
 public:
     Device(int node_id);
 
@@ -72,7 +76,7 @@ public:
     QString m_serial_number;
 
 
-
+    QVector<QTimer*> m_timer_pool;
 
 
     QVector<Command> m_commands;

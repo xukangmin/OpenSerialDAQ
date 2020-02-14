@@ -37,10 +37,13 @@ private:
     void loadProtocol(QString protocolName);
 
     QVector<QTimer*> m_timer_pool;
+
     QVector<Device*> m_device_pool;
 
     DataProcessor* dataWorker;
 
+public slots:
+    void removeDeviceFromChannel(int dev_id);
 
 
 signals:

@@ -34,8 +34,15 @@ public:
     void queryData();
     void removeChannel(int id) const;
     void removeDevice(int id) const;
+
+    Device* getDevice(int id);
     QVector<Device*> getAllDevice();
+    QVector<Device*> getUnassignedDevice();
     QVector<Channel> getAllChannel();
+    void updateDeviceWithChannelID(int deviceID, int channelID);
+    QVector<Device*> getDeviceWithChannelID(int channelID);
+    void resetDeviceBinding(int devID);
+
 protected:
     DatabaseManager(const QString& path = DATABASE_FILENAME);
 

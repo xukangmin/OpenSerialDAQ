@@ -156,6 +156,18 @@ void DatabaseManager::removeDevice(int id) const
     debugQuery(query);
 }
 
+Device* DatabaseManager::getDevice(int id) {
+    QSqlQuery query(m_database);
+
+    query.prepare("SELECT * FROM Devices WHERE id=:deviceID");
+
+    query.bindValue(":deviceID", id);
+
+    Device *dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
+
+    return dev;
+}
+
 QVector<Device*> DatabaseManager::getAllDevice() {
     QSqlQuery query("SELECT * FROM Devices", m_database);
 
@@ -172,6 +184,65 @@ QVector<Device*> DatabaseManager::getAllDevice() {
 
 }
 
+void DatabaseManager::updateDeviceWithChannelID(int deviceID, int channelID) {
+    QSqlQuery query(m_database);
+
+    query.prepare("UPDATE Devices SET ChannelID=:channelID WHERE id=:deviceID");
+
+    query.bindValue(":channelID", channelID);
+
+    query.bindValue(":deviceID", deviceID);
+
+    query.exec();
+
+    debugQuery(query);
+}
+
+QVector<Device*> DatabaseManager::getDeviceWithChannelID(int channelID) {
+    QSqlQuery query(m_database);
+
+    query.prepare("SELECT * FROM Devices WHERE ChannelID = :channelID");
+
+    query.bindValue(":channelID", channelID);
+
+    query.exec();
+
+    QVector<Device*> list;
+
+    while(query.next()) {
+        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
+        list.append(dev);
+    }
+
+    return list;
+
+}
+
+void DatabaseManager::resetDeviceBinding(int devID) {
+    QSqlQuery query(m_database);
+
+    query.prepare("UPDATE Devices SET ChannelID = 0 WHERE id=:devID");
+
+    query.bindValue(":devID", devID);
+
+    query.exec();
+}
+
+QVector<Device*> DatabaseManager::getUnassignedDevice() {
+    QSqlQuery query("SELECT * FROM Devices WHERE ChannelID = 0", m_database);
+
+    query.exec();
+
+    QVector<Device*> list;
+
+    while(query.next()) {
+        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
+        list.append(dev);
+    }
+
+    return list;
+
+}
 
 QVector<Channel> DatabaseManager::getAllChannel() {
     QSqlQuery query("SELECT * FROM Channels", m_database);
