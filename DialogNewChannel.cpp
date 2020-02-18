@@ -1,22 +1,23 @@
-#include "newchannel.h"
-#include "ui_newchannel.h"
+#include "DialogNewChannel.h"
+#include "ui_DialogNewChannel.h"
 #include <QDebug>
 
-NewChannel::NewChannel(QWidget *parent) :
+DialogNewChannel::DialogNewChannel(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::NewChannel)
+    ui(new Ui::DialogNewChannel)
 {
     ui->setupUi(this);
 }
 
 
 
-NewChannel::~NewChannel()
+DialogNewChannel::~DialogNewChannel()
 {
+    qDebug() << "new channel dialog destroyed";
     delete ui;
 }
 
-Channel NewChannel::getChannelInfo() {
+Channel DialogNewChannel::getChannelInfo() {
     Channel ch(0,
                 ui->cmbPort->currentText(),
                ui->cmbBaudRate->currentText().toInt(),
@@ -27,7 +28,7 @@ Channel NewChannel::getChannelInfo() {
     return ch;
 }
 
-void NewChannel::getAvailablePorts() {
+void DialogNewChannel::getAvailablePorts() {
 
     m_portLists.clear();
     ui->cmbPort->clear();

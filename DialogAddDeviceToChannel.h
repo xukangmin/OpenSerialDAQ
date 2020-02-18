@@ -2,8 +2,8 @@
 #define DIALOGADDDEVICETOCHANNEL_H
 
 #include <QDialog>
-#include "device.h"
-#include "databasemanager.h"
+#include "Device.h"
+#include "DatabaseManager.h"
 
 namespace Ui {
 class DialogAddDeviceToChannel;

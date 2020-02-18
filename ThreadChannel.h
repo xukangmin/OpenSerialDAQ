@@ -6,18 +6,18 @@
 #include <QWaitCondition>
 #include <QTimer>
 #include <QQueue>
-#include <device.h>
-#include <packet.h>
-#include <dataprocessor.h>
-#include "channel.h"
+#include <Device.h>
+#include <Packet.h>
+#include <ThreadDataProcessor.h>
+#include "Channel.h"
 
-class SingleChannel : public QThread
+class ThreadChannel : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit SingleChannel(Channel ch, QObject *parent = nullptr);
-    ~SingleChannel() override;
+    explicit ThreadChannel(Channel ch, QObject *parent = nullptr);
+    ~ThreadChannel() override;
 
     void addDevice(Device* dev); // add device to current channel
 
@@ -40,7 +40,7 @@ private:
 
     QVector<Device*> m_device_pool;
 
-    DataProcessor* dataWorker;
+    ThreadDataProcessor* dataWorker;
 
 public slots:
     void removeDeviceFromChannel(int dev_id);

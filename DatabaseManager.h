@@ -3,9 +3,9 @@
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include "device.h"
-#include "devicedata.h"
-#include "channel.h"
+#include "Device.h"
+#include "DeviceData.h"
+#include "Channel.h"
 
 const QString DATABASE_FILENAME = "SerialDAQData.db";
 

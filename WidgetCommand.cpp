@@ -1,5 +1,5 @@
-#include "commandwidget.h"
-#include "ui_commandwidget.h"
+#include "WidgetCommand.h"
+#include "ui_WidgetCommand.h"
 
 CommandWidget::CommandWidget(QWidget *parent) :
     QGroupBox(parent),

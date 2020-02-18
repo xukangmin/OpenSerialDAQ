@@ -3,7 +3,7 @@
 
 #include <QSerialPort>
 #include <QTimer>
-#include "devicedata.h"
+#include "DeviceData.h"
 
 enum protocol {
   ASCII,

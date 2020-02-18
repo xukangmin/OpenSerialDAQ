@@ -3,18 +3,18 @@
 
 
 #include <QRunnable>
-#include <device.h>
-#include <packet.h>
-#include "devicedata.h"
+#include <Device.h>
+#include <Packet.h>
+#include "DeviceData.h"
 
-class DataProcessor : public QObject, public QRunnable
+class ThreadDataProcessor : public QObject, public QRunnable
 {
 
 Q_OBJECT
 
 public:
-    DataProcessor(Packet* pac);
-    ~DataProcessor();
+    ThreadDataProcessor(Packet* pac);
+    ~ThreadDataProcessor();
 
     void run() override;
 

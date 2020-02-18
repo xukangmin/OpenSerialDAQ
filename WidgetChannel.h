@@ -2,8 +2,8 @@
 #define CHANNELWIDGET_H
 
 #include <QWidget>
-#include "channel.h"
-#include "minidevicewidget.h"
+#include "Channel.h"
+#include "WidgetMiniDevice.h"
 
 namespace Ui {
 class ChannelWidget;

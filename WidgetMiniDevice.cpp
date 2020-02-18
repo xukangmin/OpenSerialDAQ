@@ -1,5 +1,5 @@
-#include "minidevicewidget.h"
-#include "ui_minidevicewidget.h"
+#include "WidgetMiniDevice.h"
+#include "ui_WidgetMiniDevice.h"
 
 MiniDeviceWidget::MiniDeviceWidget(QString devName, int devID, QWidget *parent) :
     QWidget(parent),

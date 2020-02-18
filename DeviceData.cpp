@@ -1,4 +1,4 @@
-#include "devicedata.h"
+#include "DeviceData.h"
 
 
 

@@ -1,14 +1,14 @@
-#include "singlechannel.h"
+#include "ThreadChannel.h"
 #include <QSerialPort>
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QThreadPool>
-#include "mainwindow.h"
-#include "databasemanager.h"
+#include "MainWindow.h"
+#include "DatabaseManager.h"
 
-SingleChannel::SingleChannel(Channel ch, QObject *parent) :
+ThreadChannel::ThreadChannel(Channel ch, QObject *parent) :
      QThread(parent),
      m_ch(ch),
      m_stop(false),
@@ -17,7 +17,7 @@ SingleChannel::SingleChannel(Channel ch, QObject *parent) :
 }
 
 
-SingleChannel::~SingleChannel()
+ThreadChannel::~ThreadChannel()
 {
     qDebug() << "channel " << m_ch_id << " destroyed";
     //DatabaseManager::instance().removeChannel(m_ch_id);
@@ -26,7 +26,7 @@ SingleChannel::~SingleChannel()
 
 }
 
-void SingleChannel::addDevice(Device* dev) {
+void ThreadChannel::addDevice(Device* dev) {
     m_device_pool.append(dev);
 
     foreach(Command cmd, dev->m_commands) {
@@ -48,7 +48,7 @@ void SingleChannel::addDevice(Device* dev) {
     }
 }
 
-void SingleChannel::removeDeviceFromChannel(int dev_id) {
+void ThreadChannel::removeDeviceFromChannel(int dev_id) {
     foreach(Device *dev, m_device_pool) {
         if (dev->m_device_id == dev_id) {
             foreach(QTimer* tm, dev->m_timer_pool) {
@@ -60,7 +60,7 @@ void SingleChannel::removeDeviceFromChannel(int dev_id) {
     }
 }
 
-void SingleChannel::startChannel() {
+void ThreadChannel::startChannel() {
     if (!isRunning()){
         m_stop = false;
         start();
@@ -69,7 +69,7 @@ void SingleChannel::startChannel() {
 }
 
 
-void SingleChannel::stopChannel() {
+void ThreadChannel::stopChannel() {
     if (isRunning()) {
         m_stop = true;
         stopDAQ();
@@ -77,7 +77,7 @@ void SingleChannel::stopChannel() {
     }
 }
 
-void SingleChannel::startDAQ() {
+void ThreadChannel::startDAQ() {
     foreach(Device* dev, m_device_pool) {
         foreach(QTimer* tm, dev->m_timer_pool) {
             tm->start();
@@ -85,7 +85,7 @@ void SingleChannel::startDAQ() {
     }
 }
 
-void SingleChannel::stopDAQ() {
+void ThreadChannel::stopDAQ() {
     foreach(Device* dev, m_device_pool) {
         foreach(QTimer* tm, dev->m_timer_pool) {
             tm->stop();
@@ -93,7 +93,7 @@ void SingleChannel::stopDAQ() {
     }
 }
 
-void SingleChannel::run()
+void ThreadChannel::run()
 {
     QSerialPort serial;
 
@@ -138,9 +138,9 @@ void SingleChannel::run()
                 pac->m_response_bytes = responseData;
                 //m_device_pool[0]->parseRxData(pac->m_response_bytes, 0);
 
-                DataProcessor *dataProc = new DataProcessor(pac);
+                ThreadDataProcessor *dataProc = new ThreadDataProcessor(pac);
 
-                connect(dataProc, &DataProcessor::sendData, this, &SingleChannel::getData);
+                connect(dataProc, &ThreadDataProcessor::sendData, this, &ThreadChannel::getData);
 
                 QThreadPool::globalInstance()->start(dataProc);
                 //dataWorker = new DataProcessor();
@@ -158,7 +158,7 @@ void SingleChannel::run()
     serial.close();
 }
 
-void SingleChannel::getData(QVector<DeviceData> data) {
+void ThreadChannel::getData(QVector<DeviceData> data) {
     qDebug() << "get data from thread";
     emit sendData(data, m_ch_id);
 }

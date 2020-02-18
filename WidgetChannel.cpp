@@ -1,7 +1,7 @@
-#include "channelwidget.h"
-#include "ui_channelwidget.h"
+#include "WidgetChannel.h"
+#include "ui_WidgetChannel.h"
 #include <QDebug>
-#include "databasemanager.h"
+#include "DatabaseManager.h"
 
 ChannelWidget::ChannelWidget(Channel ch, QWidget *parent) :
     QWidget(parent),m_ch(ch),

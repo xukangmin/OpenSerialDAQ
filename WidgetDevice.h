@@ -2,8 +2,8 @@
 #define DEVICEWIDGET_H
 
 #include <QWidget>
-#include "device.h"
-#include "channel.h"
+#include "Device.h"
+#include "Channel.h"
 
 namespace Ui {
 class DeviceWidget;

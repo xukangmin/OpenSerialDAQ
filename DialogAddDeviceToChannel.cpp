@@ -1,5 +1,5 @@
-#include "dialogadddevicetochannel.h"
-#include "ui_dialogadddevicetochannel.h"
+#include "DialogAddDeviceToChannel.h"
+#include "ui_DialogAddDeviceToChannel.h"
 
 #include <QStringListModel>
 #include <QListWidgetItem>

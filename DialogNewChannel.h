@@ -3,19 +3,19 @@
 
 #include <QDialog>
 #include <QSerialPortInfo>
-#include "channel.h"
+#include "Channel.h"
 
 namespace Ui {
-class NewChannel;
+class DialogNewChannel;
 }
 
-class NewChannel : public QDialog
+class DialogNewChannel : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit NewChannel(QWidget *parent = nullptr);
-    ~NewChannel();
+    explicit DialogNewChannel(QWidget *parent = nullptr);
+    ~DialogNewChannel();
 
     void getAvailablePorts();
 
@@ -24,7 +24,7 @@ public:
     QList<QString> m_portLists;
 
 private:
-    Ui::NewChannel *ui;
+    Ui::DialogNewChannel *ui;
 };
 
 #endif // NEWCHANNEL_H

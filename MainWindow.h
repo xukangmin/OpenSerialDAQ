@@ -2,18 +2,18 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "singlechannel.h"
-#include "databasemanager.h"
-#include "device.h"
-#include "devicedata.h"
-#include "dataprocessor.h"
+#include "ThreadChannel.h"
+#include "DatabaseManager.h"
+#include "Device.h"
+#include "DeviceData.h"
+#include "ThreadDataProcessor.h"
 #include <QDebug>
 #include <QVBoxLayout>
-#include "newchannel.h"
-#include "channelwidget.h"
-#include "devicewidget.h"
-#include "dialogadddevicetochannel.h"
-#include "minidevicewidget.h"
+#include "DialogNewChannel.h"
+#include "WidgetChannel.h"
+#include "WidgetDevice.h"
+#include "DialogAddDeviceToChannel.h"
+#include "WidgetMiniDevice.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -32,10 +32,10 @@ private:
     Ui::MainWindow *ui;
 
     // UI - dialogs
-    NewChannel* m_dlgNewChennel;
+    DialogNewChannel* m_dlgNewChennel;
     DialogAddDeviceToChannel* m_dlgAddDeviceToChannel;
 
-    QVector<SingleChannel*> m_Channels;
+    QVector<ThreadChannel*> m_Channels;
     QVector<Device*> m_dev_list;
     QVector<ChannelWidget*> m_ChannelWidgets;
     QVector<DeviceWidget*> m_DeviceWidgets;

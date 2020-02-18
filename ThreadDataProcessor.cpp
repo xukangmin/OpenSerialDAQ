@@ -1,11 +1,11 @@
-#include "dataprocessor.h"
+#include "ThreadDataProcessor.h"
 #include <QDebug>
 #include <QMutex>
-#include "databasemanager.h"
+#include "DatabaseManager.h"
 
 QMutex mutex;
 
-DataProcessor::DataProcessor(Packet* pac) :
+ThreadDataProcessor::ThreadDataProcessor(Packet* pac) :
     m_dev(pac->dev),
     m_rx_data(pac->m_response_bytes),
     m_cmd_id(pac->m_cmd_id)
@@ -14,7 +14,7 @@ DataProcessor::DataProcessor(Packet* pac) :
 }
 
 
-DataProcessor::~DataProcessor()
+ThreadDataProcessor::~ThreadDataProcessor()
 {
     qDebug() << "data process thread destroyed";
 }
@@ -25,7 +25,7 @@ DataProcessor::~DataProcessor()
 //        run();
 //}
 
-void DataProcessor::run() {
+void ThreadDataProcessor::run() {
 
 
 

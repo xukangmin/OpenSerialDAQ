@@ -1,4 +1,4 @@
-QT       += core gui serialport sql
+QT       += core gui serialport sql quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,46 +16,46 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    channel.cpp \
-    channelwidget.cpp \
-    commandwidget.cpp \
-    databasemanager.cpp \
-    dataprocessor.cpp \
-    device.cpp \
-    devicedata.cpp \
-    devicewidget.cpp \
-    dialogadddevicetochannel.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    minidevicewidget.cpp \
-    newchannel.cpp \
-    packet.cpp \
-    singlechannel.cpp
+    Channel.cpp \
+    DatabaseManager.cpp \
+    Device.cpp \
+    DeviceData.cpp \
+    DialogAddDeviceToChannel.cpp \
+    DialogNewChannel.cpp \
+    MainWindow.cpp \
+    Packet.cpp \
+    ThreadChannel.cpp \
+    ThreadDataProcessor.cpp \
+    WidgetChannel.cpp \
+    WidgetCommand.cpp \
+    WidgetDevice.cpp \
+    WidgetMiniDevice.cpp \
+    main.cpp
 
 HEADERS += \
-    channel.h \
-    channelwidget.h \
-    commandwidget.h \
-    databasemanager.h \
-    dataprocessor.h \
-    device.h \
-    devicedata.h \
-    devicewidget.h \
-    dialogadddevicetochannel.h \
-    mainwindow.h \
-    minidevicewidget.h \
-    newchannel.h \
-    packet.h \
-    singlechannel.h
+    Channel.h \
+    DatabaseManager.h \
+    Device.h \
+    DeviceData.h \
+    DialogAddDeviceToChannel.h \
+    DialogNewChannel.h \
+    MainWindow.h \
+    Packet.h \
+    ThreadChannel.h \
+    ThreadDataProcessor.h \
+    WidgetChannel.h \
+    WidgetCommand.h \
+    WidgetDevice.h \
+    WidgetMiniDevice.h
 
 FORMS += \
-    channelwidget.ui \
-    commandwidget.ui \
-    devicewidget.ui \
-    dialogadddevicetochannel.ui \
-    mainwindow.ui \
-    minidevicewidget.ui \
-    newchannel.ui
+    DialogAddDeviceToChannel.ui \
+    DialogNewChannel.ui \
+    WidgetChannel.ui \
+    WidgetCommand.ui \
+    WidgetDevice.ui \
+    WidgetMiniDevice.ui \
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

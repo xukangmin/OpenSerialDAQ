@@ -4,7 +4,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QVector>
-#include "device.h"
+#include "Device.h"
 
 class Packet
 {
