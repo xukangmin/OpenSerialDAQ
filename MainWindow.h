@@ -42,6 +42,7 @@ private:
     QVector<Channel> m_channle_list;
 
     QVBoxLayout* scrollVLayout;
+    void createNewChannel(Channel ch_info);
 
 public slots:
     void getData(QVector<DeviceData> data, int ch_id);

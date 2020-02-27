@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NewChannel</class>
- <widget class="QDialog" name="NewChannel">
+ <class>DialogNewChannel</class>
+ <widget class="QDialog" name="DialogNewChannel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -200,7 +200,7 @@
   <connection>
    <sender>buttonBox_2</sender>
    <signal>accepted()</signal>
-   <receiver>NewChannel</receiver>
+   <receiver>DialogNewChannel</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -216,7 +216,7 @@
   <connection>
    <sender>buttonBox_2</sender>
    <signal>rejected()</signal>
-   <receiver>NewChannel</receiver>
+   <receiver>DialogNewChannel</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
