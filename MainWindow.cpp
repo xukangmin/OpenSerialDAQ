@@ -14,15 +14,17 @@ MainWindow::MainWindow(QWidget *parent)
     DatabaseManager::instance().init();
 
     // get all device from db
-    m_dev_list = DatabaseManager::instance().getAllDevice();
+    DatabaseManager::instance().getAllDevice(&m_dev_list, &m_var_list);
 
     if (m_dev_list.empty()) {
         // insert demo device
         DatabaseManager::instance().insertDevice("ALICAT",0,"LFE-ALICAT");
         DatabaseManager::instance().insertDevice("DP",0,"LFE-DP");
         DatabaseManager::instance().insertDevice("DP",1,"LFE-DP");
-        m_dev_list = DatabaseManager::instance().getAllDevice();
+        DatabaseManager::instance().getAllDevice(&m_dev_list, &m_var_list);
     }
+
+
 
     // register meta types
     qRegisterMetaType<QVector<DeviceData>>("QVector<DeviceData>");
@@ -55,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     scrollVLayout = new QVBoxLayout;
 
-    foreach(Device* dev, m_dev_list) {
+    foreach(Device *dev, m_dev_list) {
 
         QListWidgetItem* lineItem = new QListWidgetItem(dev->m_name, ui->DeviceList);
 
@@ -148,15 +150,18 @@ void MainWindow::createNewChannel(Channel ch_info) {
 
 
     if (isExist) {
-        QVector<Device*> tmpDevList = DatabaseManager::instance().getDeviceWithChannelID(ch_info.m_id);
+        QVector<Device*> tmpDevList;
+        DatabaseManager::instance().getDeviceWithChannelID(ch_info.m_id, &tmpDevList);
 
-        foreach(Device* dev, tmpDevList) {
-            MiniDeviceWidget* mw = new MiniDeviceWidget(dev->m_name,dev->m_device_id,cw);
-            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,cw,&ChannelWidget::removeMiniDeviceWidget);
-            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,ch,&ThreadChannel::removeDeviceFromChannel);
-            cw->addMiniDeviceWidget(mw);
-            ch->addDevice(dev);
-        }
+
+
+//        foreach(const Device& dev, tmpDevList) {
+//            MiniDeviceWidget* mw = new MiniDeviceWidget(dev.m_name,dev.m_device_id,cw);
+//            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,cw,&ChannelWidget::removeMiniDeviceWidget);
+//            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,ch,&ThreadChannel::removeDeviceFromChannel);
+//            cw->addMiniDeviceWidget(mw);
+//            ch->addDevice(dev);
+//        }
     }
 
     ui->ChannelLayout->addWidget(cw);
@@ -214,12 +219,12 @@ void MainWindow::showAddDeviceToChannelDialog(int id) {
 
                     foreach(ThreadChannel* sg, m_Channels) {
                         if (sg->m_ch_id == id) {
-                            foreach(Device *dev, m_dev_list) {
-                                if (dev->m_device_id == dev_id) {
-                                    sg->addDevice(dev);
-                                    connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,sg,&ThreadChannel::removeDeviceFromChannel);
-                                }
-                            }
+//                            foreach(Device *dev, m_dev_list) {
+//                                if (dev->m_device_id == dev_id) {
+//                                    sg->addDevice(dev);
+//                                    connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,sg,&ThreadChannel::removeDeviceFromChannel);
+//                                }
+//                            }
                         }
                     }
                 }

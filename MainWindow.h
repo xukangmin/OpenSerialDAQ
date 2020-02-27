@@ -36,7 +36,10 @@ private:
     DialogAddDeviceToChannel* m_dlgAddDeviceToChannel;
 
     QVector<ThreadChannel*> m_Channels;
+
     QVector<Device*> m_dev_list;
+    QVector<Variable*> m_var_list;
+
     QVector<ChannelWidget*> m_ChannelWidgets;
     QVector<DeviceWidget*> m_DeviceWidgets;
     QVector<Channel> m_channle_list;

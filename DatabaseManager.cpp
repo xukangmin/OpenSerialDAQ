@@ -71,15 +71,18 @@ void DatabaseManager::initChannel() {
 
 }
 
-void DatabaseManager::initDataType() {
+void DatabaseManager::initVariable() {
 
-    if (!m_database.tables().contains("DataType")) {
+    if (!m_database.tables().contains("Variable")) {
         QSqlQuery query(m_database);
-        query.exec("CREATE TABLE DataType ("
+        query.exec("CREATE TABLE Variable ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "DeviceID INTEGER"
                    "Name TEXT, "
-                   "Unit TEXT)");
+                   "Unit TEXT, "
+                   "DeviceID INTEGER, "
+                   "Equation TEXT,"
+                   "GourpID INTEGER"
+                   ")");
         debugQuery(query);
     }
 }
@@ -101,7 +104,7 @@ void DatabaseManager::initData() {
 void DatabaseManager::init() {
     initDevice();
     initData();
-    initDataType();
+    initVariable();
     initChannel();
 }
 
@@ -113,6 +116,20 @@ int DatabaseManager::insertDevice(QString name, int node, QString protocol, int 
     query.bindValue(":Node",node);
     query.bindValue(":Protocol", protocol);
     query.bindValue(":ChannelID", ch_id);
+    query.exec();
+    debugQuery(query);
+    return query.lastInsertId().toInt();
+
+}
+
+int DatabaseManager::insertVariable(QString name, QString unit, int deviceId, QString equation) {
+    QSqlQuery query(m_database);
+
+    query.prepare("INSERT INTO Variable (Name,Unit,DeviceID,Equation) VALUES (:name,:unit,:deviceId,:equation)");
+    query.bindValue(":name",name);
+    query.bindValue(":unit",unit);
+    query.bindValue(":deviceId", deviceId);
+    query.bindValue(":equation", equation);
     query.exec();
     debugQuery(query);
     return query.lastInsertId().toInt();
@@ -156,32 +173,33 @@ void DatabaseManager::removeDevice(int id) const
     debugQuery(query);
 }
 
-Device* DatabaseManager::getDevice(int id) {
+bool DatabaseManager::getDevice(int id, QVector<Device*> *dev_list, QVector<Variable*> *var_list) {
     QSqlQuery query(m_database);
 
     query.prepare("SELECT * FROM Devices WHERE id=:deviceID");
 
     query.bindValue(":deviceID", id);
 
-    Device *dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
+    query.exec();
 
-    return dev;
+//    while(query.next()) {
+//        dev_list->append(Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString(), var_list));
+//    }
+
+    return true;
 }
 
-QVector<Device*> DatabaseManager::getAllDevice() {
+bool DatabaseManager::getAllDevice(QVector<Device*> *dev_list, QVector<Variable*> *var_list) {
     QSqlQuery query("SELECT * FROM Devices", m_database);
 
     query.exec();
 
-    QVector<Device*> list;
-
     while(query.next()) {
-        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
-        list.append(dev);
+        Device *dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString(), var_list);
+        dev_list->append(dev);
     }
 
-    return list;
-
+    return true;
 }
 
 void DatabaseManager::updateDeviceWithChannelID(int deviceID, int channelID) {
@@ -198,7 +216,7 @@ void DatabaseManager::updateDeviceWithChannelID(int deviceID, int channelID) {
     debugQuery(query);
 }
 
-QVector<Device*> DatabaseManager::getDeviceWithChannelID(int channelID) {
+bool DatabaseManager::getDeviceWithChannelID(int channelID, QVector<Device*> *dev_list, QVector<Variable*> *var_list) {
     QSqlQuery query(m_database);
 
     query.prepare("SELECT * FROM Devices WHERE ChannelID = :channelID");
@@ -207,14 +225,13 @@ QVector<Device*> DatabaseManager::getDeviceWithChannelID(int channelID) {
 
     query.exec();
 
-    QVector<Device*> list;
+    QVector<Device> list;
 
-    while(query.next()) {
-        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
-        list.append(dev);
-    }
+//    while(query.next()) {
+//        dev_list->append(Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString(), var_list));
+//    }
 
-    return list;
+    return true;
 
 }
 
@@ -228,19 +245,40 @@ void DatabaseManager::resetDeviceBinding(int devID) {
     query.exec();
 }
 
-QVector<Device*> DatabaseManager::getUnassignedDevice() {
+bool DatabaseManager::getUnassignedDevice(QVector<Device*> *dev_list, QVector<Variable*> *var_list) {
     QSqlQuery query("SELECT * FROM Devices WHERE ChannelID = 0", m_database);
 
     query.exec();
 
-    QVector<Device*> list;
+    QVector<Device> list;
 
-    while(query.next()) {
-        Device* dev = new Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString());
-        list.append(dev);
+//    while(query.next()) {
+//        dev_list->append(Device(query.value("id").toInt(), query.value("Node").toInt(), query.value("Protocol").toString(), var_list));
+//    }
+
+    return true;
+
+}
+
+bool DatabaseManager::checkVariableExist(QString name, int deviceID) {
+    QSqlQuery query(m_database);
+
+    query.prepare("SELECT COUNT(*) FROM Variable WHERE Name=:name AND DeviceID=:deviceID");
+    query.bindValue(":name", name);
+    query.bindValue(":deviceID",deviceID);
+    query.exec();
+
+    int cont = 0;
+
+    if(query.next()) {
+        cont = query.value(0).toInt();
     }
 
-    return list;
+    if (cont == 0) {
+        return false;
+    } else {
+        return true;
+    }
 
 }
 

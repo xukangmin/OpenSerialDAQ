@@ -1,7 +1,7 @@
 #include "WidgetDevice.h"
 #include "ui_WidgetDevice.h"
 
-DeviceWidget::DeviceWidget(Device* dev, QVector<Channel> ch_list, QWidget *parent) :
+DeviceWidget::DeviceWidget(Device *dev, QVector<Channel> ch_list, QWidget *parent) :
     QWidget(parent),
     m_dev(dev),
     m_ch_list(ch_list),

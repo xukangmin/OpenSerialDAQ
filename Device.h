@@ -3,13 +3,8 @@
 
 #include <QSerialPort>
 #include <QTimer>
+#include "Variable.h"
 #include "DeviceData.h"
-
-enum protocol {
-  ASCII,
-  LRM,
-  MODBUS
-};
 
 struct Parameter {
     QString name;
@@ -20,7 +15,7 @@ struct Parameter {
 
 };
 
-struct DataFormat {
+struct ParseFormat {
     QString type;
     QString name;
     int location;
@@ -44,7 +39,7 @@ struct Command {
     uint8_t length;
     bool isDAQ;
     int interval;
-    QVector<DataFormat> data_formats;
+    QVector<ParseFormat> parse_info;
 };
 
 class Device : public QObject
@@ -57,11 +52,10 @@ public:
 
     Device(int node_id, QString protocol_name);
 
-    Device(int id, int node_id, QString protocol_name);
+    Device(int id, int node_id, QString protocol_name, QVector<Variable*> *var_list);
 
-    Device(int id, QString name, int node_id, QString protocol_name);
+    Device(int id, QString name, int node_id, QString protocol_name, QVector<Variable*> *var_list);
 
-    QVector<DeviceData> m_devData;
 
     int m_device_id;
 
@@ -72,6 +66,8 @@ public:
 
 
     QString m_protocol;
+
+    QVector<Variable*> *m_var_list;
 
     QString m_serial_number;
 

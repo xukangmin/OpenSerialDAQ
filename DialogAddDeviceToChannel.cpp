@@ -12,17 +12,17 @@ DialogAddDeviceToChannel::DialogAddDeviceToChannel(int channelID, QWidget *paren
     ui->setupUi(this);
 
     // first get device are not assigned to any channel
-    m_device_list = DatabaseManager::instance().getUnassignedDevice();
+//    m_device_list = DatabaseManager::instance().getUnassignedDevice();
 
 
-    foreach(Device* dev, m_device_list) {
+//    foreach(Device* dev, m_device_list) {
 
-        QListWidgetItem* lineItem = new QListWidgetItem(dev->m_name, ui->lsDevice);
+//        QListWidgetItem* lineItem = new QListWidgetItem(dev->m_name, ui->lsDevice);
 
-        lineItem->setData(Qt::UserRole, dev->m_device_id);
+//        lineItem->setData(Qt::UserRole, dev->m_device_id);
 
-        ui->lsDevice->addItem(lineItem);
-    }
+//        ui->lsDevice->addItem(lineItem);
+//    }
 
 
 }

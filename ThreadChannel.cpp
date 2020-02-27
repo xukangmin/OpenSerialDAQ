@@ -10,9 +10,9 @@
 
 ThreadChannel::ThreadChannel(Channel ch, QObject *parent) :
      QThread(parent),
+     m_ch_id(ch.m_id),
      m_ch(ch),
-     m_stop(false),
-     m_ch_id(ch.m_id)
+     m_stop(false)
 {
 }
 
@@ -26,7 +26,7 @@ ThreadChannel::~ThreadChannel()
 
 }
 
-void ThreadChannel::addDevice(Device* dev) {
+void ThreadChannel::addDevice(Device *dev) {
     m_device_pool.append(dev);
 
     foreach(Command cmd, dev->m_commands) {

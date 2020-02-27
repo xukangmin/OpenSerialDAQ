@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QRegularExpression>
+#include "Variable.h"
 
 Device::Device(int node_id):
         m_node_id(node_id)
@@ -20,15 +21,15 @@ Device::Device(int node_id, QString protocol_name):
 }
 
 
-Device::Device(int id, int node_id, QString protocol_name):
-        m_device_id(id), m_node_id(node_id), m_protocol(protocol_name)
+Device::Device(int id, int node_id, QString protocol_name, QVector<Variable*> *var_list):
+        m_device_id(id), m_node_id(node_id), m_protocol(protocol_name), m_var_list(var_list)
 {
     m_name = protocol_name + "_" + QString::number(node_id);
     loadFromConfig(protocol_name);
 }
 
-Device::Device(int id, QString name, int node_id, QString protocol_name):
-    m_device_id(id), m_name(name), m_node_id(node_id), m_protocol(protocol_name)
+Device::Device(int id, QString name, int node_id, QString protocol_name, QVector<Variable*> *var_list):
+    m_device_id(id), m_name(name), m_node_id(node_id), m_protocol(protocol_name), m_var_list(var_list)
 {
     loadFromConfig(protocol_name);
 }
@@ -118,7 +119,7 @@ QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
         bool isValidated = true;
 
-        foreach(DataFormat fm, cmd.data_formats) {
+        foreach(ParseFormat fm, cmd.parse_info) {
             if (fm.usage == "Validation"){
                 if (fm.name == "Header") {
                     if (!((uint8_t)rx_data.at(fm.location) == cmd.header)) {
@@ -170,12 +171,12 @@ QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 //                        }
 //                    }
 
-                    for(auto& da : m_devData) {
-                        if (da.m_dataName == fm.name) {
-                            da.addData(data, now);
-                            parsedData.append(da);
-                        }
-                    }
+//                    for(auto& da : m_devData) {
+//                        if (da.m_dataName == fm.name) {
+//                            da.addData(data, now);
+//                            parsedData.append(da);
+//                        }
+//                    }
                 }
             }
         }
@@ -269,84 +270,55 @@ void Device::loadFromConfig(QString protocol_name) {
                         }
 
 
-                        if (singleCmd.contains("DataFormat") && singleCmd["DataFormat"].isArray()) {
-                            QJsonArray data_format_arr = singleCmd["DataFormat"].toArray();
-                            for (int k = 0; k < data_format_arr.size(); k++) {
-                                QJsonObject singleDataFormat = data_format_arr[k].toObject();
+                        if (singleCmd.contains("ParseList") && singleCmd["ParseList"].isArray()) {
+                            QJsonArray var_list_arr = singleCmd["ParseList"].toArray();
+                            for (int k = 0; k < var_list_arr.size(); k++) {
+                                QJsonObject singleParseFormat = var_list_arr[k].toObject();
 
-                                DataFormat data_format;
-                                if (singleDataFormat.contains("Name") && singleDataFormat["Name"].isString()) {
-                                    data_format.name = singleDataFormat["Name"].toString();
+                                ParseFormat parseFormat;
+                                if (singleParseFormat.contains("Type") && singleParseFormat["Type"].isString()) {
+                                    parseFormat.name = singleParseFormat["Type"].toString();
                                 }
 
-                                if (singleDataFormat.contains("Type") && singleDataFormat["Type"].isString()) {
-                                    data_format.type = singleDataFormat["Type"].toString();
+                                if (singleParseFormat.contains("Type") && singleParseFormat["Type"].isString()) {
+                                    parseFormat.type = singleParseFormat["Type"].toString();
                                 }
 
-                                if (singleDataFormat.contains("Location") && singleDataFormat["Location"].isDouble()) {
-                                    data_format.location = singleDataFormat["Location"].toInt();
+                                if (singleParseFormat.contains("Location") && singleParseFormat["Location"].isDouble()) {
+                                    parseFormat.location = singleParseFormat["Location"].toInt();
                                 }
 
-                                if (singleDataFormat.contains("Unit") && singleDataFormat["Unit"].isString()) {
-                                    data_format.unit = singleDataFormat["Unit"].toString();
+                                if (singleParseFormat.contains("Unit") && singleParseFormat["Unit"].isString()) {
+                                    parseFormat.unit = singleParseFormat["Unit"].toString();
                                 }
 
-                                if (singleDataFormat.contains("Usage") && singleDataFormat["Usage"].isString()) {
-                                    data_format.usage = singleDataFormat["Usage"].toString();
+                                if (singleParseFormat.contains("Usage") && singleParseFormat["Usage"].isString()) {
+                                    parseFormat.usage = singleParseFormat["Usage"].toString();
                                 }
 
-                                if (singleDataFormat.contains("Physics") && singleDataFormat["Physics"].isString()) {
-                                    data_format.physics = singleDataFormat["Physics"].toString();
+                                if (singleParseFormat.contains("Physics") && singleParseFormat["Physics"].isString()) {
+                                    parseFormat.physics = singleParseFormat["Physics"].toString();
                                 }
 
-                                if (data_format.usage == "Data") {
+                                if (parseFormat.usage == "Data") {
 
-                                    DataPhysics ph = None;
-                                    TemperatureUnits tu = C;
-                                    PressureUnits pu = psia;
-                                    FlowUnits fu = sccm;
+                                    bool exist = false;
 
-                                    if (data_format.physics == "Temperature") {
-                                        ph = Temperature;
-                                        for(int i = 0; i < strTemperatureUnits->length(); i++) {
-
-                                            if (strTemperatureUnits[i] == data_format.unit) {
-                                                tu = (TemperatureUnits)i;
-                                            }
-                                        }
-                                    }
-                                    else if (data_format.physics == "Pressure") {
-                                        ph = Pressure;
-                                        for(int i = 0; i < strPressureUnits->length(); i++) {
-
-                                            if (strPressureUnits[i] == data_format.unit) {
-                                                pu = (PressureUnits)i;
-                                            }
-                                        }
-                                    }
-                                    else if (data_format.physics == "FlowRate") {
-                                        ph = Flow;
-                                        for(int i = 0; i < strFlowRateUnits->length(); i++) {
-
-                                            if (strFlowRateUnits[i] == data_format.unit) {
-                                                fu = (FlowUnits)i;
-                                            }
-                                        }
-                                    }
-
-                                    bool exists = false;
-                                    for(auto da : m_devData) {
-                                        if (da.m_dataName == data_format.name) {
-                                            exists = true;
+                                    for(int i = 0; i < m_var_list->length(); i++) {
+                                        if (m_var_list->at(i)->m_name == parseFormat.name &&
+                                            m_var_list->at(i)->m_device_id == m_device_id) {
+                                            exist = true;
                                             break;
                                         }
                                     }
 
-                                    if (!exists)
-                                    m_devData.append(DeviceData(dataIndex++,data_format.name,cmd.cmd_id,ph,fu,tu,pu));
+                                    if (!exist) {
+                                        m_var_list->append(new Variable(0,parseFormat.name,parseFormat.unit));
+                                    }
+
                                 }
 
-                                cmd.data_formats.append(data_format);
+                                cmd.parse_info.append(parseFormat);
                             }
                         }
 

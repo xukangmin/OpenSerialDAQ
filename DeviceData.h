@@ -23,11 +23,11 @@ enum DataStatus
 
 enum DataPhysics
 {
-    Flow,
-    Temperature,
-    Humidity,
-    Pressure,
-    Voltage,
+    Flow1,
+    Temperature1,
+    Humidity1,
+    Pressure1,
+    Voltage1,
     None
 };
 

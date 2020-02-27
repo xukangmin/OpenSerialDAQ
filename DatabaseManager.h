@@ -18,7 +18,7 @@ public:
 
     void initData();
 
-    void initDataType();
+    void initVariable();
 
     void initChannel();
 
@@ -28,20 +28,23 @@ public:
 
 
     int insertDevice(QString name, int node, QString protocol, int ch_id = 0);
-
+    int insertVariable(QString name, QString unit, int deviceId = 0, QString equation = "N/A");
     int insertChannel(Channel ch);
 
     void queryData();
     void removeChannel(int id) const;
     void removeDevice(int id) const;
 
-    Device* getDevice(int id);
-    QVector<Device*> getAllDevice();
-    QVector<Device*> getUnassignedDevice();
+    bool getDevice(int id, QVector<Device*> *dev_list, QVector<Variable*> *var_list = nullptr);
+    bool getAllDevice(QVector<Device*> *dev_list, QVector<Variable*> *var_list = nullptr);
+    bool getUnassignedDevice(QVector<Device*> *dev_list, QVector<Variable*> *var_list = nullptr);
+     bool getDeviceWithChannelID(int channelID, QVector<Device*> *dev_list, QVector<Variable*> *var_list = nullptr);
     QVector<Channel> getAllChannel();
     void updateDeviceWithChannelID(int deviceID, int channelID);
-    QVector<Device*> getDeviceWithChannelID(int channelID);
+
     void resetDeviceBinding(int devID);
+
+    bool checkVariableExist(QString name, int deviceID);
 
 protected:
     DatabaseManager(const QString& path = DATABASE_FILENAME);

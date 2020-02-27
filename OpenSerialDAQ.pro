@@ -26,6 +26,8 @@ SOURCES += \
     Packet.cpp \
     ThreadChannel.cpp \
     ThreadDataProcessor.cpp \
+    Unit.cpp \
+    Variable.cpp \
     WidgetChannel.cpp \
     WidgetCommand.cpp \
     WidgetDevice.cpp \
@@ -43,6 +45,8 @@ HEADERS += \
     Packet.h \
     ThreadChannel.h \
     ThreadDataProcessor.h \
+    Unit.h \
+    Variable.h \
     WidgetChannel.h \
     WidgetCommand.h \
     WidgetDevice.h \
