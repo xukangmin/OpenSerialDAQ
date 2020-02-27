@@ -50,32 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_channle_list = DatabaseManager::instance().getAllChannel();
 
     foreach(Channel ch, m_channle_list){
-        ThreadChannel* ch_thread = new ThreadChannel(ch,this);
-        ChannelWidget* cw = new ChannelWidget(ch, this);
-
-        connect(cw,&ChannelWidget::deleteChannel,this,&MainWindow::deleteChannel);
-
-        connect(cw,&ChannelWidget::startChannel,ch_thread,&ThreadChannel::startChannel);
-
-        connect(cw,&ChannelWidget::stopChannel,ch_thread,&ThreadChannel::stopChannel);
-
-        connect(cw,&ChannelWidget::addDeviceToChannel,this,&MainWindow::showAddDeviceToChannelDialog);
-
-        QVector<Device*> tmpDevList = DatabaseManager::instance().getDeviceWithChannelID(ch.m_id);
-
-
-
-        foreach(Device* dev, tmpDevList) {
-            MiniDeviceWidget* mw = new MiniDeviceWidget(dev->m_name,dev->m_device_id,cw);
-            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,cw,&ChannelWidget::removeMiniDeviceWidget);
-            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,ch_thread,&ThreadChannel::removeDeviceFromChannel);
-            cw->addMiniDeviceWidget(mw);
-            ch_thread->addDevice(dev);
-        }
-
-        ui->ChannelLayout->addWidget(cw);
-        m_Channels.append(ch_thread);
-        m_ChannelWidgets.append(cw);
+        createNewChannel(ch);
     }
 
     scrollVLayout = new QVBoxLayout;
@@ -149,7 +124,48 @@ void MainWindow::showOverViewPage() {
 }
 
 
+void MainWindow::createNewChannel(Channel ch_info) {
 
+    bool isExist = true;
+
+    if (ch_info.m_id == 0)
+    {
+        isExist = false;
+        ch_info.m_id = DatabaseManager::instance().insertChannel(ch_info);
+    }
+
+    ThreadChannel* ch = new ThreadChannel(ch_info,this);
+
+    ChannelWidget* cw = new ChannelWidget(ch_info,this);
+
+    connect(cw,&ChannelWidget::deleteChannel,this,&MainWindow::deleteChannel);
+
+    connect(cw,&ChannelWidget::startChannel,ch,&ThreadChannel::startChannel);
+
+    connect(cw,&ChannelWidget::stopChannel,ch,&ThreadChannel::stopChannel);
+
+    connect(cw,&ChannelWidget::addDeviceToChannel,this,&MainWindow::showAddDeviceToChannelDialog);
+
+
+    if (isExist) {
+        QVector<Device*> tmpDevList = DatabaseManager::instance().getDeviceWithChannelID(ch_info.m_id);
+
+        foreach(Device* dev, tmpDevList) {
+            MiniDeviceWidget* mw = new MiniDeviceWidget(dev->m_name,dev->m_device_id,cw);
+            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,cw,&ChannelWidget::removeMiniDeviceWidget);
+            connect(mw,&MiniDeviceWidget::deleteDeviceFromChannel,ch,&ThreadChannel::removeDeviceFromChannel);
+            cw->addMiniDeviceWidget(mw);
+            ch->addDevice(dev);
+        }
+    }
+
+    ui->ChannelLayout->addWidget(cw);
+
+    m_ChannelWidgets.append(cw);
+    m_Channels.append(ch);
+
+    qDebug() << "create new channel";
+}
 
 void MainWindow::showNewChannelDialog() {
     m_dlgNewChennel = new DialogNewChannel(this);
@@ -166,24 +182,7 @@ void MainWindow::showNewChannelDialog() {
         }
 
         if (!exists) {
-            int id = DatabaseManager::instance().insertChannel(chinfo);
-
-            chinfo.m_id = id;
-
-            ThreadChannel* ch = new ThreadChannel(chinfo,this);
-
-            ChannelWidget* cw = new ChannelWidget(chinfo,this);
-
-            connect(cw,&ChannelWidget::deleteChannel,this,&MainWindow::deleteChannel);
-
-            connect(cw,&ChannelWidget::startChannel,ch,&ThreadChannel::startChannel);
-
-            ui->ChannelLayout->addWidget(cw);
-
-            m_ChannelWidgets.append(cw);
-            m_Channels.append(ch);
-
-            qDebug() << "create new channel";
+            createNewChannel(chinfo);
         } else {
             QMessageBox msgBox;
             msgBox.setText("Same Com port already exists!");
