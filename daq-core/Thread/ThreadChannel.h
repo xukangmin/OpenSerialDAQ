@@ -6,24 +6,24 @@
 #include <QWaitCondition>
 #include <QTimer>
 #include <QQueue>
-#include <Device.h>
-#include <Packet.h>
-#include <ThreadDataProcessor.h>
-#include "Channel.h"
+#include "Device/Device.h"
+#include "Packet/Packet.h"
+#include "ThreadDataProcessor.h"
+#include "Channel/Channel.h"
 
 class ThreadChannel : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit ThreadChannel(Channel ch, QObject *parent = nullptr);
+    explicit ThreadChannel(const Channel& ch, QObject *parent = nullptr);
     ~ThreadChannel() override;
 
     void addDevice(Device* dev); // add device to current channel
 
 
     int m_ch_id;
-    Channel m_ch;
+    const Channel& m_ch;
 private:
 
     QObject* par;

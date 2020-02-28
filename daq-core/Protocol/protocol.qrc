@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>protocol/all.json</file>
+        <file>protocol.json</file>
     </qresource>
 </RCC>

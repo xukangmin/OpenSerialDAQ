@@ -3,7 +3,7 @@
 
 #include <QSerialPort>
 #include <QTimer>
-#include "Variable.h"
+#include "Variable/Variable.h"
 #include "DeviceData.h"
 
 struct Parameter {

@@ -3,9 +3,9 @@
 
 
 #include <QRunnable>
-#include <Device.h>
-#include <Packet.h>
-#include "DeviceData.h"
+#include "Device/Device.h"
+#include "Packet/Packet.h"
+#include "Device/DeviceData.h"
 
 class ThreadDataProcessor : public QObject, public QRunnable
 {

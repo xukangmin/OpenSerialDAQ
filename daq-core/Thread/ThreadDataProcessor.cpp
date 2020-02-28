@@ -1,7 +1,7 @@
 #include "ThreadDataProcessor.h"
 #include <QDebug>
 #include <QMutex>
-#include "DatabaseManager.h"
+#include "Database/DatabaseManager.h"
 
 QMutex mutex;
 

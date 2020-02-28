@@ -5,10 +5,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QThreadPool>
-#include "MainWindow.h"
-#include "DatabaseManager.h"
+#include "Database/DatabaseManager.h"
 
-ThreadChannel::ThreadChannel(Channel ch, QObject *parent) :
+ThreadChannel::ThreadChannel(const Channel& ch, QObject *parent) :
      QThread(parent),
      m_ch_id(ch.m_id),
      m_ch(ch),

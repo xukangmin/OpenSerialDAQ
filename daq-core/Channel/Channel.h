@@ -4,6 +4,8 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
+class ThreadChannel;
+
 enum ChannelType{
     Serial,
     IP
@@ -70,6 +72,9 @@ public:
     int m_ipPort;
 
     ChannelType m_type;
+
+private:
+    ThreadChannel* m_threadChannel;
 };
 
 #endif // CHANNEL_H

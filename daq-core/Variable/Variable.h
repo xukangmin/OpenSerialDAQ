@@ -2,7 +2,7 @@
 #define VARIABLE_H
 
 #include <QObject>
-#include "Unit.h"
+#include "Unit/Unit.h"
 #include <QDateTime>
 #include <QVector>
 #include <QMetaType>

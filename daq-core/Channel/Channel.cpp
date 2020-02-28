@@ -1,4 +1,5 @@
 #include "Channel.h"
+#include "Thread/ThreadChannel.h"
 
 Channel::Channel(
         int id,
@@ -15,7 +16,8 @@ Channel::Channel(
      m_stopBits(stopBits),
      m_baudRateStr(QString::number(baudRate)),
      m_dataBitsStr(QString::number(dataBits)),
-     m_stopBitsStr(QString::number(stopBits))
+     m_stopBitsStr(QString::number(stopBits)),
+     m_threadChannel(new ThreadChannel(*this))
 {
     m_type = Serial;
 }
@@ -32,7 +34,8 @@ Channel::Channel(int id,
                  m_baudRate(baudRate),
                  m_baudRateStr(QString::number(baudRate)),
                  m_dataBitsStr(QString::number(dataBits)),
-                 m_stopBitsStr(QString::number(stopBits))
+                 m_stopBitsStr(QString::number(stopBits)),
+                 m_threadChannel(new ThreadChannel(*this))
 {
     m_type = Serial;
 

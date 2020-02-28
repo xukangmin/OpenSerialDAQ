@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QRegularExpression>
-#include "Variable.h"
+#include "Variable/Variable.h"
 
 Device::Device(int node_id):
         m_node_id(node_id)
@@ -191,7 +191,7 @@ QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
 
 void Device::loadFromConfig(QString protocol_name) {
-    QFile loadFile(":/protocol/all.json");
+    QFile loadFile(":/protocol/protocol.json");
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
