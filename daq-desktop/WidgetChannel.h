@@ -2,8 +2,7 @@
 #define CHANNELWIDGET_H
 
 #include <QWidget>
-#include "Channel.h"
-#include "WidgetMiniDevice.h"
+#include "Channel/Channel.h"
 
 namespace Ui {
 class ChannelWidget;
@@ -17,11 +16,11 @@ public:
     ChannelWidget(Channel ch, QWidget *parent = nullptr);
     Channel m_ch;
     int getChannelID();
-    void addMiniDeviceWidget(MiniDeviceWidget* dev);
+    //void addMiniDeviceWidget(MiniDeviceWidget* dev);
     ~ChannelWidget();
 
 public slots:
-    void removeMiniDeviceWidget(int dev_id);
+//    void removeMiniDeviceWidget(int dev_id);
 
 private slots:
     void on_btnDelete_clicked();

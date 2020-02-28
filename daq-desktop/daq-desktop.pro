@@ -17,27 +17,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     MainWindow.cpp \
-    DialogAddDeviceToChannel.cpp \
     DialogNewChannel.cpp \
     WidgetChannel.cpp \
-    WidgetCommand.cpp \
-    WidgetDevice.cpp \
-    WidgetMiniDevice.cpp \
+    WidgetChannelList.cpp \
     main.cpp
 
 HEADERS += \
     MainWindow.h \
-    DialogAddDeviceToChannel.h \
     DialogNewChannel.h \
     WidgetChannel.h \
-    WidgetCommand.h \
-    WidgetDevice.h \
-    WidgetMiniDevice.h
+    WidgetChannelList.h
 
 FORMS += \
     DialogAddDeviceToChannel.ui \
     DialogNewChannel.ui \
     WidgetChannel.ui \
+    WidgetChannelList.ui \
     WidgetCommand.ui \
     WidgetDevice.ui \
     WidgetMiniDevice.ui \
@@ -46,9 +41,8 @@ FORMS += \
 RESOURCES += \
     Icons/icons.qrc
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../daq-core/release/ -lgallery-core
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../daq-core/debug/ -lgallery-core
-else:unix: LIBS += -L$$OUT_PWD/../daq-core/ -ldaq-core
+
+LIBS += -L$$OUT_PWD/../daq-core/ -ldaq-core
 
 INCLUDEPATH += $$PWD/../daq-core
 DEPENDPATH += $$PWD/../daq-core

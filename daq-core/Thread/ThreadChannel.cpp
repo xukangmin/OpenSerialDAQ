@@ -13,12 +13,13 @@ ThreadChannel::ThreadChannel(const Channel& ch, QObject *parent) :
      m_ch(ch),
      m_stop(false)
 {
+    qDebug() << "thread channel " << m_ch_id << " created";
 }
 
 
 ThreadChannel::~ThreadChannel()
 {
-    qDebug() << "channel " << m_ch_id << " destroyed";
+    qDebug() << "thread channel " << m_ch_id << " destroyed";
     //DatabaseManager::instance().removeChannel(m_ch_id);
     m_stop = true;
 
@@ -100,17 +101,17 @@ void ThreadChannel::run()
 
     serial.setBaudRate(m_ch.m_baudRate);
 
-    serial.setParity(m_ch.m_parity);
+    serial.setParity((QSerialPort::Parity)m_ch.m_parity);
 
-    serial.setDataBits(m_ch.m_dataBits);
+    serial.setDataBits((QSerialPort::DataBits)m_ch.m_dataBits);
 
-    serial.setStopBits(m_ch.m_stopBits);
+    serial.setStopBits((QSerialPort::StopBits)m_ch.m_stopBits);
 
     qDebug() << "channel started";
 
     if (!serial.open(QIODevice::ReadWrite)) {
         //Todo: emit a signal here
-
+        qDebug() << "com port in use";
         return;
     }
 

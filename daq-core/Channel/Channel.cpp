@@ -1,27 +1,9 @@
 #include "Channel.h"
 #include "Thread/ThreadChannel.h"
 
-Channel::Channel(
-        int id,
-        QString portName,
-        SerialBaudRate baudRate,
-        QSerialPort::DataBits dataBits,
-        QSerialPort::Parity parity,
-         QSerialPort::StopBits stopBits) :
-     m_id(id),
-     m_portName(portName),
-     m_baudRate(baudRate),
-     m_dataBits(dataBits),
-     m_parity(parity),
-     m_stopBits(stopBits),
-     m_baudRateStr(QString::number(baudRate)),
-     m_dataBitsStr(QString::number(dataBits)),
-     m_stopBitsStr(QString::number(stopBits)),
-     m_threadChannel(new ThreadChannel(*this))
-{
-    m_type = Serial;
-}
-
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QDebug>
 
 Channel::Channel(int id,
                  QString portName,
@@ -37,6 +19,7 @@ Channel::Channel(int id,
                  m_stopBitsStr(QString::number(stopBits)),
                  m_threadChannel(new ThreadChannel(*this))
 {
+    qDebug() << "channel " << m_id << " created";
     m_type = Serial;
 
     switch (dataBits) {
@@ -84,4 +67,25 @@ Channel::Channel(int id,
     }
 
 
+}
+
+Channel::~Channel() {
+    qDebug() << "channel " << m_id << "destroyed";
+   // m_threadChannel->stopDAQ();
+    //m_threadChannel->deleteLater();
+
+}
+
+void Channel::startChannel()
+{
+    m_threadChannel->startChannel();
+}
+
+void Channel::stopChannel()
+{
+    m_threadChannel->stopChannel();
+}
+void Channel::addDeviceToChannel(int device_id)
+{
+    //m_threadChannel->addDevice()
 }

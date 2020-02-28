@@ -38,11 +38,11 @@ void ThreadDataProcessor::run() {
 
 
     mutex.lock();
-    if (!parData.empty()) {
-        for(auto da : parData) {
-            DatabaseManager::instance().insertData(da, m_dev->m_device_id);
-        }
-    }
+//    if (!parData.empty()) {
+//        for(auto da : parData) {
+//            DatabaseManager::instance().insertData(da, m_dev->m_device_id);
+//        }
+//    }
     mutex.unlock();
 
     //data.values = m_dev->m_devData

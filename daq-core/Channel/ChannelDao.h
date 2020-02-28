@@ -18,7 +18,6 @@ public:
     void updateChannel(const Channel& ch) const;
     void removeChannel(int id) const;
     std::unique_ptr<std::vector<std::unique_ptr<Channel>>> channels() const;
-    std::unique_ptr<std::vector<std::unique_ptr<ThreadChannel>>> threadChannels() const;
 private:
     QSqlDatabase& mDatabase;
 };

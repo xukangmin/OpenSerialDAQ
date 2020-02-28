@@ -6,6 +6,7 @@
 #include "Channel.h"
 #include "Database/DatabaseManager.h"
 #include "Thread/ThreadChannel.h"
+#include <QDebug>
 
 using namespace std;
 
@@ -49,9 +50,16 @@ void ChannelDao::addChannel(Channel& ch) const
     query.bindValue(":StopBits", ch.m_stopBits);
     query.exec();
 
+    ch.m_id = query.lastInsertId().toInt();
+
     DatabaseManager::debugQuery(query);
 
-    ch.m_id = query.lastInsertId().toInt();
+
+
+}
+
+void ChannelDao::updateChannel(const Channel &ch) const
+{
 
 }
 
@@ -72,6 +80,7 @@ unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
         ;
 
         //        list.append(ch);
+        qDebug() << "create new ch=" << query.value("id").toInt();
         unique_ptr<Channel> ch(new Channel(query.value("id").toInt(),
                                             query.value("ComPort").toString(),
                                              query.value("BaudRate").toInt(),

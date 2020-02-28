@@ -2,8 +2,7 @@
 #define NEWCHANNEL_H
 
 #include <QDialog>
-#include <QSerialPortInfo>
-#include "Channel.h"
+#include "Channel/Channel.h"
 
 namespace Ui {
 class DialogNewChannel;

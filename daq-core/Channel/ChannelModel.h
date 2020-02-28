@@ -9,7 +9,7 @@
 #include "Channel.h"
 #include "Database/DatabaseManager.h"
 
-class ChannelModel : public QAbstractListModel
+class DAQCORESHARED_EXPORT ChannelModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -18,24 +18,42 @@ public:
     enum Roles {
            IdRole = Qt::UserRole + 1,
            NameRole,
-           TestRole
+           TypeRole,
+           ComPortRole,
+           BaudRateRole,
+           ParityRole,
+           DataBitsRole,
+           StopBitsRole
     };
     ChannelModel(QObject* parent = nullptr);
 
-    QModelIndex addChannel(const Channel& channel);
+    static QStringList getAvailableComPorts();
+    bool isPortExists(QString portName);
+    QModelIndex addChannel(Channel& channel);
+    QVector<Channel> getAllChannels();
+    Channel getChannel(int id);
+    void removeByID(int id);
+
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    bool removeRows(int row, int count, const QModelIndex& parent) override;
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
+
+    void startChannel(int id);
+    void stopChannel(int id);
+    void addDeviceToChannel(int id, int device_id);
 
 private:
     bool isIndexValid(const QModelIndex& index) const;
 
+
+
 private:
     DatabaseManager& mDb;
     std::unique_ptr<std::vector<std::unique_ptr<Channel>>> mChannels;
+    int getIndexFromID(int id);
 };
 
 #endif // CHANNELMODEL_H

@@ -1,10 +1,11 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-#include <QSerialPort>
-#include <QSerialPortInfo>
+#include "daq-core_global.h"
+#include <QString>
 
 class ThreadChannel;
+class QSerialPort;
 
 enum ChannelType{
     Serial,
@@ -26,16 +27,18 @@ enum SerialBaudRate {
     Baud115200 = 115200
 };
 
-class Channel
-{
-public:
-    Channel(int id,
-            QString portName,
-            SerialBaudRate baudRate = Baud9600,
-            QSerialPort::DataBits dataBits = QSerialPort::Data8,
-            QSerialPort::Parity parity = QSerialPort::NoParity,
-            QSerialPort::StopBits stopBits = QSerialPort::OneStop);
+typedef struct {
+    QString portName;
+    int baudRate = 9600;
+    int dataBits = 8;
+    QString parity = "None";
+    int stopBits = 1;
+} SerialPortDef;
 
+class DAQCORESHARED_EXPORT Channel
+{
+
+public:
 
     Channel(int id,
             QString portName,
@@ -43,6 +46,8 @@ public:
             int dataBits = 8,
             QString parity = "None",
             int stopBits = 1);
+
+    ~Channel();
 
     int m_id;
 
@@ -52,13 +57,14 @@ public:
 
     int m_baudRate;
 
-    QSerialPort::DataBits m_dataBits;
+    int m_dataBits;
 
-    QSerialPort::Parity m_parity;
+    int m_parity;
+
+    int m_stopBits;
 
     QString m_parityStr;
 
-    QSerialPort::StopBits m_stopBits;
 
 
     QString m_baudRateStr;
@@ -72,6 +78,10 @@ public:
     int m_ipPort;
 
     ChannelType m_type;
+
+    void startChannel();
+    void stopChannel();
+    void addDeviceToChannel(int device_id);
 
 private:
     ThreadChannel* m_threadChannel;

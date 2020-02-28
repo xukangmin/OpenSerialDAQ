@@ -1,12 +1,11 @@
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include "Device/Device.h"
-#include "Device/DeviceData.h"
 #include "Channel/Channel.h"
 #include "Channel/ChannelDao.h"
+
+class QSqlDatabase;
+class QSqlQuery;
 
 const QString DATABASE_FILENAME = "SerialDAQData.db";
 

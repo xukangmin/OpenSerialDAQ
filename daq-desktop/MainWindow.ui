@@ -35,55 +35,7 @@
      <height>16777215</height>
     </size>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QStackedWidget" name="stackedWidget">
-      <property name="currentIndex">
-       <number>1</number>
-      </property>
-      <widget class="QWidget" name="ChannelPage">
-       <layout class="QVBoxLayout" name="ChannelLayout"/>
-      </widget>
-      <widget class="QWidget" name="DevicePage">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QListWidget" name="DeviceList">
-          <property name="maximumSize">
-           <size>
-            <width>130</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>PushButton</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="text">
-              <string>PushButton</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QHBoxLayout" name="horizontalLayout"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -115,7 +67,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOverView">
    <property name="icon">
-    <iconset resource="icons/icons.qrc">
+    <iconset resource="Icons/icons.qrc">
      <normaloff>:/icons/serial-pot-16.png</normaloff>:/icons/serial-pot-16.png</iconset>
    </property>
    <property name="text">
@@ -127,8 +79,8 @@
   </action>
   <action name="actionDevices">
    <property name="icon">
-    <iconset resource="icons/icons.qrc">
-     <normaloff>:/icons/save-16.png</normaloff>:/icons/save-16.png</iconset>
+    <iconset resource="Icons/icons.qrc">
+     <normaloff>:/icons/connect-24.png</normaloff>:/icons/connect-24.png</iconset>
    </property>
    <property name="text">
     <string>Devices</string>
@@ -136,8 +88,8 @@
   </action>
   <action name="actionAddNewChannel">
    <property name="icon">
-    <iconset resource="icons/icons.qrc">
-     <normaloff>:/icons/ethernet-port-16.png</normaloff>:/icons/ethernet-port-16.png</iconset>
+    <iconset resource="Icons/icons.qrc">
+     <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
    </property>
    <property name="text">
     <string>AddNewChannel</string>
@@ -145,7 +97,7 @@
   </action>
  </widget>
  <resources>
-  <include location="icons/icons.qrc"/>
+  <include location="Icons/icons.qrc"/>
  </resources>
  <connections/>
 </ui>
