@@ -1,7 +1,6 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
-#include <QSerialPort>
 #include <QTimer>
 #include "Variable/Variable.h"
 #include "DeviceData.h"

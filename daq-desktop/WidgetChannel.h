@@ -13,7 +13,7 @@ class ChannelWidget : public QWidget
     Q_OBJECT
 
 public:
-    ChannelWidget(Channel ch, QWidget *parent = nullptr);
+    ChannelWidget(Channel &ch, QWidget *parent = nullptr);
     Channel m_ch;
     int getChannelID();
     //void addMiniDeviceWidget(MiniDeviceWidget* dev);

@@ -1,5 +1,4 @@
 #include "ThreadChannel.h"
-#include <QSerialPort>
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>

@@ -9,7 +9,7 @@
 #include "Channel.h"
 #include "Database/DatabaseManager.h"
 
-class DAQCORESHARED_EXPORT ChannelModel : public QAbstractListModel
+class DAQCORESHARED_EXPORT ChannelModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -30,20 +30,16 @@ public:
     static QStringList getAvailableComPorts();
     bool isPortExists(QString portName);
     QModelIndex addChannel(Channel& channel);
-    QVector<Channel> getAllChannels();
-    Channel getChannel(int id);
+    QVector<Channel*> getAllChannels();
+    Channel* getChannel(int id);
     void removeByID(int id);
 
-
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
-
-    void startChannel(int id);
-    void stopChannel(int id);
-    void addDeviceToChannel(int id, int device_id);
 
 private:
     bool isIndexValid(const QModelIndex& index) const;

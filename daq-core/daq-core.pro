@@ -1,4 +1,4 @@
-QT       += sql serialport
+QT       += sql
 QT       -= gui
 
 TARGET = daq-core
@@ -16,7 +16,6 @@ SOURCES += \
     Device/Device.cpp \
     Device/DeviceData.cpp \
     Device/DeviceModel.cpp \
-    Thread/ThreadChannel.cpp \
     Thread/ThreadDataProcessor.cpp \
     Packet/Packet.cpp \
     Unit/Unit.cpp \
@@ -32,7 +31,6 @@ HEADERS += \
     Device/Device.h \
     Device/DeviceData.h \
     Device/DeviceModel.h \
-    Thread/ThreadChannel.h \
     Thread/ThreadDataProcessor.h \
     Packet/Packet.h \
     Unit/Unit.h \

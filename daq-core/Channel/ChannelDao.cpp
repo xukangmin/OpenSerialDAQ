@@ -19,18 +19,20 @@ void ChannelDao::init() const
 {
     if (!mDatabase.tables().contains("Channels")) {
             QSqlQuery query(mDatabase);
-            query.exec("CREATE TABLE Channels ("
-                               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                               "Name TEXT, "
-                               "Type TEXT, "
-                               "ComPort TEXT,"
-                               "BaudRate INTEGER,"
-                               "Parity TEXT,"
-                               "DataBits INTEGER,"
-                               "StopBits INTEGER,"
-                               "Source TEXT,"
-                               "Port INTEGER"
-                               ")");
+
+           QString createQuery = "CREATE TABLE Channels (";
+
+           qDebug() << "length=" << channelColumnSize;
+
+           for(int i = 0; i < channelColumnSize; i++) {
+               createQuery += (channelHeaderList[i] + " " + channelDataType[i] + ",");
+           }
+
+           createQuery = createQuery.left(createQuery.length() - 1);
+
+           createQuery += ")";
+
+            query.exec(createQuery);
 
             DatabaseManager::debugQuery(query);
         }
@@ -40,22 +42,37 @@ void ChannelDao::addChannel(Channel& ch) const
 {
     QSqlQuery query(mDatabase);
 
-    query.prepare("INSERT INTO Channels (Type,ComPort,BaudRate,Parity,DataBits,StopBits) VALUES (:Type,:ComPort,:BaudRate,:Parity,:DataBits,:StopBits)");
+    QString insertList = "(";
 
-    query.bindValue(":Type",(ch.m_type == Serial ? "Serial" : "IP"));
-    query.bindValue(":ComPort", ch.m_portName);
-    query.bindValue(":BaudRate", ch.m_baudRate);
-    query.bindValue(":Parity", ch.m_parityStr);
-    query.bindValue(":DataBits", ch.m_dataBits);
-    query.bindValue(":StopBits", ch.m_stopBits);
+    for(int i = 1; i < channelColumnSize; i++) {
+        insertList += (channelHeaderList[i] + ",");
+    }
+
+    insertList = insertList.left(insertList.length() - 1);
+
+    insertList += ")";
+
+    QString dataList = "(";
+
+    for(int i = 1; i < channelColumnSize; i++) {
+        dataList += (":" + channelHeaderList[i] + ",");
+    }
+
+    dataList = dataList.left(dataList.length() - 1);
+
+    dataList += ")";
+
+    query.prepare("INSERT INTO Channels " + insertList + " VALUES " + dataList);
+
+    for(int i = 1; i < channelColumnSize; i++) {
+        query.bindValue(":" + channelHeaderList[i], ch.getProperty(channelHeaderList[i]));
+    }
+
     query.exec();
 
     ch.m_id = query.lastInsertId().toInt();
 
     DatabaseManager::debugQuery(query);
-
-
-
 }
 
 void ChannelDao::updateChannel(const Channel &ch) const
@@ -81,12 +98,16 @@ unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
 
         //        list.append(ch);
         qDebug() << "create new ch=" << query.value("id").toInt();
-        unique_ptr<Channel> ch(new Channel(query.value("id").toInt(),
-                                            query.value("ComPort").toString(),
-                                             query.value("BaudRate").toInt(),
-                                             query.value("DataBits").toInt(),
-                                             query.value("Parity").toString(),
-                                             query.value("StopBits").toInt()));
+
+        QList<QVariant> properties;
+
+        for(int i = 0; i < channelColumnSize; i++) {
+            properties.append(query.value(channelHeaderList[i]));
+        }
+
+
+        unique_ptr<Channel> ch(new Channel(query.value("id").toInt(),properties));
+
         list->push_back(move(ch));
     }
     return list;

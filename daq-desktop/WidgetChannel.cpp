@@ -2,13 +2,13 @@
 #include "ui_WidgetChannel.h"
 #include <QDebug>
 
-ChannelWidget::ChannelWidget(Channel ch, QWidget *parent) :
+ChannelWidget::ChannelWidget(Channel& ch, QWidget *parent) :
     QWidget(parent),m_ch(ch),
     ui(new Ui::ChannelWidget)
 {
     ui->setupUi(this);
 
-    ui->ChannelInfo->setText(ch.m_portName + " " + ch.m_baudRateStr + " " + ch.m_dataBitsStr + "-" + ch.m_parityStr + "-" + ch.m_stopBitsStr);
+    ui->ChannelInfo->setText(ch.getProperty("ComPort").toString());
 
 }
 

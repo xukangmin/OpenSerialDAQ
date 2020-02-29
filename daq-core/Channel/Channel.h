@@ -3,6 +3,7 @@
 
 #include "daq-core_global.h"
 #include <QString>
+#include <QVariant>
 
 class ThreadChannel;
 class QSerialPort;
@@ -27,64 +28,23 @@ enum SerialBaudRate {
     Baud115200 = 115200
 };
 
-typedef struct {
-    QString portName;
-    int baudRate = 9600;
-    int dataBits = 8;
-    QString parity = "None";
-    int stopBits = 1;
-} SerialPortDef;
+static const QString channelHeaderList[] = {"id","ComPort", "BaudRate", "DataBits", "Parity", "StopBits"};
+static const QString channelDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT", "INTEGER", "INTEGER", "TEXT", "INTEGER"};
+static const int channelColumnSize = 6;
 
 class DAQCORESHARED_EXPORT Channel
 {
 
 public:
 
-    Channel(int id,
-            QString portName,
-            int baudRate = 9600,
-            int dataBits = 8,
-            QString parity = "None",
-            int stopBits = 1);
-
-    ~Channel();
+    Channel(int id, QList<QVariant> properties);
 
     int m_id;
 
-    QString m_channelName;
+    QList<QVariant> m_properties;
 
-    QString m_portName;
+    QVariant getProperty(QString name);
 
-    int m_baudRate;
-
-    int m_dataBits;
-
-    int m_parity;
-
-    int m_stopBits;
-
-    QString m_parityStr;
-
-
-
-    QString m_baudRateStr;
-    QString m_dataBitsStr;
-    QString m_stopBitsStr;
-
-
-    QString m_ipAddress;
-    QString m_desAddress;
-
-    int m_ipPort;
-
-    ChannelType m_type;
-
-    void startChannel();
-    void stopChannel();
-    void addDeviceToChannel(int device_id);
-
-private:
-    ThreadChannel* m_threadChannel;
 };
 
 #endif // CHANNEL_H

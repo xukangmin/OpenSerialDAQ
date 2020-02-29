@@ -1,7 +1,9 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include <QListView>
 #include <QMessageBox>
 #include <QMetaType>
+#include <QTableView>
 #include "Channel/ChannelModel.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -30,11 +32,26 @@ MainWindow::MainWindow(QWidget *parent)
     // Generate Channel Widges
     channelModel = new ChannelModel(this);
 
+
     if (channelModel->rowCount() == 0) {
         // populate test data
-        Channel tmp(0,"COM3");
-        channelModel->addChannel(tmp);
+
+        QList<QVariant> properties;
+        properties.append(0);
+        properties.append("COM3");
+        properties.append(9600);
+        properties.append(8);
+        properties.append("None");
+        properties.append(1);
+        Channel c = Channel(0,properties);
+        channelModel->addChannel(c);
     }
+
+//    QTableView *tb = new QTableView(this);
+
+//    tb->setModel(channelModel);
+
+//    setCentralWidget(tb);
 
     m_widgetChannelList->setModel(channelModel);
 
@@ -63,9 +80,9 @@ void MainWindow::showNewChannelDialog() {
     mDialogNewChannel = new DialogNewChannel(this);
 
     if (mDialogNewChannel->exec() == QDialog::Accepted) {
-        Channel chinfo(mDialogNewChannel->getChannelInfo());
+        Channel chinfo = mDialogNewChannel->getChannelInfo();
 
-        if (!channelModel->isPortExists(chinfo.m_portName)) {
+        if (!channelModel->isPortExists(chinfo.getProperty("ComPort").toString())) {
             m_widgetChannelList->addNewChannel(chinfo);
         } else {
             QMessageBox msgBox;
