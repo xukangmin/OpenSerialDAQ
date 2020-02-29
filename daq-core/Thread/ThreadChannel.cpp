@@ -3,8 +3,10 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSerialPortInfo>
 #include <QThreadPool>
 #include "Database/DatabaseManager.h"
+#include <QSerialPort>
 
 ThreadChannel::ThreadChannel(const Channel& ch, QObject *parent) :
      QThread(parent),
@@ -24,6 +26,19 @@ ThreadChannel::~ThreadChannel()
 
 
 }
+
+QList<QString> ThreadChannel::getAvailablePorts() {
+
+    QList<QString> tmp;
+
+    foreach(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
+        tmp.append(port.portName());
+    }
+
+    return tmp;
+}
+
+
 
 void ThreadChannel::addDevice(Device *dev) {
     m_device_pool.append(dev);
@@ -96,15 +111,17 @@ void ThreadChannel::run()
 {
     QSerialPort serial;
 
-    serial.setPortName(m_ch.m_portName);
+    serial.setPortName(m_ch.getProperty("ComPort").toString());
 
-    serial.setBaudRate(m_ch.m_baudRate);
+    serial.setBaudRate(m_ch.getProperty("BaudRate").toInt());
 
-    serial.setParity((QSerialPort::Parity)m_ch.m_parity);
+    // To do
 
-    serial.setDataBits((QSerialPort::DataBits)m_ch.m_dataBits);
+//    serial.setParity(m_ch.getProperty("Parity").toString());
 
-    serial.setStopBits((QSerialPort::StopBits)m_ch.m_stopBits);
+//    serial.setDataBits(m_ch.getProperty("DataBits").toString());
+
+//    serial.setStopBits(m_ch.getProperty("StopBits").toString());
 
     qDebug() << "channel started";
 

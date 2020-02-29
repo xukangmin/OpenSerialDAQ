@@ -37,13 +37,13 @@ class DAQCORESHARED_EXPORT Channel
 
 public:
 
-    Channel(int id, QList<QVariant> properties);
+    Channel(int id, QHash<QString, QVariant> properties);
 
     int m_id;
 
-    QList<QVariant> m_properties;
+    QHash<QString, QVariant> m_properties;
 
-    QVariant getProperty(QString name);
+    QVariant getProperty(QString name) const;
 
 };
 

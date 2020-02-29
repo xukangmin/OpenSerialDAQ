@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "Channel/Channel.h"
+#include "Thread/ThreadChannel.h"
 
 namespace Ui {
 class ChannelWidget;
@@ -35,7 +36,7 @@ private slots:
 private:
 
     Ui::ChannelWidget *ui;
-
+    ThreadChannel* threadChannel;
 signals:
     void deleteChannel(int id);
     void startChannel(int id);

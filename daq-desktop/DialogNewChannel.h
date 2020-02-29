@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "Channel/Channel.h"
+#include "Thread/ThreadChannel.h"
 
 namespace Ui {
 class DialogNewChannel;

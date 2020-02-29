@@ -1,7 +1,6 @@
 #include "DialogNewChannel.h"
 #include "ui_DialogNewChannel.h"
 #include <QDebug>
-#include <QSerialPortInfo>
 #include <QStringListModel>
 #include "Channel/ChannelModel.h"
 
@@ -26,14 +25,14 @@ DialogNewChannel::~DialogNewChannel()
 
 Channel DialogNewChannel::getChannelInfo() {
 
-    QList<QVariant> prop;
+    QHash<QString, QVariant> prop;
 
-    prop.append(0);
-    prop.append(ui->cmbPort->currentText());
-    prop.append(ui->cmbBaudRate->currentText().toInt());
-    prop.append(ui->cmbDataBits->currentText().toInt());
-    prop.append(ui->cmbParity->currentText());
-    prop.append(ui->cmbStopBits->currentText().toInt());
+    prop[channelHeaderList[0]] = 0;
+    prop[channelHeaderList[1]] = ui->cmbPort->currentText();
+    prop[channelHeaderList[2]] = ui->cmbBaudRate->currentText().toInt();
+    prop[channelHeaderList[3]] = ui->cmbDataBits->currentText().toInt();
+    prop[channelHeaderList[4]] = ui->cmbParity->currentText();
+    prop[channelHeaderList[5]] = ui->cmbStopBits->currentText().toInt();
 
     Channel ch(0,prop);
 
@@ -44,9 +43,11 @@ void DialogNewChannel::getAvailablePorts() {
 
     m_portLists.clear();
     ui->cmbPort->clear();
-    foreach(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
-        m_portLists.append(port.portName());
-        ui->cmbPort->addItem(port.portName());
+
+    m_portLists = ThreadChannel::getAvailablePorts();
+
+    foreach(auto port, m_portLists) {
+        ui->cmbPort->addItem(port);
     }
 
 

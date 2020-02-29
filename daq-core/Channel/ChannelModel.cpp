@@ -80,7 +80,7 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const {
 
     qDebug() << "get data col" << index.column();
 
-    return channel.m_properties.at(index.column());
+    return channel.m_properties[channelHeaderList[index.column()]];
 
 //    switch (role) {
 //        case Qt::DisplayRole:

@@ -38,6 +38,8 @@ void WidgetChannelList::addNewChannel(Channel channel) {
 
     auto ch_widget = new ChannelWidget(channel,this);
     connect(ch_widget, &ChannelWidget::deleteChannel, this, &WidgetChannelList::deleteChannel);
+//    connect(ch_widget, &ChannelWidget::startChannel, this, &WidgetChannelList::startChannel);
+//    connect(ch_widget, &ChannelWidget::stopChannel, this, &WidgetChannelList::stopChannel);
     ui->verticalLayout->addWidget(ch_widget);
 }
 

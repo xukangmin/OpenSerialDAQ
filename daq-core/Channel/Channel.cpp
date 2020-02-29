@@ -3,20 +3,15 @@
 
 #include <QDebug>
 
-Channel::Channel(int id, QList<QVariant> properties) :
+Channel::Channel(int id, QHash<QString, QVariant> properties) :
                 m_id(id),
                 m_properties(properties)
 {
 
 }
 
-QVariant Channel::getProperty(QString name) {
-    for(int i = 0; i < channelColumnSize; i++) {
-        if (name == channelHeaderList[i]) {
-            return m_properties.at(i);
-        }
-    }
-    return QVariant();
+QVariant Channel::getProperty(QString name) const {
+    return m_properties[name];
 }
 
 //Channel::Channel(int id,

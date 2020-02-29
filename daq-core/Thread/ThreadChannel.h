@@ -19,6 +19,8 @@ public:
     explicit ThreadChannel(const Channel& ch, QObject *parent = nullptr);
     ~ThreadChannel() override;
 
+    static QList<QString> getAvailablePorts();
+
     void addDevice(Device* dev); // add device to current channel
 
 

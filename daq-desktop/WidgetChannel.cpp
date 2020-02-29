@@ -4,7 +4,8 @@
 
 ChannelWidget::ChannelWidget(Channel& ch, QWidget *parent) :
     QWidget(parent),m_ch(ch),
-    ui(new Ui::ChannelWidget)
+    ui(new Ui::ChannelWidget),
+    threadChannel(new ThreadChannel(ch,this))
 {
     ui->setupUi(this);
 
@@ -16,6 +17,8 @@ ChannelWidget::ChannelWidget(Channel& ch, QWidget *parent) :
 
 ChannelWidget::~ChannelWidget()
 {
+    threadChannel->stopChannel();
+    threadChannel->wait();
     qDebug() << "channel widget " << m_ch.m_id << " destroyed";
     delete ui;
 }
@@ -29,12 +32,12 @@ void ChannelWidget::on_btnDelete_clicked()
 
 void ChannelWidget::on_btnStart_clicked()
 {
-    emit startChannel(m_ch.m_id);
+    threadChannel->startChannel();
 }
 
 void ChannelWidget::on_btnStop_clicked()
 {
-    emit stopChannel(m_ch.m_id);
+    threadChannel->stopChannel();
 }
 
 void ChannelWidget::on_btnAddDevice_clicked()

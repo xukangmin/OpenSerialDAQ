@@ -36,13 +36,16 @@ MainWindow::MainWindow(QWidget *parent)
     if (channelModel->rowCount() == 0) {
         // populate test data
 
-        QList<QVariant> properties;
-        properties.append(0);
-        properties.append("COM3");
-        properties.append(9600);
-        properties.append(8);
-        properties.append("None");
-        properties.append(1);
+        QHash<QString, QVariant> properties;
+
+
+        properties["id"] = 0;
+        properties["ComPort"] = "COM3";
+        properties["BaudRate"] = 9600;
+        properties["DataBits"] = 8;
+        properties["Parity"] = "None";
+        properties["StopBits"] = 1;
+
         Channel c = Channel(0,properties);
         channelModel->addChannel(c);
     }
