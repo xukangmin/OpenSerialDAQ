@@ -7,6 +7,21 @@
 #include <QRegularExpression>
 #include "Variable/Variable.h"
 
+Device::Device(int id, QHash<QString, QVariant> properties) :
+                m_id(id),
+                m_properties(properties)
+{
+//    if (properties.contains("Protocol")) {
+//        m_name = protocol_name + "_" + QString::number(node_id);
+//        loadFromConfig(protocol_name);
+//    }
+}
+
+QVariant Device::getProperty(QString name) const {
+    return m_properties[name];
+}
+
+
 Device::Device(int node_id):
         m_node_id(node_id)
 {   

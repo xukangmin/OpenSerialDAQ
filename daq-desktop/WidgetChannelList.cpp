@@ -9,38 +9,40 @@ WidgetChannelList::WidgetChannelList(QWidget *parent) :
     ui->setupUi(this);
 }
 
+void clearWidgets(QLayout * layout) {
+   if (! layout)
+      return;
+   while (auto item = layout->takeAt(0)) {
+      delete item->widget();
+      clearWidgets(item->layout());
+   }
+}
+
+void WidgetChannelList::addWidget(Channel ch) {
+    auto ch_widget = new ChannelWidget(ch,this);
+    connect(ch_widget, &ChannelWidget::deleteChannel, this, &WidgetChannelList::deleteChannel);
+    ui->verticalLayout->addWidget(ch_widget);
+}
+
+void WidgetChannelList::updateWidgets() {
+
+
+}
+
 void WidgetChannelList::setModel(ChannelModel *model)
 {
     m_model = model;
-    // populate small widgets
-
     auto chs = m_model->getAllChannels();
 
     foreach(auto ch, chs) {
-        auto ch_widget = new ChannelWidget(*ch,this);
-        connect(ch_widget, &ChannelWidget::deleteChannel, this, &WidgetChannelList::deleteChannel);
-//        connect(ch_widget, &ChannelWidget::startChannel, this, &WidgetChannelList::startChannel);
-//        connect(ch_widget, &ChannelWidget::stopChannel, this, &WidgetChannelList::stopChannel);
-        ui->verticalLayout->addWidget(ch_widget);
+        addWidget(*ch);
     }
-//    auto list = model->getAllChannels();
-
-//    foreach(auto c, list) {
-//        auto ch_widget = new ChannelWidget(c,this);
-//        connect(ch_widget, &ChannelWidget::deleteChannel, this, &WidgetChannelList::deleteChannel);
-//        ui->verticalLayout->addWidget(ch_widget);
-//    }
 
 }
 
 void WidgetChannelList::addNewChannel(Channel channel) {
     m_model->addChannel(channel);
-
-    auto ch_widget = new ChannelWidget(channel,this);
-    connect(ch_widget, &ChannelWidget::deleteChannel, this, &WidgetChannelList::deleteChannel);
-//    connect(ch_widget, &ChannelWidget::startChannel, this, &WidgetChannelList::startChannel);
-//    connect(ch_widget, &ChannelWidget::stopChannel, this, &WidgetChannelList::stopChannel);
-    ui->verticalLayout->addWidget(ch_widget);
+    addWidget(channel);
 }
 
 void WidgetChannelList::deleteChannel(int id) {

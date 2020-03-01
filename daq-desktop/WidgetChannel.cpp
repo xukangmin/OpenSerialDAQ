@@ -26,6 +26,8 @@ ChannelWidget::~ChannelWidget()
 void ChannelWidget::on_btnDelete_clicked()
 {
     emit deleteChannel(m_ch.m_id);
+    threadChannel->stopChannel();
+    threadChannel->wait();
     deleteLater();
 }
 

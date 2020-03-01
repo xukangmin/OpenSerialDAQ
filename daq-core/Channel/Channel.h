@@ -4,6 +4,7 @@
 #include "daq-core_global.h"
 #include <QString>
 #include <QVariant>
+#include "Generic/GenericDefinition.h"
 
 class ThreadChannel;
 class QSerialPort;
@@ -28,22 +29,17 @@ enum SerialBaudRate {
     Baud115200 = 115200
 };
 
-static const QString channelHeaderList[] = {"id","ComPort", "BaudRate", "DataBits", "Parity", "StopBits"};
-static const QString channelDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT", "INTEGER", "INTEGER", "TEXT", "INTEGER"};
-static const int channelColumnSize = 6;
+static const QString ChannelHeaderList[] = {"id","ComPort", "BaudRate", "DataBits", "Parity", "StopBits"};
+static const QString ChannelDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT", "INTEGER", "INTEGER", "TEXT", "INTEGER"};
+static const int ChannelColumnSize = 6;
 
-class DAQCORESHARED_EXPORT Channel
+class DAQCORESHARED_EXPORT Channel : public GenericDefinition
 {
 
 public:
 
     Channel(int id, QHash<QString, QVariant> properties);
 
-    int m_id;
-
-    QHash<QString, QVariant> m_properties;
-
-    QVariant getProperty(QString name) const;
 
 };
 

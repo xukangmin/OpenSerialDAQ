@@ -58,7 +58,7 @@ QModelIndex ChannelModel::addChannel(Channel& channel)
 
 int ChannelModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
-    return channelColumnSize;
+    return ChannelColumnSize;
 }
 
 int ChannelModel::rowCount(const QModelIndex& parent) const {
@@ -80,7 +80,7 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const {
 
     qDebug() << "get data col" << index.column();
 
-    return channel.m_properties[channelHeaderList[index.column()]];
+    return channel.m_properties[ChannelHeaderList[index.column()]];
 
 //    switch (role) {
 //        case Qt::DisplayRole:

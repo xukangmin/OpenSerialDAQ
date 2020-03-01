@@ -4,6 +4,7 @@
 #include <QScrollArea>
 #include <QWidget>
 #include "Channel/ChannelModel.h"
+#include "WidgetChannel.h"
 
 namespace Ui {
 class WidgetChannelList;
@@ -24,6 +25,7 @@ private:
     Ui::WidgetChannelList *ui;
     ChannelModel* m_model;
     void updateWidgets();
+    void addWidget(Channel ch);
     void addNewChannelWidget();
 private slots:
     void deleteChannel(int id);

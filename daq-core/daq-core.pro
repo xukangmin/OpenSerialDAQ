@@ -3,7 +3,7 @@ QT       -= gui
 
 TARGET = daq-core
 TEMPLATE = lib
-CONFIG += lib c++11
+CONFIG += lib c++17
 
 DEFINES += DAQCORE_LIBRARY
 
@@ -14,8 +14,11 @@ SOURCES += \
     Channel/ChannelModel.cpp \
     Database/DatabaseManager.cpp \
     Device/Device.cpp \
+    Device/DeviceDao.cpp \
     Device/DeviceData.cpp \
     Device/DeviceModel.cpp \
+    Generic/GenericDefinition.cpp \
+    Generic/GenericDefinitionDao.cpp \
     Thread/ThreadChannel.cpp \
     Thread/ThreadDataProcessor.cpp \
     Packet/Packet.cpp \
@@ -30,8 +33,11 @@ HEADERS += \
     Channel/ChannelModel.h \
     Database/DatabaseManager.h \
     Device/Device.h \
+    Device/DeviceDao.h \
     Device/DeviceData.h \
     Device/DeviceModel.h \
+    Generic/GenericDefinition.h \
+    Generic/GenericDefinitionDao.h \
     Thread/ThreadChannel.h \
     Thread/ThreadDataProcessor.h \
     Packet/Packet.h \

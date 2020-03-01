@@ -16,7 +16,7 @@ class ThreadChannel : public QThread
     Q_OBJECT
 
 public:
-    explicit ThreadChannel(const Channel& ch, QObject *parent = nullptr);
+    explicit ThreadChannel(Channel& ch, QObject *parent = nullptr);
     ~ThreadChannel() override;
 
     static QList<QString> getAvailablePorts();
@@ -25,7 +25,7 @@ public:
 
 
     int m_ch_id;
-    const Channel& m_ch;
+    Channel m_ch;
 private:
 
     QObject* par;

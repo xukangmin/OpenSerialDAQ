@@ -1,9 +1,11 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+#include "daq-core_global.h"
 #include <QTimer>
 #include "Variable/Variable.h"
 #include "DeviceData.h"
+#include <QVariant>
 
 struct Parameter {
     QString name;
@@ -41,12 +43,25 @@ struct Command {
     QVector<ParseFormat> parse_info;
 };
 
-class Device : public QObject
+static const QString DeviceHeaderList[] = {"id","Name","NodeID","Protocl","ChannelID"};
+static const QString DeviceDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","INTEGER", "TEXT", "INTEGER"};
+static const int DeviceColumnSize = 5;
+
+class DAQCORESHARED_EXPORT Device : public QObject
 {
 
 Q_OBJECT
 
 public:
+
+    Device(int id, QHash<QString, QVariant> properties);
+
+    int m_id;
+
+    QHash<QString, QVariant> m_properties;
+
+    QVariant getProperty(QString name) const;
+
     Device(int node_id);
 
     Device(int node_id, QString protocol_name);

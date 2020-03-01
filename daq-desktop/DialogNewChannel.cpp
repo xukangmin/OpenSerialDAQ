@@ -27,12 +27,12 @@ Channel DialogNewChannel::getChannelInfo() {
 
     QHash<QString, QVariant> prop;
 
-    prop[channelHeaderList[0]] = 0;
-    prop[channelHeaderList[1]] = ui->cmbPort->currentText();
-    prop[channelHeaderList[2]] = ui->cmbBaudRate->currentText().toInt();
-    prop[channelHeaderList[3]] = ui->cmbDataBits->currentText().toInt();
-    prop[channelHeaderList[4]] = ui->cmbParity->currentText();
-    prop[channelHeaderList[5]] = ui->cmbStopBits->currentText().toInt();
+    prop[ChannelHeaderList[0]] = 0;
+    prop[ChannelHeaderList[1]] = ui->cmbPort->currentText();
+    prop[ChannelHeaderList[2]] = ui->cmbBaudRate->currentText().toInt();
+    prop[ChannelHeaderList[3]] = ui->cmbDataBits->currentText().toInt();
+    prop[ChannelHeaderList[4]] = ui->cmbParity->currentText();
+    prop[ChannelHeaderList[5]] = ui->cmbStopBits->currentText().toInt();
 
     Channel ch(0,prop);
 

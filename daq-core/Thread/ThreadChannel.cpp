@@ -8,7 +8,7 @@
 #include "Database/DatabaseManager.h"
 #include <QSerialPort>
 
-ThreadChannel::ThreadChannel(const Channel& ch, QObject *parent) :
+ThreadChannel::ThreadChannel(Channel& ch, QObject *parent) :
      QThread(parent),
      m_ch_id(ch.m_id),
      m_ch(ch),

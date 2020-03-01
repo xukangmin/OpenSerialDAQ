@@ -22,10 +22,10 @@ void ChannelDao::init() const
 
            QString createQuery = "CREATE TABLE Channels (";
 
-           qDebug() << "length=" << channelColumnSize;
+           qDebug() << "length=" << ChannelColumnSize;
 
-           for(int i = 0; i < channelColumnSize; i++) {
-               createQuery += (channelHeaderList[i] + " " + channelDataType[i] + ",");
+           for(int i = 0; i < ChannelColumnSize; i++) {
+               createQuery += (ChannelHeaderList[i] + " " + ChannelDataType[i] + ",");
            }
 
            createQuery = createQuery.left(createQuery.length() - 1);
@@ -44,8 +44,8 @@ void ChannelDao::addChannel(Channel& ch) const
 
     QString insertList = "(";
 
-    for(int i = 1; i < channelColumnSize; i++) {
-        insertList += (channelHeaderList[i] + ",");
+    for(int i = 1; i < ChannelColumnSize; i++) {
+        insertList += (ChannelHeaderList[i] + ",");
     }
 
     insertList = insertList.left(insertList.length() - 1);
@@ -54,8 +54,8 @@ void ChannelDao::addChannel(Channel& ch) const
 
     QString dataList = "(";
 
-    for(int i = 1; i < channelColumnSize; i++) {
-        dataList += (":" + channelHeaderList[i] + ",");
+    for(int i = 1; i < ChannelColumnSize; i++) {
+        dataList += (":" + ChannelHeaderList[i] + ",");
     }
 
     dataList = dataList.left(dataList.length() - 1);
@@ -64,8 +64,8 @@ void ChannelDao::addChannel(Channel& ch) const
 
     query.prepare("INSERT INTO Channels " + insertList + " VALUES " + dataList);
 
-    for(int i = 1; i < channelColumnSize; i++) {
-        query.bindValue(":" + channelHeaderList[i], ch.getProperty(channelHeaderList[i]));
+    for(int i = 1; i < ChannelColumnSize; i++) {
+        query.bindValue(":" + ChannelHeaderList[i], ch.getProperty(ChannelHeaderList[i]));
     }
 
     query.exec();
@@ -101,8 +101,8 @@ unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
 
         QHash<QString, QVariant> properties;
 
-        for(int i = 0; i < channelColumnSize; i++) {
-            properties[channelHeaderList[i]] = query.value(channelHeaderList[i]);
+        for(int i = 0; i < ChannelColumnSize; i++) {
+            properties[ChannelHeaderList[i]] = query.value(ChannelHeaderList[i]);
         }
 
 

@@ -13,7 +13,8 @@ DatabaseManager&DatabaseManager::instance()
 
 DatabaseManager::DatabaseManager(const QString& path) :
     mDatabase(new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
-    channelDao(*mDatabase)
+    channelDao(*mDatabase),
+    deviceDao(*mDatabase)
 {
     mDatabase->setDatabaseName(path);
 
@@ -21,6 +22,7 @@ DatabaseManager::DatabaseManager(const QString& path) :
     qDebug() << "Database connection: " << (openStatus ? "OK" : "Error");
 
     channelDao.init();
+    deviceDao.init();
 }
 
 
