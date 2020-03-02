@@ -19,7 +19,7 @@ public:
 
     void getAvailablePorts();
 
-    Channel getChannelInfo();
+    QHash<QString, QVariant> getChannelInfo();
 
     QList<QString> m_portLists;
 

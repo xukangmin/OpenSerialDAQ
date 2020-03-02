@@ -1,5 +1,7 @@
 #include "ChannelModel.h"
 #include <QDebug>
+#include <QSerialPortInfo>
+#include <Device/DeviceModel.h>
 
 using namespace std;
 
@@ -10,27 +12,38 @@ ChannelModel::ChannelModel(QObject* parent) :
 {
 }
 
-QVector<Channel*> ChannelModel::getAllChannels()
-{
-    QVector<Channel*> list;
+QList<QString> ChannelModel::getAvailablePorts() {
 
-    for(auto it = mChannels->begin(); it != mChannels->end(); it++) {
-        list.append(it->get());
+    QList<QString> tmp;
+
+    foreach(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
+        tmp.append(port.portName());
     }
 
-    return list;
+    return tmp;
 }
 
-int ChannelModel::getIndexFromID(int id)
-{
-    auto it = find_if(mChannels->begin(), mChannels->end(), [&id](unique_ptr<Channel>& obj) {return obj->m_id == id;});
+//QVector<Channel*> ChannelModel::getAllChannels()
+//{
+//    QVector<Channel*> list;
 
-    return distance(mChannels->begin(),it);
-}
+//    for(auto it = mChannels->begin(); it != mChannels->end(); it++) {
+//        list.append(it->get());
+//    }
 
-Channel* ChannelModel::getChannel(int id) {
-    return (mChannels->at(getIndexFromID(id)).get());
-}
+//    return list;
+//}
+
+//int ChannelModel::getIndexFromID(int id)
+//{
+//    auto it = find_if(mChannels->begin(), mChannels->end(), [&id](unique_ptr<Channel>& obj) {return obj->m_id == id;});
+
+//    return distance(mChannels->begin(),it);
+//}
+
+//Channel* ChannelModel::getChannel(int id) {
+//    return (mChannels->at(getIndexFromID(id)).get());
+//}
 
 bool ChannelModel::isPortExists(QString portName) {
 
@@ -44,17 +57,35 @@ bool ChannelModel::isPortExists(QString portName) {
 }
 
 
-QModelIndex ChannelModel::addChannel(Channel& channel)
+void ChannelModel::addDevice(shared_ptr<Device> dev, const QModelIndex& ch_index) {
+    Channel& channel = *mChannels->at(ch_index.row());
+    channel.devices.push_back(dev);
+}
+
+
+QModelIndex ChannelModel::addChannel(QHash<QString,QVariant> properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Channel> newChannel(new Channel(channel));
+    unique_ptr<Channel> newChannel(new Channel(0, properties));
     mDb.channelDao.addChannel(*newChannel);
-    channel.m_id = (*newChannel).m_id;
     mChannels->push_back(move(newChannel));
     endInsertRows();
     return index(rowIndex, 0);
 }
+
+void ChannelModel::startChannel(const QModelIndex& index) {
+    Channel& channel = *mChannels->at(index.row());
+
+    channel.startChannel();
+}
+
+void ChannelModel::stopChannel(const QModelIndex& index){
+    Channel& channel = *mChannels->at(index.row());
+
+    channel.stopChannel();
+}
+
 
 int ChannelModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
@@ -66,11 +97,6 @@ int ChannelModel::rowCount(const QModelIndex& parent) const {
     return mChannels->size();
 }
 
-void ChannelModel::removeByID(int id)
-{
-    removeRows(getIndexFromID(id),1);
-}
-
 QVariant ChannelModel::data(const QModelIndex& index, int role) const {
 
     if (!isIndexValid(index)) {
@@ -80,14 +106,12 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const {
 
     qDebug() << "get data col" << index.column();
 
-    return channel.m_properties[ChannelHeaderList[index.column()]];
-
-//    switch (role) {
-//        case Qt::DisplayRole:
-//            return channel.m_id;
-//        default:
-//            return QVariant();
-//    }
+    switch (role) {
+        case Qt::DisplayRole:
+            return channel.m_properties[ChannelHeaderList[index.column()]];
+        default:
+            return QVariant();
+    }
 
 }
 

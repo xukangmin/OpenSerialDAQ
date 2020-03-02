@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "Database/DatabaseManager.h"
+#include <Channel/ChannelModel.h>
 
 class DAQCORESHARED_EXPORT DeviceModel : public QAbstractTableModel
 {
@@ -26,12 +27,8 @@ public:
     };
     DeviceModel(QObject* parent = nullptr);
 
-    static QStringList getAvailableComPorts();
-    bool isPortExists(QString portName);
-    QModelIndex addDevice(Device& channel);
-    QVector<Device*> getAllDevices();
-    Device* getDevice(int id);
-    void removeByID(int id);
+    QModelIndex addDevice(QHash<QString,QVariant> properties);
+    void addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

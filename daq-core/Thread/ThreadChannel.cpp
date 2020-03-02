@@ -27,16 +27,6 @@ ThreadChannel::~ThreadChannel()
 
 }
 
-QList<QString> ThreadChannel::getAvailablePorts() {
-
-    QList<QString> tmp;
-
-    foreach(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
-        tmp.append(port.portName());
-    }
-
-    return tmp;
-}
 
 
 

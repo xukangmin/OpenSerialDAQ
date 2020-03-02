@@ -19,18 +19,17 @@ public:
     ~WidgetChannelList();
 
     void setModel(ChannelModel* model);
-    void addNewChannel(Channel channel);
+    void addNewChannel(QHash<QString, QVariant> properties);
 
 private:
     Ui::WidgetChannelList *ui;
     ChannelModel* m_model;
+    void addWidget(ChannelModel *model, int row_index);
+
+    void clearWidgets(QLayout * layout);
+
+public slots:
     void updateWidgets();
-    void addWidget(Channel ch);
-    void addNewChannelWidget();
-private slots:
-    void deleteChannel(int id);
-    void startChannel(int id);
-    void stopChannel(int id);
 };
 
 #endif // WIDGETCHANNELLIST_H

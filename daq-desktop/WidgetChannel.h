@@ -2,8 +2,7 @@
 #define CHANNELWIDGET_H
 
 #include <QWidget>
-#include "Channel/Channel.h"
-#include "Thread/ThreadChannel.h"
+#include "Channel/ChannelModel.h"
 
 namespace Ui {
 class ChannelWidget;
@@ -14,8 +13,9 @@ class ChannelWidget : public QWidget
     Q_OBJECT
 
 public:
-    ChannelWidget(Channel &ch, QWidget *parent = nullptr);
-    Channel m_ch;
+    ChannelWidget(ChannelModel* model, int row_index , QWidget *parent = nullptr);
+    ChannelModel* m_model;
+    int m_row_index;
     int getChannelID();
     //void addMiniDeviceWidget(MiniDeviceWidget* dev);
     ~ChannelWidget();
@@ -34,14 +34,8 @@ private slots:
 
 
 private:
-
     Ui::ChannelWidget *ui;
-    ThreadChannel* threadChannel;
-signals:
-    void deleteChannel(int id);
-    void startChannel(int id);
-    void stopChannel(int id);
-    void addDeviceToChannel(int id);
+
 };
 
 #endif // CHANNELWIDGET_H

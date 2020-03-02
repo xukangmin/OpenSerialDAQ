@@ -29,10 +29,12 @@ public:
 
     static QStringList getAvailableComPorts();
     bool isPortExists(QString portName);
-    QModelIndex addChannel(Channel& channel);
-    QVector<Channel*> getAllChannels();
-    Channel* getChannel(int id);
-    void removeByID(int id);
+    QModelIndex addChannel(QHash<QString,QVariant> properties);
+
+    static QList<QString> getAvailablePorts();
+//    QVector<Channel*> getAllChannels();
+//    Channel* getChannel(int id);
+//    void removeByID(int id);
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -41,6 +43,9 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
 
+    void startChannel(const QModelIndex& index);
+    void stopChannel(const QModelIndex& index);
+    void addDevice(std::shared_ptr<Device> dev, const QModelIndex& ch_index);
 private:
     bool isIndexValid(const QModelIndex& index) const;
 
@@ -49,7 +54,6 @@ private:
 private:
     DatabaseManager& mDb;
     std::unique_ptr<std::vector<std::unique_ptr<Channel>>> mChannels;
-    int getIndexFromID(int id);
 };
 
 #endif // CHANNELMODEL_H

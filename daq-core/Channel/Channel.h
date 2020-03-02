@@ -5,6 +5,8 @@
 #include <QString>
 #include <QVariant>
 #include "Generic/GenericDefinition.h"
+#include <memory>
+#include "Device/Device.h"
 
 class ThreadChannel;
 class QSerialPort;
@@ -37,9 +39,16 @@ class DAQCORESHARED_EXPORT Channel : public GenericDefinition
 {
 
 public:
-
     Channel(int id, QHash<QString, QVariant> properties);
+    ~Channel();
 
+    void startChannel();
+    void stopChannel();
+
+    std::vector<std::shared_ptr<Device>> devices;
+
+private:
+    std::unique_ptr<ThreadChannel> threadChannel;
 
 };
 

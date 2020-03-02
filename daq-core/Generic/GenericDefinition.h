@@ -15,8 +15,9 @@ public:
 
     QHash<QString, QVariant> m_properties;
 
-    QVariant getProperty(QString name) const;
+    QVariant getSingleProperty(QString name) const;
 
+    void setSingleProperty(QString key, QVariant property);
 };
 
 #endif

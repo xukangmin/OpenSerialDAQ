@@ -10,51 +10,36 @@ DeviceModel::DeviceModel(QObject* parent) :
 {
 }
 
-QVector<Device*> DeviceModel::getAllDevices()
-{
-    QVector<Device*> list;
-
-    for(auto it = mDevices->begin(); it != mDevices->end(); it++) {
-        list.append(it->get());
-    }
-
-    return list;
-}
-
-int DeviceModel::getIndexFromID(int id)
-{
-    auto it = find_if(mDevices->begin(), mDevices->end(), [&id](unique_ptr<Device>& obj) {return obj->m_id == id;});
-
-    return distance(mDevices->begin(),it);
-}
-
-Device* DeviceModel::getDevice(int id) {
-    return (mDevices->at(getIndexFromID(id)).get());
-}
-
-bool DeviceModel::isPortExists(QString portName) {
-
-    auto it = find_if(mDevices->begin(), mDevices->end(), [&portName](unique_ptr<Device>& obj) {return obj->getProperty("ComPort") == portName;});
-
-    if (it != mDevices->end()) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-QModelIndex DeviceModel::addDevice(Device& device)
+QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Device> newDevice(new Device(device.m_id, device.m_properties));
+    unique_ptr<Device> newDevice(new Device(0, properties));
     mDb.deviceDao.addDevice(*newDevice);
-    device.m_id = (*newDevice).m_id;
     mDevices->push_back(move(newDevice));
     endInsertRows();
     return index(rowIndex, 0);
 }
+
+void DeviceModel::addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index)
+{
+    beginResetModel();
+    Device& device = *mDevices->at(dev_index.row());
+    QVariant channelid = ch_model->data(ch_index,Roles::IdRole);
+    device.setSingleProperty("ChannelID",channelid);
+    mDb.deviceDao.updateDevice(device);
+    endResetModel();
+}
+
+void DeviceModel::removeDeviceFromChannel(const QModelIndex& dev_index)
+{
+    beginResetModel();
+    Device& device = *mDevices->at(dev_index.row());
+    device.setSingleProperty("ChannelID",-1);
+    mDb.deviceDao.updateDevice(device);
+    endResetModel();
+}
+
 
 int DeviceModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
@@ -66,10 +51,6 @@ int DeviceModel::rowCount(const QModelIndex& parent) const {
     return mDevices->size();
 }
 
-void DeviceModel::removeByID(int id)
-{
-    removeRows(getIndexFromID(id),1);
-}
 
 QVariant DeviceModel::data(const QModelIndex& index, int role) const {
 

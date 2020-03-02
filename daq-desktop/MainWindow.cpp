@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Generate Channel Widges
     channelModel = new ChannelModel(this);
 
-
     if (channelModel->rowCount() == 0) {
         // populate test data
 
@@ -46,8 +45,23 @@ MainWindow::MainWindow(QWidget *parent)
         properties["Parity"] = "None";
         properties["StopBits"] = 1;
 
-        Channel c = Channel(0,properties);
-        channelModel->addChannel(c);
+        channelModel->addChannel(properties);
+    }
+
+    deviceModel = new DeviceModel(this);
+
+    if (deviceModel->rowCount() == 0) {
+        // populate test data
+
+        QHash<QString, QVariant> properties;
+
+        properties["Name"] = "ALICAT";
+        properties["NodeID"] = 1;
+        properties["Protocol"] = "LFE-ALICAT";
+        properties["ChannelID"] = 0;
+
+        deviceModel->addDevice(properties);
+
     }
 
 //    QTableView *tb = new QTableView(this);
@@ -56,7 +70,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 //    setCentralWidget(tb);
 
+
     m_widgetChannelList->setModel(channelModel);
+
+    connect(channelModel, &ChannelModel::rowsInserted, m_widgetChannelList, &WidgetChannelList::updateWidgets);
+    connect(channelModel, &ChannelModel::rowsRemoved, m_widgetChannelList, &WidgetChannelList::updateWidgets);
+
 
     mStackedWidget->addWidget(m_widgetChannelList);
 
@@ -83,10 +102,10 @@ void MainWindow::showNewChannelDialog() {
     mDialogNewChannel = new DialogNewChannel(this);
 
     if (mDialogNewChannel->exec() == QDialog::Accepted) {
-        Channel chinfo = mDialogNewChannel->getChannelInfo();
+        QHash<QString, QVariant> properties = mDialogNewChannel->getChannelInfo();
 
-        if (!channelModel->isPortExists(chinfo.getProperty("ComPort").toString())) {
-            m_widgetChannelList->addNewChannel(chinfo);
+        if (!channelModel->isPortExists(properties["ComPort"].toString())) {
+            m_widgetChannelList->addNewChannel(properties);
         } else {
             QMessageBox msgBox;
             msgBox.setText("Same Com port already exists!");

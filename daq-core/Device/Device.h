@@ -6,6 +6,7 @@
 #include "Variable/Variable.h"
 #include "DeviceData.h"
 #include <QVariant>
+#include "Generic/GenericDefinition.h"
 
 struct Parameter {
     QString name;
@@ -43,11 +44,11 @@ struct Command {
     QVector<ParseFormat> parse_info;
 };
 
-static const QString DeviceHeaderList[] = {"id","Name","NodeID","Protocl","ChannelID"};
+static const QString DeviceHeaderList[] = {"id","Name","NodeID","Protocol","ChannelID"};
 static const QString DeviceDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","INTEGER", "TEXT", "INTEGER"};
 static const int DeviceColumnSize = 5;
 
-class DAQCORESHARED_EXPORT Device : public QObject
+class DAQCORESHARED_EXPORT Device : public QObject, public GenericDefinition
 {
 
 Q_OBJECT
@@ -55,20 +56,6 @@ Q_OBJECT
 public:
 
     Device(int id, QHash<QString, QVariant> properties);
-
-    int m_id;
-
-    QHash<QString, QVariant> m_properties;
-
-    QVariant getProperty(QString name) const;
-
-    Device(int node_id);
-
-    Device(int node_id, QString protocol_name);
-
-    Device(int id, int node_id, QString protocol_name, QVector<Variable*> *var_list);
-
-    Device(int id, QString name, int node_id, QString protocol_name, QVector<Variable*> *var_list);
 
 
     int m_device_id;

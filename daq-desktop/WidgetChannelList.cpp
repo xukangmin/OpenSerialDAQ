@@ -9,7 +9,7 @@ WidgetChannelList::WidgetChannelList(QWidget *parent) :
     ui->setupUi(this);
 }
 
-void clearWidgets(QLayout * layout) {
+void WidgetChannelList::clearWidgets(QLayout * layout) {
    if (! layout)
       return;
    while (auto item = layout->takeAt(0)) {
@@ -18,45 +18,30 @@ void clearWidgets(QLayout * layout) {
    }
 }
 
-void WidgetChannelList::addWidget(Channel ch) {
-    auto ch_widget = new ChannelWidget(ch,this);
-    connect(ch_widget, &ChannelWidget::deleteChannel, this, &WidgetChannelList::deleteChannel);
-    ui->verticalLayout->addWidget(ch_widget);
+void WidgetChannelList::updateWidgets() {
+    clearWidgets(ui->verticalLayout);
+
+    for(int i = 0; i < m_model->rowCount(); i++) {
+        addWidget(m_model,i);
+    }
 }
 
-void WidgetChannelList::updateWidgets() {
-
-
+void WidgetChannelList::addWidget(ChannelModel *model, int row_index) {
+    auto ch_widget = new ChannelWidget(model, row_index, this);
+    ui->verticalLayout->addWidget(ch_widget);
 }
 
 void WidgetChannelList::setModel(ChannelModel *model)
 {
     m_model = model;
-    auto chs = m_model->getAllChannels();
 
-    foreach(auto ch, chs) {
-        addWidget(*ch);
-    }
-
+    updateWidgets();
 }
 
-void WidgetChannelList::addNewChannel(Channel channel) {
-    m_model->addChannel(channel);
-    addWidget(channel);
+void WidgetChannelList::addNewChannel(QHash<QString, QVariant> properties) {
+    m_model->addChannel(properties);
+    updateWidgets();
 }
-
-void WidgetChannelList::deleteChannel(int id) {
-    m_model->removeByID(id);
-}
-
-void WidgetChannelList::startChannel(int id) {
-//    m_model->startChannel(id);
-}
-
-void WidgetChannelList::stopChannel(int id) {
-//    m_model->stopChannel(id);
-}
-
 
 WidgetChannelList::~WidgetChannelList()
 {

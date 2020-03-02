@@ -9,6 +9,10 @@ GenericDefinition::GenericDefinition(int id, QHash<QString, QVariant> properties
 
 }
 
-QVariant GenericDefinition::getProperty(QString name) const {
+QVariant GenericDefinition::getSingleProperty(QString name) const {
     return m_properties[name];
+}
+
+void GenericDefinition::setSingleProperty(QString key, QVariant property) {
+    m_properties[key] = property;
 }

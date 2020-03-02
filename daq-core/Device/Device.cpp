@@ -8,46 +8,39 @@
 #include "Variable/Variable.h"
 
 Device::Device(int id, QHash<QString, QVariant> properties) :
-                m_id(id),
-                m_properties(properties)
+            GenericDefinition(id, properties)
 {
-//    if (properties.contains("Protocol")) {
-//        m_name = protocol_name + "_" + QString::number(node_id);
-//        loadFromConfig(protocol_name);
-//    }
+    if (properties.contains("Protocol")) {
+        loadFromConfig(properties["Protocol"].toString());
+    }
 }
 
-QVariant Device::getProperty(QString name) const {
-    return m_properties[name];
-}
+//Device::Device(int node_id):
+//        m_node_id(node_id)
+//{
+//    m_device_id = 1;
+//}
+
+//Device::Device(int node_id, QString protocol_name):
+//        m_node_id(node_id), m_protocol(protocol_name)
+//{
+//    m_name = protocol_name + "_" + QString::number(node_id);
+//    loadFromConfig(protocol_name);
+//}
 
 
-Device::Device(int node_id):
-        m_node_id(node_id)
-{   
-    m_device_id = 1;
-}
+//Device::Device(int id, int node_id, QString protocol_name, QVector<Variable*> *var_list):
+//        m_device_id(id), m_node_id(node_id), m_protocol(protocol_name), m_var_list(var_list)
+//{
+//    m_name = protocol_name + "_" + QString::number(node_id);
+//    loadFromConfig(protocol_name);
+//}
 
-Device::Device(int node_id, QString protocol_name):
-        m_node_id(node_id), m_protocol(protocol_name)
-{
-    m_name = protocol_name + "_" + QString::number(node_id);
-    loadFromConfig(protocol_name);
-}
-
-
-Device::Device(int id, int node_id, QString protocol_name, QVector<Variable*> *var_list):
-        m_device_id(id), m_node_id(node_id), m_protocol(protocol_name), m_var_list(var_list)
-{
-    m_name = protocol_name + "_" + QString::number(node_id);
-    loadFromConfig(protocol_name);
-}
-
-Device::Device(int id, QString name, int node_id, QString protocol_name, QVector<Variable*> *var_list):
-    m_device_id(id), m_name(name), m_node_id(node_id), m_protocol(protocol_name), m_var_list(var_list)
-{
-    loadFromConfig(protocol_name);
-}
+//Device::Device(int id, QString name, int node_id, QString protocol_name, QVector<Variable*> *var_list):
+//    m_device_id(id), m_name(name), m_node_id(node_id), m_protocol(protocol_name), m_var_list(var_list)
+//{
+//    loadFromConfig(protocol_name);
+//}
 
 void Device::setID(int id) {
     m_device_id = id;
@@ -206,7 +199,7 @@ QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
 
 void Device::loadFromConfig(QString protocol_name) {
-    QFile loadFile(":/protocol/protocol.json");
+    QFile loadFile(":/protocol.json");
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
@@ -315,23 +308,23 @@ void Device::loadFromConfig(QString protocol_name) {
                                     parseFormat.physics = singleParseFormat["Physics"].toString();
                                 }
 
-                                if (parseFormat.usage == "Data") {
+//                                if (parseFormat.usage == "Data") {
 
-                                    bool exist = false;
+//                                    bool exist = false;
 
-                                    for(int i = 0; i < m_var_list->length(); i++) {
-                                        if (m_var_list->at(i)->m_name == parseFormat.name &&
-                                            m_var_list->at(i)->m_device_id == m_device_id) {
-                                            exist = true;
-                                            break;
-                                        }
-                                    }
+//                                    for(int i = 0; i < m_var_list->length(); i++) {
+//                                        if (m_var_list->at(i)->m_name == parseFormat.name &&
+//                                            m_var_list->at(i)->m_device_id == m_device_id) {
+//                                            exist = true;
+//                                            break;
+//                                        }
+//                                    }
 
-                                    if (!exist) {
-                                        m_var_list->append(new Variable(0,parseFormat.name,parseFormat.unit));
-                                    }
+//                                    if (!exist) {
+//                                        m_var_list->append(new Variable(0,parseFormat.name,parseFormat.unit));
+//                                    }
 
-                                }
+//                                }
 
                                 cmd.parse_info.append(parseFormat);
                             }

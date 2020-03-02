@@ -8,6 +8,7 @@
 #include "DialogNewChannel.h"
 #include "WidgetChannel.h"
 #include "WidgetChannelList.h"
+#include "Device/DeviceModel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,6 +35,7 @@ private:
     DialogNewChannel* mDialogNewChannel;
 
     ChannelModel *channelModel;
+    DeviceModel *deviceModel;
 public slots:
     void showOverViewPage();
     void showDevicePage();

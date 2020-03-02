@@ -2,14 +2,13 @@
 #include "ui_WidgetChannel.h"
 #include <QDebug>
 
-ChannelWidget::ChannelWidget(Channel& ch, QWidget *parent) :
-    QWidget(parent),m_ch(ch),
-    ui(new Ui::ChannelWidget),
-    threadChannel(new ThreadChannel(ch,this))
+ChannelWidget::ChannelWidget(ChannelModel* model, int row_index , QWidget *parent) :
+    QWidget(parent), m_model(model), m_row_index(row_index),
+    ui(new Ui::ChannelWidget)
 {
     ui->setupUi(this);
 
-    ui->ChannelInfo->setText(ch.getProperty("ComPort").toString());
+    ui->ChannelInfo->setText(model->data(model->index(row_index, 1)).toString());
 
 }
 
@@ -17,38 +16,30 @@ ChannelWidget::ChannelWidget(Channel& ch, QWidget *parent) :
 
 ChannelWidget::~ChannelWidget()
 {
-    threadChannel->stopChannel();
-    threadChannel->wait();
-    qDebug() << "channel widget " << m_ch.m_id << " destroyed";
+    qDebug() << "channel widget destroyed";
     delete ui;
 }
 
 void ChannelWidget::on_btnDelete_clicked()
 {
-    emit deleteChannel(m_ch.m_id);
-    threadChannel->stopChannel();
-    threadChannel->wait();
-    deleteLater();
+    m_model->removeRows(m_row_index,1);
+    //deleteLater();
 }
 
 
 void ChannelWidget::on_btnStart_clicked()
 {
-    threadChannel->startChannel();
+    m_model->startChannel(m_model->index(m_row_index,0));
 }
 
 void ChannelWidget::on_btnStop_clicked()
 {
-    threadChannel->stopChannel();
+    m_model->stopChannel(m_model->index(m_row_index,0));
 }
 
 void ChannelWidget::on_btnAddDevice_clicked()
 {
-    emit addDeviceToChannel(m_ch.m_id);
-}
-
-int ChannelWidget::getChannelID() {
-    return m_ch.m_id;
+    //emit addDeviceToChannel(m_ch.m_id);
 }
 
 //void ChannelWidget::addMiniDeviceWidget(MiniDeviceWidget* dev) {
