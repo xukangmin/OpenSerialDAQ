@@ -64,7 +64,7 @@ void DeviceDao::addDevice(Device& ch) const
     query.prepare("INSERT INTO Devices " + insertList + " VALUES " + dataList);
 
     for(int i = 1; i < DeviceColumnSize; i++) {
-        query.bindValue(":" + DeviceHeaderList[i], ch.getProperty(DeviceHeaderList[i]));
+        query.bindValue(":" + DeviceHeaderList[i], ch.getSingleProperty(DeviceHeaderList[i]));
     }
 
     query.exec();

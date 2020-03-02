@@ -29,6 +29,7 @@ public:
 
     QModelIndex addDevice(QHash<QString,QVariant> properties);
     void addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
+    void removeDeviceFromChannel(const QModelIndex& dev_index);
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

@@ -47,7 +47,7 @@ QList<QString> ChannelModel::getAvailablePorts() {
 
 bool ChannelModel::isPortExists(QString portName) {
 
-    auto it = find_if(mChannels->begin(), mChannels->end(), [&portName](unique_ptr<Channel>& obj) {return obj->getProperty("ComPort") == portName;});
+    auto it = find_if(mChannels->begin(), mChannels->end(), [&portName](unique_ptr<Channel>& obj) {return obj->getSingleProperty("ComPort") == portName;});
 
     if (it != mChannels->end()) {
         return true;

@@ -65,7 +65,7 @@ void ChannelDao::addChannel(Channel& ch) const
     query.prepare("INSERT INTO Channels " + insertList + " VALUES " + dataList);
 
     for(int i = 1; i < ChannelColumnSize; i++) {
-        query.bindValue(":" + ChannelHeaderList[i], ch.getProperty(ChannelHeaderList[i]));
+        query.bindValue(":" + ChannelHeaderList[i], ch.getSingleProperty(ChannelHeaderList[i]));
     }
 
     query.exec();

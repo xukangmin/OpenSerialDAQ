@@ -101,9 +101,9 @@ void ThreadChannel::run()
 {
     QSerialPort serial;
 
-    serial.setPortName(m_ch.getProperty("ComPort").toString());
+    serial.setPortName(m_ch.getSingleProperty("ComPort").toString());
 
-    serial.setBaudRate(m_ch.getProperty("BaudRate").toInt());
+    serial.setBaudRate(m_ch.getSingleProperty("BaudRate").toInt());
 
     // To do
 

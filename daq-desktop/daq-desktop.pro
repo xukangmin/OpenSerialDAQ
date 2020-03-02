@@ -20,13 +20,15 @@ SOURCES += \
     DialogNewChannel.cpp \
     WidgetChannel.cpp \
     WidgetChannelList.cpp \
+    WidgetMiniDevice.cpp \
     main.cpp
 
 HEADERS += \
     MainWindow.h \
     DialogNewChannel.h \
     WidgetChannel.h \
-    WidgetChannelList.h
+    WidgetChannelList.h \
+    WidgetMiniDevice.h
 
 FORMS += \
     DialogAddDeviceToChannel.ui \
