@@ -5,6 +5,7 @@
 #include <QWidget>
 #include "Channel/ChannelModel.h"
 #include "WidgetChannel.h"
+#include "Models.h"
 
 namespace Ui {
 class WidgetChannelList;
@@ -18,13 +19,15 @@ public:
     explicit WidgetChannelList(QWidget *parent = nullptr);
     ~WidgetChannelList();
 
-    void setModel(ChannelModel* model);
+    void setModel(Models *models);
     void addNewChannel(QHash<QString, QVariant> properties);
 
 private:
     Ui::WidgetChannelList *ui;
-    ChannelModel* m_model;
-    void addWidget(ChannelModel *model, int row_index);
+    ChannelModel* m_ch_model;
+    DeviceModel * m_dev_model;
+    Models *mModels;
+    void addWidget(Models* models);
 
     void clearWidgets(QLayout * layout);
 

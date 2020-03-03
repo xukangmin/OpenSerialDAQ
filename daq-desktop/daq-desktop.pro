@@ -16,18 +16,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DialogAddDeviceToChannel.cpp \
     MainWindow.cpp \
     DialogNewChannel.cpp \
+    Models.cpp \
     WidgetChannel.cpp \
     WidgetChannelList.cpp \
+    WidgetDevicePage.cpp \
     WidgetMiniDevice.cpp \
     main.cpp
 
 HEADERS += \
+    DialogAddDeviceToChannel.h \
     MainWindow.h \
     DialogNewChannel.h \
+    Models.h \
     WidgetChannel.h \
     WidgetChannelList.h \
+    WidgetDevicePage.h \
     WidgetMiniDevice.h
 
 FORMS += \
@@ -37,6 +43,7 @@ FORMS += \
     WidgetChannelList.ui \
     WidgetCommand.ui \
     WidgetDevice.ui \
+    WidgetDevicePage.ui \
     WidgetMiniDevice.ui \
     MainWindow.ui
 

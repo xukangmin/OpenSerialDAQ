@@ -57,9 +57,14 @@ bool ChannelModel::isPortExists(QString portName) {
 }
 
 
-void ChannelModel::addDevice(shared_ptr<Device> dev, const QModelIndex& ch_index) {
+void ChannelModel::addDeviceToChannel(const shared_ptr<Device>& dev, const QModelIndex& ch_index) {
     Channel& channel = *mChannels->at(ch_index.row());
-    channel.devices.push_back(dev);
+    channel.addDeviceToThread(dev);
+}
+
+void ChannelModel::removeDeviceFromChannel(const shared_ptr<Device>& dev, const QModelIndex& ch_index) {
+    Channel& channel = *mChannels->at(ch_index.row());
+    channel.removeDeviceFromThread(dev);
 }
 
 
@@ -104,11 +109,11 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const {
     }
     const Channel& channel = *mChannels->at(index.row());
 
-    qDebug() << "get data col" << index.column();
-
     switch (role) {
         case Qt::DisplayRole:
             return channel.m_properties[ChannelHeaderList[index.column()]];
+        case Roles::IdRole:
+            return channel.m_properties[ChannelHeaderList[0]];
         default:
             return QVariant();
     }

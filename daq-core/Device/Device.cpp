@@ -42,9 +42,6 @@ Device::Device(int id, QHash<QString, QVariant> properties) :
 //    loadFromConfig(protocol_name);
 //}
 
-void Device::setID(int id) {
-    m_device_id = id;
-}
 
 QByteArray Device::buildQueryCmd(Command cmd) {
 
@@ -67,7 +64,7 @@ QByteArray Device::buildQueryCmd(Command cmd) {
                 cmd.query_cmd.append(cmd.header);
             }
             else if (cmd_str.contains("Node")) {
-                cmd.query_cmd.append(m_node_id);
+                cmd.query_cmd.append(getSingleProperty("NodeID").toInt());
             }
             else if (cmd_str.contains("Cmd")) {
                 cmd.query_cmd.append(cmd.cmd);
@@ -145,7 +142,7 @@ QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
                     }
                 }
                 else if (fm.name == "Node") {
-                    if (!(rx_data.at(fm.location) == m_node_id)) {
+                    if (!(rx_data.at(fm.location) == getSingleProperty("NodeID").toInt())) {
                         isValidated = false;
                     }
                 }

@@ -6,7 +6,7 @@
 QMutex mutex;
 
 ThreadDataProcessor::ThreadDataProcessor(Packet* pac) :
-    m_dev(pac->dev),
+    m_dev(pac->m_dev),
     m_rx_data(pac->m_response_bytes),
     m_cmd_id(pac->m_cmd_id)
 {

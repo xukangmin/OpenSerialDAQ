@@ -16,6 +16,16 @@ Channel::~Channel() {
 }
 
 
+void Channel::addDeviceToThread(const std::shared_ptr<Device>& dev)
+{
+    threadChannel->addDevice(dev);
+}
+
+void Channel::removeDeviceFromThread(const std::shared_ptr<Device>& dev)
+{
+    threadChannel->removeDeviceFromChannel((*dev).getSingleProperty("id").toInt());
+}
+
 void Channel::startChannel()
 {
     threadChannel->startChannel();

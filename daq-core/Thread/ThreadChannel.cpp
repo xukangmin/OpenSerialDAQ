@@ -8,6 +8,8 @@
 #include "Database/DatabaseManager.h"
 #include <QSerialPort>
 
+using namespace std;
+
 ThreadChannel::ThreadChannel(Channel& ch, QObject *parent) :
      QThread(parent),
      m_ch_id(ch.m_id),
@@ -30,19 +32,18 @@ ThreadChannel::~ThreadChannel()
 
 
 
-void ThreadChannel::addDevice(Device *dev) {
-    m_device_pool.append(dev);
+void ThreadChannel::addDevice(const shared_ptr<Device>& dev) {
+    m_device_pool.push_back(dev);
 
     foreach(Command cmd, dev->m_commands) {
         if (cmd.isDAQ) {
-            QTimer *m_timer = new QTimer(dev);
+            QTimer *m_timer = new QTimer(dev.get());
 
             m_timer->setInterval(cmd.interval);
             connect(m_timer, &QTimer::timeout,this,[=]() {
-                Packet *pac = new Packet();
+                Packet *pac = new Packet(dev);
                 pac->m_packet_id = rand();
                 pac->m_query_bytes = dev->buildQueryCmd(cmd);
-                pac->dev = dev;
                 pac->m_cmd_id = cmd.cmd_id;
                 qDebug() << "enqueu";
                 m_packet_queue.enqueue(pac);
@@ -53,13 +54,16 @@ void ThreadChannel::addDevice(Device *dev) {
 }
 
 void ThreadChannel::removeDeviceFromChannel(int dev_id) {
-    foreach(Device *dev, m_device_pool) {
-        if (dev->m_device_id == dev_id) {
-            foreach(QTimer* tm, dev->m_timer_pool) {
-                tm->stop();
+
+    for (auto it = m_device_pool.begin(); it != m_device_pool.end(); it++) {
+        if ((*(*it)).getSingleProperty("id").toInt() == dev_id) {
+            foreach(auto timer, (*(*it)).m_timer_pool) {
+                timer->stop();
+                timer->deleteLater();
             }
-            m_device_pool.removeOne(dev);
-            dev->deleteLater();
+            (*(*it)).m_timer_pool.clear();
+            m_device_pool.erase(it);
+            break;
         }
     }
 }
@@ -82,7 +86,7 @@ void ThreadChannel::stopChannel() {
 }
 
 void ThreadChannel::startDAQ() {
-    foreach(Device* dev, m_device_pool) {
+    foreach(auto& dev, m_device_pool) {
         foreach(QTimer* tm, dev->m_timer_pool) {
             tm->start();
         }
@@ -90,7 +94,7 @@ void ThreadChannel::startDAQ() {
 }
 
 void ThreadChannel::stopDAQ() {
-    foreach(Device* dev, m_device_pool) {
+    foreach(auto& dev, m_device_pool) {
         foreach(QTimer* tm, dev->m_timer_pool) {
             tm->stop();
         }

@@ -4,13 +4,19 @@
 #include <QStringListModel>
 #include <QListWidgetItem>
 
-DialogAddDeviceToChannel::DialogAddDeviceToChannel(int channelID, QWidget *parent) :
+DialogAddDeviceToChannel::DialogAddDeviceToChannel(DeviceModel *dev_model, QWidget *parent) :
     QDialog(parent),
-    m_channel_id(channelID),
     ui(new Ui::DialogAddDeviceToChannel)
 {
     ui->setupUi(this);
 
+    proxyModel = new DeviceProxyModel(this);
+
+    proxyModel->setChannelID(-1);
+    proxyModel->setSourceModel(dev_model);
+
+    ui->listView->setModel(proxyModel);
+    ui->listView->setSelectionMode(QAbstractItemView::MultiSelection);
     // first get device are not assigned to any channel
 //    m_device_list = DatabaseManager::instance().getUnassignedDevice();
 
@@ -28,14 +34,20 @@ DialogAddDeviceToChannel::DialogAddDeviceToChannel(int channelID, QWidget *paren
 }
 
 
-QVector<int> DialogAddDeviceToChannel::getSelectedDeviceID()
+QList<QModelIndex> DialogAddDeviceToChannel::getSelectedDevice()
 {
-    QVector<int> ls;
+    QList<QModelIndex> ls;
 
-    foreach(QListWidgetItem* lineItem, ui->lsDevice->selectedItems()) {
-        //ls.append(lineItem->data(Qt::UserRole));
-        ls.append(lineItem->data(Qt::UserRole).toInt());
-    }
+    QItemSelection selectionProxy = ui->listView->selectionModel()->selection();
+
+    QItemSelection selectionSource = proxyModel->mapSelectionToSource(selectionProxy);
+
+    ls = selectionSource.indexes();
+
+//    foreach(QListWidgetItem* lineItem, ui->lsDevice->selectedItems()) {
+//        //ls.append(lineItem->data(Qt::UserRole));
+//        ls.append(lineItem->data(Qt::UserRole).toInt());
+//    }
 
     return ls;
 }

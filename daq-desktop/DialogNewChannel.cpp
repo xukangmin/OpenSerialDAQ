@@ -10,9 +10,6 @@ DialogNewChannel::DialogNewChannel(QWidget *parent) :
 {
     ui->setupUi(this);
     getAvailablePorts();
-//    QStringListModel *model = new QStringListModel();
-//    model->setStringList(ChannelModel::getAvailableComPorts());
-//    ui->cmbPort->setModel(model);
 }
 
 

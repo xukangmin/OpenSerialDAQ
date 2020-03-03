@@ -5,11 +5,12 @@
 #include <QString>
 #include <QVector>
 #include "Device/Device.h"
+#include <memory>
 
 class Packet
 {
 public:
-    Packet();
+    Packet(const std::shared_ptr<Device>& dev);
 
     int m_packet_id;
     QString m_query_str;
@@ -20,7 +21,7 @@ public:
     QString m_parse_regex;
     QVector<double> result;
     int m_cmd_id;
-    Device *dev;
+    const std::shared_ptr<Device>& m_dev;
 };
 
 #endif // PACKET_H

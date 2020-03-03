@@ -74,9 +74,31 @@ void DeviceDao::addDevice(Device& ch) const
     DatabaseManager::debugQuery(query);
 }
 
-void DeviceDao::updateDevice(const Device &ch) const
+void DeviceDao::updateDevice(const Device &dev) const
 {
+    QSqlQuery query(mDatabase);
 
+
+    QString setStr = "";
+
+    for(int i = 1; i < DeviceColumnSize; i++) {
+        setStr += (DeviceHeaderList[i] + " = "
+                   + (DeviceDataType[i] == "TEXT" ? "'" : "") +
+                   dev.getSingleProperty(DeviceHeaderList[i]).toString()
+                   + (DeviceDataType[i] == "TEXT" ? "'" : "") + ",");
+    }
+
+    setStr = setStr.left(setStr.length() - 1);
+
+    QString queryStr = "UPDATE Devices SET " + setStr + " WHERE id = " + dev.getSingleProperty(DeviceHeaderList[0]).toString();
+
+    qDebug() << queryStr;
+
+    query.prepare(queryStr);
+
+    query.exec();
+
+    DatabaseManager::debugQuery(query);
 }
 
 void DeviceDao::removeDevice(int id) const {
@@ -87,11 +109,11 @@ void DeviceDao::removeDevice(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
-unique_ptr<vector<unique_ptr<Device>>> DeviceDao::devices() const
+unique_ptr<vector<shared_ptr<Device>>> DeviceDao::devices() const
 {
     QSqlQuery query("SELECT * FROM Devices", mDatabase);
     query.exec();
-    unique_ptr<vector<unique_ptr<Device>>> list(new vector<unique_ptr<Device>>());
+    unique_ptr<vector<shared_ptr<Device>>> list(new vector<shared_ptr<Device>>());
     while(query.next()) {
         ;
 
@@ -105,9 +127,9 @@ unique_ptr<vector<unique_ptr<Device>>> DeviceDao::devices() const
         }
 
 
-        unique_ptr<Device> ch(new Device(query.value("id").toInt(),properties));
+        shared_ptr<Device> dev(new Device(query.value("id").toInt(),properties));
 
-        list->push_back(move(ch));
+        list->push_back(move(dev));
     }
     return list;
 }

@@ -14,7 +14,7 @@ QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Device> newDevice(new Device(0, properties));
+    shared_ptr<Device> newDevice(new Device(0, properties));
     mDb.deviceDao.addDevice(*newDevice);
     mDevices->push_back(move(newDevice));
     endInsertRows();
@@ -24,19 +24,22 @@ QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
 void DeviceModel::addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index)
 {
     beginResetModel();
-    Device& device = *mDevices->at(dev_index.row());
+    qDebug() << "row=" << dev_index.row();
+    shared_ptr<Device>& device = mDevices->at(dev_index.row());
     QVariant channelid = ch_model->data(ch_index,Roles::IdRole);
-    device.setSingleProperty("ChannelID",channelid);
-    mDb.deviceDao.updateDevice(device);
+    (*device).setSingleProperty("ChannelID",channelid);
+    mDb.deviceDao.updateDevice(*device);
+    ch_model->addDeviceToChannel(device,ch_index);
     endResetModel();
 }
 
-void DeviceModel::removeDeviceFromChannel(const QModelIndex& dev_index)
+void DeviceModel::removeDeviceFromChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index)
 {
     beginResetModel();
-    Device& device = *mDevices->at(dev_index.row());
-    device.setSingleProperty("ChannelID",-1);
-    mDb.deviceDao.updateDevice(device);
+    shared_ptr<Device>& device = mDevices->at(dev_index.row());
+    (*device).setSingleProperty("ChannelID",-1);
+    mDb.deviceDao.updateDevice(*device);
+    ch_model->removeDeviceFromChannel(device,ch_index);
     endResetModel();
 }
 
@@ -57,18 +60,18 @@ QVariant DeviceModel::data(const QModelIndex& index, int role) const {
     if (!isIndexValid(index)) {
         return QVariant();
     }
+
     const Device& device = *mDevices->at(index.row());
 
-    qDebug() << "get data col" << index.column();
 
-    return device.m_properties[DeviceHeaderList[index.column()]];
-
-//    switch (role) {
-//        case Qt::DisplayRole:
-//            return device.m_id;
-//        default:
-//            return QVariant();
-//    }
+    switch (role) {
+        case Qt::DisplayRole:
+            return device.m_properties[DeviceHeaderList[index.column()]];
+        case Roles::IdRole:
+            return device.m_properties[DeviceHeaderList[0]];
+        default:
+            return QVariant();
+    }
 
 }
 
@@ -116,3 +119,36 @@ bool DeviceModel::isIndexValid(const QModelIndex& index) const
 {
     return index.isValid() && index.row() < rowCount();
 }
+
+DeviceProxyModel::DeviceProxyModel(QObject *parent) :
+    QSortFilterProxyModel(parent)
+{
+}
+
+bool DeviceProxyModel::filterAcceptsRow(int sourceRow,
+                                              const QModelIndex &sourceParent) const
+{
+    QModelIndex index = sourceModel()->index(sourceRow, 4, sourceParent);
+
+    QVariant tmp = sourceModel()->data(index);
+
+    return (tmp.toInt() == mChID);
+}
+
+void DeviceProxyModel::setChannelID(int id) {
+    mChID = id;
+}
+
+QVariant DeviceProxyModel::data(const QModelIndex &index, int role) const noexcept
+{
+
+    QModelIndex in = sourceModel()->index(mapToSource(index).row(),1);
+
+    switch (role) {
+        case Qt::DisplayRole:
+            return sourceModel()->data(in);
+        default:
+            return QVariant();
+    }
+}
+

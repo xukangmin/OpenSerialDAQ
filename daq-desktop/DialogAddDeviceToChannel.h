@@ -2,8 +2,8 @@
 #define DIALOGADDDEVICETOCHANNEL_H
 
 #include <QDialog>
-#include "Device.h"
-#include "DatabaseManager.h"
+#include <QSortFilterProxyModel>
+#include "Device/DeviceModel.h"
 
 namespace Ui {
 class DialogAddDeviceToChannel;
@@ -14,15 +14,15 @@ class DialogAddDeviceToChannel : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogAddDeviceToChannel(int channelID, QWidget *parent = nullptr);
+    explicit DialogAddDeviceToChannel(DeviceModel *dev_model, QWidget *parent = nullptr);
     ~DialogAddDeviceToChannel();
 
-    QVector<int> getSelectedDeviceID();
+    QList<QModelIndex> getSelectedDevice();
     int m_channel_id;
 
 private:
     Ui::DialogAddDeviceToChannel *ui;
-    QVector<Device*> m_device_list;
+    DeviceProxyModel *proxyModel;
 };
 
 #endif // DIALOGADDDEVICETOCHANNEL_H

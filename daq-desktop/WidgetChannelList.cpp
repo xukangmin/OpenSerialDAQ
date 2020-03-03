@@ -21,25 +21,27 @@ void WidgetChannelList::clearWidgets(QLayout * layout) {
 void WidgetChannelList::updateWidgets() {
     clearWidgets(ui->verticalLayout);
 
-    for(int i = 0; i < m_model->rowCount(); i++) {
-        addWidget(m_model,i);
+    for(int i = 0; i < m_ch_model->rowCount(); i++) {
+        mModels->mChannelIndex = mModels->mChannelModel->index(i,0);
+        addWidget(mModels);
     }
 }
 
-void WidgetChannelList::addWidget(ChannelModel *model, int row_index) {
-    auto ch_widget = new ChannelWidget(model, row_index, this);
+void WidgetChannelList::addWidget(Models* models) {
+    auto ch_widget = new ChannelWidget(models, this);
     ui->verticalLayout->addWidget(ch_widget);
 }
 
-void WidgetChannelList::setModel(ChannelModel *model)
+void WidgetChannelList::setModel(Models *models)
 {
-    m_model = model;
-
+    m_ch_model = models->mChannelModel;
+    m_dev_model = models->mDeviceModel;
+    mModels = models;
     updateWidgets();
 }
 
 void WidgetChannelList::addNewChannel(QHash<QString, QVariant> properties) {
-    m_model->addChannel(properties);
+    m_ch_model->addChannel(properties);
     updateWidgets();
 }
 

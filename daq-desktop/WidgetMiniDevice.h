@@ -1,7 +1,11 @@
 #ifndef MINIDEVICEWIDGET_H
 #define MINIDEVICEWIDGET_H
 
+#include "Models.h"
+
 #include <QWidget>
+
+#include <Device/DeviceModel.h>
 
 namespace Ui {
 class MiniDeviceWidget;
@@ -12,11 +16,12 @@ class MiniDeviceWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit MiniDeviceWidget(QString devName, int devID, QWidget *parent = nullptr);
+    explicit MiniDeviceWidget(Models *models, QWidget *parent = nullptr);
     ~MiniDeviceWidget();
 
-    QString m_devName;
-    int m_devID;
+    DeviceModel* m_dev_model;
+    QModelIndex m_dev_index;
+    Models *mModels;
 
 private slots:
     void on_btnDelete_clicked();

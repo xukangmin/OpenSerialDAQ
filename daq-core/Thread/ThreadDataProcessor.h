@@ -6,6 +6,7 @@
 #include "Device/Device.h"
 #include "Packet/Packet.h"
 #include "Device/DeviceData.h"
+#include <memory>
 
 class ThreadDataProcessor : public QObject, public QRunnable
 {
@@ -22,7 +23,7 @@ signals:
     void sendData(QVector<DeviceData> data);
 
 private:
-    Device* m_dev;
+    const std::shared_ptr<Device>& m_dev;
     QByteArray m_rx_data;
     int m_cmd_id;
 };

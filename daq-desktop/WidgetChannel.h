@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "Channel/ChannelModel.h"
+#include "DialogAddDeviceToChannel.h"
+#include "Models.h"
 
 namespace Ui {
 class ChannelWidget;
@@ -13,9 +15,12 @@ class ChannelWidget : public QWidget
     Q_OBJECT
 
 public:
-    ChannelWidget(ChannelModel* model, int row_index , QWidget *parent = nullptr);
-    ChannelModel* m_model;
+    ChannelWidget(Models* models, QWidget *parent = nullptr);
+    ChannelModel* m_ch_model;
     int m_row_index;
+    DeviceModel* m_dev_model;
+    Models* mModels;
+    void addDeviceToChannel(const QModelIndex& dev_index);
     int getChannelID();
     //void addMiniDeviceWidget(MiniDeviceWidget* dev);
     ~ChannelWidget();
@@ -35,7 +40,7 @@ private slots:
 
 private:
     Ui::ChannelWidget *ui;
-
+    DialogAddDeviceToChannel* mDialogAddDevice;
 };
 
 #endif // CHANNELWIDGET_H

@@ -45,7 +45,8 @@ public:
     void startChannel();
     void stopChannel();
 
-    std::vector<std::shared_ptr<Device>> devices;
+    void addDeviceToThread(const std::shared_ptr<Device>& dev);
+    void removeDeviceFromThread(const std::shared_ptr<Device>& dev);
 
 private:
     std::unique_ptr<ThreadChannel> threadChannel;

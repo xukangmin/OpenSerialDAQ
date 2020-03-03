@@ -7,10 +7,11 @@
 #include <QVector>
 #include <QMetaType>
 #include <limits>
+#include <Generic/GenericDefinition.h>
 
 
 
-class Variable : public QObject
+class Variable : public QObject, public GenericDefinition
 {
     Q_OBJECT
 public:

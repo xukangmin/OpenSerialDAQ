@@ -57,20 +57,7 @@ public:
 
     Device(int id, QHash<QString, QVariant> properties);
 
-
-    int m_device_id;
-
-    QString m_name;
-
-    int m_node_id;
-
-
-
-    QString m_protocol;
-
     QVector<Variable*> *m_var_list;
-
-    QString m_serial_number;
 
 
     QVector<QTimer*> m_timer_pool;
@@ -78,7 +65,6 @@ public:
 
     QVector<Command> m_commands;
 
-    void setID(int id);
     void loadFromConfig(QString protocol_name);
 
     QByteArray buildQueryCmd(Command cmd);

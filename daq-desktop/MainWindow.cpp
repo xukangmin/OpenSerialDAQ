@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
       mStackedWidget(new QStackedWidget(this)),
-      m_widgetChannelList(new WidgetChannelList(this))
+      m_widgetChannelList(new WidgetChannelList(this)),
+      mWidgetDevicePage(new WidgetDevicePage(this)),
+      allModels(new Models(new ChannelModel(this), new DeviceModel(this)))
 {
     ui->setupUi(this);
 
@@ -29,10 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addAction(ui->actionDevices);
     ui->toolBar->addAction(ui->actionAddNewChannel);
 
-    // Generate Channel Widges
-    channelModel = new ChannelModel(this);
-
-    if (channelModel->rowCount() == 0) {
+    if (allModels->mChannelModel->rowCount() == 0) {
         // populate test data
 
         QHash<QString, QVariant> properties;
@@ -45,12 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
         properties["Parity"] = "None";
         properties["StopBits"] = 1;
 
-        channelModel->addChannel(properties);
+        allModels->mChannelModel->addChannel(properties);
     }
 
-    deviceModel = new DeviceModel(this);
-
-    if (deviceModel->rowCount() == 0) {
+    if (allModels->mDeviceModel->rowCount() == 0) {
         // populate test data
 
         QHash<QString, QVariant> properties;
@@ -58,9 +55,17 @@ MainWindow::MainWindow(QWidget *parent)
         properties["Name"] = "ALICAT";
         properties["NodeID"] = 1;
         properties["Protocol"] = "LFE-ALICAT";
-        properties["ChannelID"] = 0;
+        properties["ChannelID"] = -1;
 
-        deviceModel->addDevice(properties);
+        allModels->mDeviceModel->addDevice(properties);
+
+
+        properties["Name"] = "DP";
+        properties["NodeID"] = 1;
+        properties["Protocol"] = "LFE-DP";
+        properties["ChannelID"] = -1;
+
+        allModels->mDeviceModel->addDevice(properties);
 
     }
 
@@ -71,13 +76,19 @@ MainWindow::MainWindow(QWidget *parent)
 //    setCentralWidget(tb);
 
 
-    m_widgetChannelList->setModel(channelModel);
+    m_widgetChannelList->setModel(allModels);
 
-    connect(channelModel, &ChannelModel::rowsInserted, m_widgetChannelList, &WidgetChannelList::updateWidgets);
-    connect(channelModel, &ChannelModel::rowsRemoved, m_widgetChannelList, &WidgetChannelList::updateWidgets);
+    connect(allModels->mChannelModel, &ChannelModel::rowsInserted, m_widgetChannelList, &WidgetChannelList::updateWidgets);
+    connect(allModels->mChannelModel, &ChannelModel::rowsRemoved, m_widgetChannelList, &WidgetChannelList::updateWidgets);
+
+    mWidgetDevicePage->setModel(allModels);
 
 
     mStackedWidget->addWidget(m_widgetChannelList);
+
+    mStackedWidget->addWidget(mWidgetDevicePage);
+
+
 
     setCentralWidget(mStackedWidget);
 
@@ -104,7 +115,7 @@ void MainWindow::showNewChannelDialog() {
     if (mDialogNewChannel->exec() == QDialog::Accepted) {
         QHash<QString, QVariant> properties = mDialogNewChannel->getChannelInfo();
 
-        if (!channelModel->isPortExists(properties["ComPort"].toString())) {
+        if (!allModels->mChannelModel->isPortExists(properties["ComPort"].toString())) {
             m_widgetChannelList->addNewChannel(properties);
         } else {
             QMessageBox msgBox;

@@ -45,7 +45,9 @@ public:
 
     void startChannel(const QModelIndex& index);
     void stopChannel(const QModelIndex& index);
-    void addDevice(std::shared_ptr<Device> dev, const QModelIndex& ch_index);
+    void addDeviceToChannel(const std::shared_ptr<Device>& dev, const QModelIndex& ch_index);
+    void removeDeviceFromChannel(const std::shared_ptr<Device>& dev, const QModelIndex& ch_index);
+
 private:
     bool isIndexValid(const QModelIndex& index) const;
 

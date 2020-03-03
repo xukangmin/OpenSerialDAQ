@@ -10,6 +10,8 @@
 #include "Packet/Packet.h"
 #include "ThreadDataProcessor.h"
 #include "Channel/Channel.h"
+#include <memory>
+#include <vector>
 
 class ThreadChannel : public QThread
 {
@@ -19,7 +21,7 @@ public:
     explicit ThreadChannel(Channel& ch, QObject *parent = nullptr);
     ~ThreadChannel() override;
 
-    void addDevice(Device* dev); // add device to current channel
+    void addDevice(const std::shared_ptr<Device>& dev); // add device to current channel
 
 
     int m_ch_id;
@@ -38,7 +40,7 @@ private:
 
     QVector<QTimer*> m_timer_pool;
 
-    QVector<Device*> m_device_pool;
+    std::vector<std::shared_ptr<Device>> m_device_pool;
 
     ThreadDataProcessor* dataWorker;
 
