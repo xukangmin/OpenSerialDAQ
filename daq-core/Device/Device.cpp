@@ -6,6 +6,9 @@
 #include <QJsonArray>
 #include <QRegularExpression>
 #include "Variable/Variable.h"
+#include "Data/Data.h"
+
+using namespace std;
 
 Device::Device(int id, QHash<QString, QVariant> properties) :
             GenericDefinition(id, properties)
@@ -76,13 +79,14 @@ QByteArray Device::buildQueryCmd(Command cmd) {
                 if (cmd.check_sum_rule == "Simple") {
                     // calculate check sum
                     if (cmd.query_cmd.at(1) == cmd.query_cmd.size() - 1 ) { // size ok
-                        uint32_t total_cr = 0;
+                        uint16_t total_cr = 0;
+                        uint8_t check_sum_final = 0;
                         for (int cr_i = 2; cr_i < cmd.query_cmd.size(); cr_i++) {
                             total_cr += cmd.query_cmd[cr_i];
-                            total_cr = 0xFF - (total_cr & 0xFF);
-                        }
 
-                        cmd.query_cmd.append(total_cr);
+                        }
+                        check_sum_final = 0xFF - (uint8_t)(total_cr & 0xFF);
+                        cmd.query_cmd.append(check_sum_final);
                     }
                 }
             }
@@ -112,13 +116,13 @@ QByteArray Device::buildQueryCmd(QString cmdName) {
 }
 
 
-QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
+vector<QHash<QString,QVariant>> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
     Command cmd = m_commands[cmd_id];
 
     QDateTime now = QDateTime::currentDateTime();
 
-    QVector<DeviceData> parsedData;
+    vector<QHash<QString,QVariant>> parsedData;
 
     if (cmd.parse_method == "Exact") {
 
@@ -168,6 +172,24 @@ QVector<DeviceData> Device::parseRxData(QByteArray rx_data, int cmd_id) {
                     memcpy(&data, tmp_float, sizeof(float));
                     qDebug() << data << " " << fm.name;
 
+
+                    auto it = find_if(m_var_list.begin(),m_var_list.end(),[&fm](const shared_ptr<Variable>& var){
+                       if (var->getSingleProperty("Name") == fm.name) {
+                           return true;
+                       } else {
+                           return false;
+                       }
+                    });
+
+                    if (it != m_var_list.end()) {
+                        QHash<QString,QVariant> singleData;
+                        //singleData[DataHeaderList[0]] = ""; // id
+                        singleData[DataHeaderList[1]] = (*it)->m_id; // VariableID
+                        singleData[DataHeaderList[2]] = now; // TimeStamp
+                        singleData[DataHeaderList[3]] = data; // Value
+
+                        parsedData.push_back(singleData);
+                    }
 
 //                    for(int i = 0; i < m_devData.size(); i++) {
 //                        if (m_devData[i].m_dataName == fm.name) {
@@ -281,8 +303,8 @@ void Device::loadFromConfig(QString protocol_name) {
                                 QJsonObject singleParseFormat = var_list_arr[k].toObject();
 
                                 ParseFormat parseFormat;
-                                if (singleParseFormat.contains("Type") && singleParseFormat["Type"].isString()) {
-                                    parseFormat.name = singleParseFormat["Type"].toString();
+                                if (singleParseFormat.contains("Name") && singleParseFormat["Name"].isString()) {
+                                    parseFormat.name = singleParseFormat["Name"].toString();
                                 }
 
                                 if (singleParseFormat.contains("Type") && singleParseFormat["Type"].isString()) {
@@ -303,6 +325,17 @@ void Device::loadFromConfig(QString protocol_name) {
 
                                 if (singleParseFormat.contains("Physics") && singleParseFormat["Physics"].isString()) {
                                     parseFormat.physics = singleParseFormat["Physics"].toString();
+                                }
+
+                                if (parseFormat.usage == "Data") {
+                                    QHash<QString, QVariant> property;
+
+                                    property[VariableHeaderList[1]] = parseFormat.name;
+                                    property[VariableHeaderList[2]] = "N/A"; // equation
+                                    property[VariableHeaderList[3]] = m_id;  // device id
+                                    property[VariableHeaderList[4]] = 1;     // unit id
+
+                                    mVariablePropertiesList.push_back(property);
                                 }
 
 //                                if (parseFormat.usage == "Data") {

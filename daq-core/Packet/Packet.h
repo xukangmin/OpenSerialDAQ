@@ -6,6 +6,7 @@
 #include <QVector>
 #include "Device/Device.h"
 #include <memory>
+#include <Data/DataModel.h>
 
 class Packet
 {
@@ -22,6 +23,7 @@ public:
     QVector<double> result;
     int m_cmd_id;
     const std::shared_ptr<Device>& m_dev;
+    DataModel* mDataModel;
 };
 
 #endif // PACKET_H

@@ -10,6 +10,19 @@ DeviceModel::DeviceModel(QObject* parent) :
 {
 }
 
+void DeviceModel::addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index)
+{
+    shared_ptr<Device>& device = mDevices->at(dev_index.row());
+    device->m_var_list.push_back(var);
+}
+
+vector<QHash<QString, QVariant>> DeviceModel::getVariableDefinitionFromDevice(const QModelIndex& dev_index)
+{
+    shared_ptr<Device>& device = mDevices->at(dev_index.row());
+
+    return device->mVariablePropertiesList;
+}
+
 QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
 {
     int rowIndex = rowCount();

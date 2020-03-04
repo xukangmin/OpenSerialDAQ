@@ -94,10 +94,6 @@ unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
     query.exec();
     unique_ptr<vector<unique_ptr<Channel>>> list(new vector<unique_ptr<Channel>>());
     while(query.next()) {
-        ;
-
-        //        list.append(ch);
-        qDebug() << "create new ch=" << query.value("id").toInt();
 
         QHash<QString, QVariant> properties;
 

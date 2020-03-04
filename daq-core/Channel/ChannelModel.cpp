@@ -74,6 +74,7 @@ QModelIndex ChannelModel::addChannel(QHash<QString,QVariant> properties)
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
     unique_ptr<Channel> newChannel(new Channel(0, properties));
     mDb.channelDao.addChannel(*newChannel);
+    newChannel->setSingleProperty("id",newChannel->m_id);
     mChannels->push_back(move(newChannel));
     endInsertRows();
     return index(rowIndex, 0);

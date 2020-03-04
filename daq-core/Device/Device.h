@@ -3,10 +3,13 @@
 
 #include "daq-core_global.h"
 #include <QTimer>
-#include "Variable/Variable.h"
 #include "DeviceData.h"
 #include <QVariant>
 #include "Generic/GenericDefinition.h"
+#include <memory>
+#include <vector>
+
+class Variable;
 
 struct Parameter {
     QString name;
@@ -59,18 +62,21 @@ public:
 
     //QVector<Variable*> *m_var_list;
 
+    std::vector<std::shared_ptr<Variable>> m_var_list;
 
     QVector<QTimer*> m_timer_pool;
 
 
     QVector<Command> m_commands;
 
+    std::vector<QHash<QString, QVariant>> mVariablePropertiesList;
+
     void loadFromConfig(QString protocol_name);
 
     QByteArray buildQueryCmd(Command cmd);
     QByteArray buildQueryCmd(QString cmdName);
 
-    QVector<DeviceData> parseRxData(QByteArray rx_data, int cmd_id);
+    std::vector<QHash<QString,QVariant>> parseRxData(QByteArray rx_data, int cmd_id);
 
     DeviceData m_deviceData;
 

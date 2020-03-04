@@ -1,11 +1,52 @@
 #ifndef VARIABLEMODEL_H
 #define VARIABLEMODEL_H
 
+#include <QAbstractListModel>
+#include <QHash>
+#include <vector>
+#include <memory>
+#include <Device/DeviceModel.h>
+#include "Variable.h"
+#include "Database/DatabaseManager.h"
 
-class VariableModel
+class DAQCORESHARED_EXPORT VariableModel : public QAbstractTableModel
 {
+    Q_OBJECT
+
 public:
-    VariableModel();
+
+    enum Roles {
+           IdRole = Qt::UserRole + 1,
+           NameRole,
+           TypeRole,
+           ComPortRole,
+           BaudRateRole,
+           ParityRole,
+           DataBitsRole,
+           StopBitsRole
+    };
+    VariableModel(DeviceModel* dev_model, QObject* parent = nullptr);
+
+    DeviceModel* m_dev_model;
+    //bool isVariableExists(QString portName);
+    QModelIndex addVariable(QHash<QString,QVariant> properties);
+    bool isVariableExists(QHash<QString,QVariant> property);
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    QHash<int, QByteArray> roleNames() const override;
+
+private:
+    bool isIndexValid(const QModelIndex& index) const;
+
+
+
+private:
+    DatabaseManager& mDb;
+    std::unique_ptr<std::vector<std::shared_ptr<Variable>>> mVariables;
 };
+
 
 #endif // VARIABLEMODEL_H

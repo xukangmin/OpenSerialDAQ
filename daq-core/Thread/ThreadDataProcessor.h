@@ -20,7 +20,7 @@ public:
     void run() override;
 
 signals:
-    void sendData(QVector<DeviceData> data);
+    //void sendData(QVector<DeviceData> data);
 
 private:
     const std::shared_ptr<Device>& m_dev;

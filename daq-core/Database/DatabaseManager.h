@@ -63,8 +63,8 @@ public:
     const ChannelDao channelDao;
     const DeviceDao deviceDao;
     const VariableDao variableDao;
-    const UnitDao unitDao;
     const DataDao dataDao;
+    const UnitDao unitDao;
 };
 
 #endif // DATABASEMANAGER_H

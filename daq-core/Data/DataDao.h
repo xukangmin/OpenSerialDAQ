@@ -21,4 +21,4 @@ private:
     QSqlDatabase& mDatabase;
 };
 
-#endif // DEVICEDAO_H
+#endif // DATADAO_H

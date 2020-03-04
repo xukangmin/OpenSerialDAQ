@@ -115,10 +115,6 @@ unique_ptr<vector<shared_ptr<Device>>> DeviceDao::devices() const
     query.exec();
     unique_ptr<vector<shared_ptr<Device>>> list(new vector<shared_ptr<Device>>());
     while(query.next()) {
-        ;
-
-        //        list.append(ch);
-        qDebug() << "create new ch=" << query.value("id").toInt();
 
         QHash<QString, QVariant> properties;
 

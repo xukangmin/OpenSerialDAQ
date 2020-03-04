@@ -1,9 +1,9 @@
-#include "DataDao.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QVariant>
 
 #include "Data.h"
+#include "DataDao.h"
 #include "Database/DatabaseManager.h"
 #include <QDebug>
 
@@ -115,10 +115,6 @@ unique_ptr<vector<shared_ptr<Data>>> DataDao::datas() const
     query.exec();
     unique_ptr<vector<shared_ptr<Data>>> list(new vector<shared_ptr<Data>>());
     while(query.next()) {
-        ;
-
-        //        list.append(ch);
-        qDebug() << "create new ch=" << query.value("id").toInt();
 
         QHash<QString, QVariant> properties;
 

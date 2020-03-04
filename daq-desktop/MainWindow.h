@@ -37,7 +37,7 @@ private:
     // UI - dialogs
     DialogNewChannel* mDialogNewChannel;
 
-    Models* allModels;
+    Models& allModels;
 
 public slots:
     void showOverViewPage();

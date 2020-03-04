@@ -22,6 +22,7 @@ SOURCES += \
     Device/DeviceModel.cpp \
     Generic/GenericDefinition.cpp \
     Generic/GenericDefinitionDao.cpp \
+    Models.cpp \
     Thread/ThreadChannel.cpp \
     Thread/ThreadDataProcessor.cpp \
     Packet/Packet.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     Device/DeviceModel.h \
     Generic/GenericDefinition.h \
     Generic/GenericDefinitionDao.h \
+    Models.h \
     Thread/ThreadChannel.h \
     Thread/ThreadDataProcessor.h \
     Packet/Packet.h \

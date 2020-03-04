@@ -1,7 +1,7 @@
 #include "ThreadDataProcessor.h"
 #include <QDebug>
 #include <QMutex>
-#include "Database/DatabaseManager.h"
+#include "Models.h"
 
 QMutex mutex;
 
@@ -31,18 +31,16 @@ void ThreadDataProcessor::run() {
 
     qDebug() << "data process started";
 
-    QVector<DeviceData> parData;
-
-    parData = m_dev->parseRxData(m_rx_data, m_cmd_id);
+    auto parData = m_dev->parseRxData(m_rx_data, m_cmd_id);
     // log to database
 
 
     mutex.lock();
-//    if (!parData.empty()) {
-//        for(auto da : parData) {
-//            DatabaseManager::instance().insertData(da, m_dev->m_device_id);
-//        }
-//    }
+    if (!parData.empty()) {
+        for(auto da : parData) {
+            Models::instance().mDataModel->addData(da);
+        }
+    }
     mutex.unlock();
 
     //data.values = m_dev->m_devData
@@ -50,7 +48,7 @@ void ThreadDataProcessor::run() {
     //data.name = m_dev->m_deviceData.dataName;
     //data.unit = m_dev->m_deviceData.dataUnit;
     // send to front end
-    emit sendData(parData);
+    //emit sendData(parData);
 
     //m_dev->parseRxData(m_rx_data, 0);
 }

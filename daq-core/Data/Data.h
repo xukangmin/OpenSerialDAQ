@@ -1,5 +1,5 @@
-#ifndef VARIABLE_H
-#define VARIABLE_H
+#ifndef DATA_H
+#define DATA_H
 
 #include <QObject>
 #include "Unit/Unit.h"
@@ -10,9 +10,9 @@
 #include <Generic/GenericDefinition.h>
 
 
-static const QString DataHeaderList[] = {"id","VariableID","TimeStamp","Value","UnitID"};
-static const QString DataDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","TEXT", "INTEGER", "INTEGER"};
-static const int DataColumnSize = 5;
+static const QString DataHeaderList[] = {"id","VariableID","TimeStamp","Value"};
+static const QString DataDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","INTEGER","DATETIME DEFAULT CURRENT_TIMESTAMP", "DOUBLE"};
+static const int DataColumnSize = 4;
 
 class Data : public QObject, public GenericDefinition
 {
@@ -22,4 +22,4 @@ public:
 
 };
 
-#endif // VARIABLE_H
+#endif // DATA_H

@@ -115,10 +115,6 @@ unique_ptr<vector<shared_ptr<Unit>>> UnitDao::units() const
     query.exec();
     unique_ptr<vector<shared_ptr<Unit>>> list(new vector<shared_ptr<Unit>>());
     while(query.next()) {
-        ;
-
-        //        list.append(ch);
-        qDebug() << "create new ch=" << query.value("id").toInt();
 
         QHash<QString, QVariant> properties;
 

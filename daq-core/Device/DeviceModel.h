@@ -9,6 +9,7 @@
 #include <QSortFilterProxyModel>
 #include "Database/DatabaseManager.h"
 #include <Channel/ChannelModel.h>
+#include "Variable/Variable.h"
 
 class DAQCORESHARED_EXPORT DeviceModel : public QAbstractTableModel
 {
@@ -31,6 +32,9 @@ public:
     QModelIndex addDevice(QHash<QString,QVariant> properties);
     void addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
     void removeDeviceFromChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
+
+    void addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index);
+    std::vector<QHash<QString, QVariant>> getVariableDefinitionFromDevice(const QModelIndex& dev_index);
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

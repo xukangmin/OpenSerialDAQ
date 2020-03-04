@@ -19,7 +19,6 @@ SOURCES += \
     DialogAddDeviceToChannel.cpp \
     MainWindow.cpp \
     DialogNewChannel.cpp \
-    Models.cpp \
     WidgetChannel.cpp \
     WidgetChannelList.cpp \
     WidgetDevicePage.cpp \
@@ -30,7 +29,6 @@ HEADERS += \
     DialogAddDeviceToChannel.h \
     MainWindow.h \
     DialogNewChannel.h \
-    Models.h \
     WidgetChannel.h \
     WidgetChannelList.h \
     WidgetDevicePage.h \

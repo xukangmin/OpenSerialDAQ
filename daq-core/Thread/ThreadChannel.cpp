@@ -132,12 +132,12 @@ void ThreadChannel::run()
             qDebug() << pac->m_query_bytes;
 
             serial.write(pac->m_query_bytes);
-            if (serial.waitForBytesWritten(1000)) {
+            if (serial.waitForBytesWritten(500)) {
                 qDebug() << "data sent";
             }
 
 
-            if (serial.waitForReadyRead(1000)) {
+            if (serial.waitForReadyRead(500)) {
                 QByteArray responseData = serial.readAll();
                 while (serial.waitForReadyRead(50))
                     responseData += serial.readAll();
@@ -150,7 +150,7 @@ void ThreadChannel::run()
 
                 ThreadDataProcessor *dataProc = new ThreadDataProcessor(pac);
 
-                connect(dataProc, &ThreadDataProcessor::sendData, this, &ThreadChannel::getData);
+                //connect(dataProc, &ThreadDataProcessor::sendData, this, &ThreadChannel::getData);
 
                 QThreadPool::globalInstance()->start(dataProc);
                 //dataWorker = new DataProcessor();
