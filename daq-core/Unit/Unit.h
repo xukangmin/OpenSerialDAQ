@@ -1,19 +1,23 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-enum UnitType {
-    Temperature,
-    Pressure,
-    Flow,
-    DeltaPressure
-};
+#include <QObject>
+#include <QDateTime>
+#include <QVector>
+#include <QMetaType>
+#include <limits>
+#include <Generic/GenericDefinition.h>
 
 
-class Unit
+static const QString UnitHeaderList[] = {"id","Name","Conversion","TypeID"};
+static const QString UnitDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","Real", "INTEGER"};
+static const int UnitColumnSize = 4;
+
+class Unit : public QObject, public GenericDefinition
 {
+    Q_OBJECT
 public:
-    Unit();
-
+    Unit(int id, QHash<QString,QVariant> properties);
 
 };
 

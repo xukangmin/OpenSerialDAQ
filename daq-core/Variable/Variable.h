@@ -10,48 +10,15 @@
 #include <Generic/GenericDefinition.h>
 
 
+static const QString VariableHeaderList[] = {"id","Name","Equation","DeviceID","UnitID"};
+static const QString VariableDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","TEXT", "INTEGER", "INTEGER"};
+static const int VariableColumnSize = 5;
 
 class Variable : public QObject, public GenericDefinition
 {
     Q_OBJECT
 public:
-    explicit Variable(QObject *parent = nullptr);
-
-    Variable(int id, QString name, QString unit, QString equation = "N/A");
-
-    int m_id;  // variable id
-
-    QString m_name;
-
-    int m_device_id;
-
-    QString m_unitStr;
-
-    Unit m_unit;
-
-    QString m_equation;
-
-    QVector<int> source_variable_list;
-
-    void addData(double data, QDateTime curTime = QDateTime::currentDateTime());
-
-    int m_dataIndex;
-
-    QString m_dataName;
-
-    int m_linked_cmd_id;
-
-    int m_parameterIndex;
-
-
-
-    double m_maxAllowed;
-
-    double m_minAllowed;
-
-    QByteArray m_extraQueryData;
-
-    int m_dataTypeID;
+    Variable(int id, QHash<QString,QVariant> properties);
 
     QDateTime m_currentTimeStamp;
 
@@ -66,9 +33,6 @@ public:
     QVector<double> m_historyData;
 
     QVector<QDateTime> m_historyDataTimeStamp;
-
-
-signals:
 
 };
 

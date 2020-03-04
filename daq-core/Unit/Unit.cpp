@@ -1,6 +1,8 @@
 #include "Unit.h"
 
-Unit::Unit()
+Unit::Unit(int id, QHash<QString,QVariant> properties):
+            GenericDefinition(id,properties)
 {
-
 }
+
+

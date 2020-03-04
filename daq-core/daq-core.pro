@@ -12,6 +12,9 @@ SOURCES += \
     Channel/Channel.cpp \
     Channel/ChannelDao.cpp \
     Channel/ChannelModel.cpp \
+    Data/Data.cpp \
+    Data/DataDao.cpp \
+    Data/DataModel.cpp \
     Database/DatabaseManager.cpp \
     Device/Device.cpp \
     Device/DeviceDao.cpp \
@@ -23,6 +26,8 @@ SOURCES += \
     Thread/ThreadDataProcessor.cpp \
     Packet/Packet.cpp \
     Unit/Unit.cpp \
+    Unit/UnitDao.cpp \
+    Unit/UnitModel.cpp \
     Variable/Variable.cpp \
     Variable/VariableDao.cpp \
     Variable/VariableModel.cpp
@@ -31,6 +36,9 @@ HEADERS += \
     Channel/Channel.h \
     Channel/ChannelDao.h \
     Channel/ChannelModel.h \
+    Data/Data.h \
+    Data/DataDao.h \
+    Data/DataModel.h \
     Database/DatabaseManager.h \
     Device/Device.h \
     Device/DeviceDao.h \
@@ -42,6 +50,8 @@ HEADERS += \
     Thread/ThreadDataProcessor.h \
     Packet/Packet.h \
     Unit/Unit.h \
+    Unit/UnitDao.h \
+    Unit/UnitModel.h \
     Variable/Variable.h \
     Variable/VariableDao.h \
     Variable/VariableModel.h \

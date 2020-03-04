@@ -14,7 +14,10 @@ DatabaseManager&DatabaseManager::instance()
 DatabaseManager::DatabaseManager(const QString& path) :
     mDatabase(new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
     channelDao(*mDatabase),
-    deviceDao(*mDatabase)
+    deviceDao(*mDatabase),
+    variableDao(*mDatabase),
+    unitDao(*mDatabase),
+    dataDao(*mDatabase)
 {
     mDatabase->setDatabaseName(path);
 
@@ -23,6 +26,9 @@ DatabaseManager::DatabaseManager(const QString& path) :
 
     channelDao.init();
     deviceDao.init();
+    variableDao.init();
+    unitDao.init();
+    dataDao.init();
 }
 
 

@@ -57,7 +57,7 @@ public:
 
     Device(int id, QHash<QString, QVariant> properties);
 
-    QVector<Variable*> *m_var_list;
+    //QVector<Variable*> *m_var_list;
 
 
     QVector<QTimer*> m_timer_pool;
