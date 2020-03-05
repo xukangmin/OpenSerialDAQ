@@ -1,0 +1,110 @@
+{
+    "Units":
+    [
+        {
+            "Type": "AirFlow",
+            "UnitList": [
+                {
+                    "Name": "sccm",
+                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "slpm",
+                    "Alias": ["lpm"],
+                    "Conversion": 1000
+                },
+                {
+                    "Name": "scfm",
+                    "Alias": ["cfm"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "scfh",
+                    "Alias": ["ccm"],
+                    "Conversion": 1
+                }
+            ]
+        },
+        {
+            "Type": "WaterFlow",
+            "UnitList": [
+                {
+                    "Name": "gpm",
+                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "slpm",
+                    "Alias": ["lpm"],
+                    "Conversion": 1000
+                },
+                {
+                    "Name": "scfm",
+                    "Alias": ["cfm"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "scfh",
+                    "Alias": ["ccm"],
+                    "Conversion": 1
+                }
+            ]
+        },
+        {
+            "Type": "Temperature",
+            "UnitList": [
+                {
+                    "Name": "C",
+                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Conversion": ["[U]","([U] - 32) * 5 / 9","[U] + 273.15","[U] * 9 / 5 + 491.67"],
+                    "UnicodeSymbol": "U+2103°C",
+                    "Index": 1
+                },
+                {
+                    "Name": "F",
+                    "Alias": ["lpm"],
+                    "Conversion": 1000
+                },
+                {
+                    "Name": "K",
+                    "Alias": ["cfm"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "R",
+                    "Alias": ["ccm"],
+                    "Conversion": 1
+                }
+            ]
+
+
+        },
+        {
+            "Type": "Pressure",
+            "UnitList": [
+                {
+                    "Name": "gpm",
+                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "slpm",
+                    "Alias": ["lpm"],
+                    "Conversion": 1000
+                },
+                {
+                    "Name": "scfm",
+                    "Alias": ["cfm"],
+                    "Conversion": 1
+                },
+                {
+                    "Name": "scfh",
+                    "Alias": ["ccm"],
+                    "Conversion": 1
+                }
+            ]
+        }
+
+    ]
+}

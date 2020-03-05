@@ -60,4 +60,8 @@ HEADERS += \
     daq-core_global.h
 
 RESOURCES += \
-    Protocol/protocol.qrc
+    Definition/definitions.qrc
+
+DISTFILES += \
+    Definition/protocol.json \
+    Definition/units.json

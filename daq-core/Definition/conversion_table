@@ -1,0 +1,4 @@
+------------------------------------------------------
+ConversionID SourceUnitID,  DestinationUnitID          Equation
+1                1           2                    ([U] - 32) * 5 / 9
+2                2           1                     ([U] - 32 *

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>protocol.json</file>
+        <file>units.json</file>
     </qresource>
 </RCC>
