@@ -3,78 +3,143 @@
     [
         {
             "Type": "AirFlow",
+            "ConversionType": "Factor",
             "UnitList": [
                 {
+                    "Name": "sccs",
+                    "Alias": ["ccs"],
+                    "Conversion": 0.01666667
+                },
+                {
                     "Name": "sccm",
-                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Alias": ["ccm"],
                     "Conversion": 1
                 },
                 {
-                    "Name": "slpm",
-                    "Alias": ["lpm"],
-                    "Conversion": 1000
+                    "Name": "scch",
+                    "Alias": ["cch"],
+                    "Conversion": 60
+                },
+                {
+                    "Name": "sls",
+                    "Alias": ["ls"],
+                    "Conversion": 1.666667E-05
+                },
+                {
+                    "Name": "slm",
+                    "Alias": ["lm","slpm"],
+                    "Conversion": 0.001
+                },
+                {
+                    "Name": "slh",
+                    "Alias": ["lh"],
+                    "Conversion": 0.06
+                },
+                {
+                    "Name": "scfh",
+                    "Alias": ["cfh"],
+                    "Conversion": 0.002118882
                 },
                 {
                     "Name": "scfm",
                     "Alias": ["cfm"],
-                    "Conversion": 1
+                    "Conversion": 3.5314700E-5
                 },
                 {
-                    "Name": "scfh",
-                    "Alias": ["ccm"],
-                    "Conversion": 1
+                    "Name": "scfs",
+                    "Alias": ["cfs"],
+                    "Conversion": 5.88578E-07
+                },
+                {
+                    "Name": "pph",
+                    "Alias": [],
+                    "Conversion": 0.000159308
+                },
+                {
+                    "Name": "ppm",
+                    "Alias": [],
+                    "Conversion": 2.65514E-06
+                },
+                {
+                    "Name": "pps",
+                    "Alias": [],
+                    "Conversion": 4.42523E-08
+                },
+                {
+                    "Name": "scis",
+                    "Alias": ["cis"],
+                    "Conversion": 0.00101706
+                },
+                {
+                    "Name": "scim",
+                    "Alias": ["cim"],
+                    "Conversion": 0.0610237
+                },
+                {
+                    "Name": "scih",
+                    "Alias": ["ls"],
+                    "Conversion": 3.661422
                 }
             ]
         },
         {
             "Type": "WaterFlow",
+            "ConversionType": "Factor",
             "UnitList": [
                 {
                     "Name": "gpm",
-                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Alias": [],
                     "Conversion": 1
                 },
                 {
-                    "Name": "slpm",
-                    "Alias": ["lpm"],
-                    "Conversion": 1000
+                    "Name": "gph",
+                    "Alias": [],
+                    "Conversion": 60
                 },
                 {
-                    "Name": "scfm",
-                    "Alias": ["cfm"],
-                    "Conversion": 1
+                    "Name": "gpd",
+                    "Alias": [],
+                    "Conversion": 1440
                 },
                 {
-                    "Name": "scfh",
-                    "Alias": ["ccm"],
-                    "Conversion": 1
+                    "Name": "ccm",
+                    "Alias": [],
+                    "Conversion": 3785.4118
+                },
+                {
+                    "Name": "L/min",
+                    "Alias": [],
+                    "Conversion": 3.79
                 }
             ]
         },
         {
             "Type": "Temperature",
+            "ConversionType": "Equation",
             "UnitList": [
                 {
                     "Name": "C",
                     "Alias": ["ccm","standard centimeter per minute"],
-                    "Conversion": ["[U]","([U] - 32) * 5 / 9","[U] + 273.15","[U] * 9 / 5 + 491.67"],
-                    "UnicodeSymbol": "U+2103°C",
-                    "Index": 1
+                    "Conversion": ["[U]","([U] * 9 / 5) + 32","[U] + 273.15","[U] * 9 / 5 + 491.67"],
+                    "UnicodeSymbol": "U+2103°C"
                 },
                 {
                     "Name": "F",
                     "Alias": ["lpm"],
-                    "Conversion": 1000
+                    "Conversion": ["([U] - 32) * 5 / 9","[U]","([U]-32) * 5 / 9 + 273.15","[U] + 459.67"],
+                    "UnicodeSymbol": "U+2103°C"
                 },
                 {
                     "Name": "K",
                     "Alias": ["cfm"],
-                    "Conversion": 1
+                    "Conversion": ["[U] - 273.15","([U] - 273.15) * 9 / 5 + 32","[U]","[U] * 9 / 5"],
+                    "UnicodeSymbol": "U+2103°C"
                 },
                 {
                     "Name": "R",
                     "Alias": ["ccm"],
-                    "Conversion": 1
+                    "Conversion": ["([U] - 491.67) * 5 / 9","[U] - 459.67","[U] * 5 / 9","[U]"],
+                    "UnicodeSymbol": "U+2103°C"
                 }
             ]
 
@@ -82,26 +147,62 @@
         },
         {
             "Type": "Pressure",
+            "ConversionType": "Factor",
             "UnitList": [
                 {
-                    "Name": "gpm",
-                    "Alias": ["ccm","standard centimeter per minute"],
+                    "Name": "psia",
+                    "Alias": [],
                     "Conversion": 1
                 },
                 {
-                    "Name": "slpm",
-                    "Alias": ["lpm"],
-                    "Conversion": 1000
+                    "Name": "KPa",
+                    "Alias": [],
+                    "Conversion": 6.89476
                 },
                 {
-                    "Name": "scfm",
-                    "Alias": ["cfm"],
-                    "Conversion": 1
+                    "Name": "Bar",
+                    "Alias": [],
+                    "Conversion": 0.0689476
                 },
                 {
-                    "Name": "scfh",
-                    "Alias": ["ccm"],
-                    "Conversion": 1
+                    "Name": "inchHg@32F",
+                    "Alias": [],
+                    "Conversion": 2.03603
+                },
+                {
+                    "Name": "inchHg@60F",
+                    "Alias": [],
+                    "Conversion": 2.041771856
+                },
+                {
+                    "Name": "torr",
+                    "Alias": [],
+                    "Conversion": 51.7151
+                },
+                {
+                    "Name": "cmHg",
+                    "Alias": [],
+                    "Conversion": 5.17151
+                },
+                {
+                    "Name": "ATM",
+                    "Alias": [],
+                    "Conversion": 0.068046
+                },
+                {
+                    "Name": "inchH2O@4C",
+                    "Alias": [],
+                    "Conversion": 27.6807
+                },
+                {
+                    "Name": "cmH2O@4C",
+                    "Alias": [],
+                    "Conversion": 70.3089
+                },
+                {
+                    "Name": "Pa",
+                    "Alias": ["Pascal"],
+                    "Conversion": 6894.75729
                 }
             ]
         }

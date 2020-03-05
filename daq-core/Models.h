@@ -11,6 +11,9 @@
 
 #include <Unit/UnitModel.h>
 
+#include <UnitType/UnitTypeModel.h>
+
+#include <UnitConversion/UnitConversionModel.h>
 
 
 class DAQCORESHARED_EXPORT Models : public QObject
@@ -27,6 +30,8 @@ public:
     VariableModel *mVariableModel;
     DataModel *mDataModel;
     UnitModel *mUnitModel;
+    UnitTypeModel *mUnitTypeModel;
+    UnitConversionModel *mUnitConversionModel;
 
 
     QModelIndex mChannelIndex;

@@ -19,6 +19,8 @@ Models::Models(QObject *parent) :
     mDeviceModel(new DeviceModel(this)),
     mVariableModel(new VariableModel(mDeviceModel,this)),
     mDataModel(new DataModel(this)),
-    mUnitModel(new UnitModel(this))
+    mUnitModel(new UnitModel(this)),
+    mUnitTypeModel(new UnitTypeModel(this)),
+    mUnitConversionModel(new UnitConversionModel(this))
 {
 }
