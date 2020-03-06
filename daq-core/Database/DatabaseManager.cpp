@@ -17,9 +17,7 @@ DatabaseManager::DatabaseManager(const QString& path) :
     deviceDao(*mDatabase),
     variableDao(*mDatabase),
     dataDao(*mDatabase),
-    unitDao(*mDatabase),
-    unitTypeDao(*mDatabase),
-    unitConversionDao(*mDatabase)
+    variableGroupDao(*mDatabase)
 {
     mDatabase->setDatabaseName(path);
 
@@ -30,9 +28,7 @@ DatabaseManager::DatabaseManager(const QString& path) :
     deviceDao.init();
     variableDao.init();
     dataDao.init();
-    unitDao.init();
-    unitTypeDao.init();
-    unitConversionDao.init();
+    variableGroupDao.init();
 
 }
 

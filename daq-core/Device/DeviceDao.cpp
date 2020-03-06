@@ -71,6 +71,8 @@ void DeviceDao::addDevice(Device& ch) const
 
     ch.m_id = query.lastInsertId().toInt();
 
+    ch.setSingleProperty("id",ch.m_id);
+
     DatabaseManager::debugQuery(query);
 }
 

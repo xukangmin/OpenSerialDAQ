@@ -11,7 +11,7 @@ Models::~Models() {
     mDeviceModel->deleteLater();
     mVariableModel->deleteLater();
     mDataModel->deleteLater();
-    mUnitModel->deleteLater();
+    mVariableGroupModel->deleteLater();
 }
 
 Models::Models(QObject *parent) :
@@ -19,8 +19,6 @@ Models::Models(QObject *parent) :
     mDeviceModel(new DeviceModel(this)),
     mVariableModel(new VariableModel(mDeviceModel,this)),
     mDataModel(new DataModel(this)),
-    mUnitModel(new UnitModel(this)),
-    mUnitTypeModel(new UnitTypeModel(this)),
-    mUnitConversionModel(new UnitConversionModel(this))
+    mVariableGroupModel(new VariableGroupModel(this))
 {
 }

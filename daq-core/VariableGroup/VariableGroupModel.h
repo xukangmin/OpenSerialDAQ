@@ -1,15 +1,15 @@
-#ifndef UNITMODEL_H
-#define UNITMODEL_H
+#ifndef VARIABLEGROUPMODEL_H
+#define VARIABLEGROUPMODEL_H
 
 #include <QAbstractListModel>
 #include <QHash>
 #include <vector>
 #include <memory>
-
-#include "Unit.h"
+#include <Device/DeviceModel.h>
+#include "VariableGroup.h"
 #include "Database/DatabaseManager.h"
 
-class DAQCORESHARED_EXPORT UnitModel : public QAbstractTableModel
+class DAQCORESHARED_EXPORT VariableGroupModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -25,11 +25,13 @@ public:
            DataBitsRole,
            StopBitsRole
     };
-    UnitModel(QObject* parent = nullptr);
+    VariableGroupModel(QObject* parent = nullptr);
 
-    //bool isUnitExists(QString portName);
-    QModelIndex addUnit(QHash<QString,QVariant> properties);
-
+    //bool isVariableGroupExists(QString portName);
+    void loadGroupsFromConfigFile(QString configFilePath = ":/stationconfig.json");
+    QModelIndex addVariableGroup(QHash<QString,QVariant> properties, QHash<QString,QVariant> specific_properties = QHash<QString,QVariant>());
+    void addVariables(QHash<QString,QVariant> properties, QHash<QString,QVariant> specific_properties);
+    bool isVariableGroupExists(QHash<QString,QVariant> property);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
@@ -44,7 +46,8 @@ private:
 
 private:
     DatabaseManager& mDb;
-    std::unique_ptr<std::vector<std::shared_ptr<Unit>>> mUnits;
+    std::unique_ptr<std::vector<std::shared_ptr<VariableGroup>>> mVariableGroups;
 };
 
-#endif // UNITMODEL_H
+
+#endif // VARIABLEGROUPMODEL_H

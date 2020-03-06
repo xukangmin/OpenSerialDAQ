@@ -7,13 +7,9 @@
 
 #include <Variable/VariableModel.h>
 
+#include <VariableGroup/VariableGroupModel.h>
+
 #include <Data/DataModel.h>
-
-#include <Unit/UnitModel.h>
-
-#include <UnitType/UnitTypeModel.h>
-
-#include <UnitConversion/UnitConversionModel.h>
 
 
 class DAQCORESHARED_EXPORT Models : public QObject
@@ -29,10 +25,7 @@ public:
     DeviceModel *mDeviceModel;
     VariableModel *mVariableModel;
     DataModel *mDataModel;
-    UnitModel *mUnitModel;
-    UnitTypeModel *mUnitTypeModel;
-    UnitConversionModel *mUnitConversionModel;
-
+    VariableGroupModel *mVariableGroupModel;
 
     QModelIndex mChannelIndex;
     QModelIndex mDeviceIndex;

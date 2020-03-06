@@ -10,6 +10,17 @@ DeviceModel::DeviceModel(QObject* parent) :
 {
 }
 
+int DeviceModel::getDeviceIDByNameAndNode(QString name, int node) {
+    foreach(auto& dev, (*mDevices)) {
+        if ((*dev).getSingleProperty("Name").toString() == name &&
+            (*dev).getSingleProperty("NodeID").toInt() == node) {
+            return (*dev).getSingleProperty("id").toInt();
+        }
+    }
+
+    return -1;
+}
+
 void DeviceModel::addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index)
 {
     shared_ptr<Device>& device = mDevices->at(dev_index.row());

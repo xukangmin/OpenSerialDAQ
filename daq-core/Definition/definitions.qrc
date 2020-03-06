@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>protocol.json</file>
-        <file>units.json</file>
+        <file>stationconfig.json</file>
+        <file>EquationLaminar.json</file>
     </qresource>
 </RCC>

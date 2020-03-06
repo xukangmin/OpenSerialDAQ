@@ -330,10 +330,14 @@ void Device::loadFromConfig(QString protocol_name) {
                                 if (parseFormat.usage == "Data") {
                                     QHash<QString, QVariant> property;
 
-                                    property[VariableHeaderList[1]] = parseFormat.name;
-                                    property[VariableHeaderList[2]] = "N/A"; // equation
-                                    property[VariableHeaderList[3]] = m_id;  // device id
-                                    property[VariableHeaderList[4]] = 1;     // unit id
+                                    property[VariableHeaderList[1]] = m_id;
+                                    property[VariableHeaderList[2]] = -1;
+                                    property[VariableHeaderList[3]] = parseFormat.name;
+                                    property[VariableHeaderList[4]] = "DigitalSource"; // Type
+                                    property[VariableHeaderList[5]] = "N/A";
+                                    property[VariableHeaderList[6]] = parseFormat.unit;
+                                    property[VariableHeaderList[7]] = "[]";
+                                    property[VariableHeaderList[8]] = "[]";
 
                                     mVariablePropertiesList.push_back(property);
                                 }

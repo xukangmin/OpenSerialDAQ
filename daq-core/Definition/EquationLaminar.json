@@ -1,0 +1,254 @@
+{
+    "TemplateName": "Laminar",
+    "Equations":
+    [
+        {
+            "Name": "Standard Temperature",
+            "Type": "UserInput",
+            "Unit": "F",
+            "CurrentValue": 68,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Standard Pressure",
+            "Type": "UserInput",
+            "Unit": "psia",
+            "CurrentValue": 14.7,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Flow Gas Type",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": "Air",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
+            "Name": "Standard Gas Type",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": "Air",
+            "DataType": "double",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
+            "Name": "Pressure Unit",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": "psia",
+            "DataType": "double",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
+            "Name": "Air Flow Unit",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": "scfh",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
+            "Name": "Sample Size",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": 5,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Sample Time Interval",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": 1,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "RangeMin",
+            "Type": "RangeSpecific",
+            "Unit": "sccm",
+            "CurrentValue": 0,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "RangeMax",
+            "Type": "RangeSpecific",
+            "Unit": "sccm",
+            "CurrentValue": 0,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Calibration Constant A",
+            "Type": "RangeSpecific",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Calibration Constant B",
+            "Type": "RangeSpecific",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Calibration Constant C",
+            "Type": "RangeSpecific",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "N/A",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "Temperature",
+            "Type": "DigitalInput",
+            "Unit": "F",
+            "CurrentValue": 0,
+            "Equation": "Device(ALICAT,0,Temperature)",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Delta Pressure",
+            "Type": "DigitalInput",
+            "Unit": "sccm",
+            "CurrentValue": 0,
+            "Equation": "Device(DP,1,DP)",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Pressure",
+            "Type": "DigitalInput",
+            "Unit": "psia",
+            "CurrentValue": 0,
+            "Equation": "Device(ALICAT,0,Pressure)",
+            "DataType": "double",
+            "Log": 1
+
+        },
+        {
+            "Name": "Delta InchH20",
+            "Type": "Intermediate",
+            "Unit": "InchH20",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Delta Pressure],InchH20)",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Temperature,R",
+            "Type": "Intermediate",
+            "Unit": "R",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Temperature],R)",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Tstd/T",
+            "Type": "Intermediate",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "([Standard Temperature] + 459.67) / [Temperature,R]",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "P/Pstd",
+            "Type": "Intermediate",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "[Pressure] / [Standard Pressure]",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Vstd/V",
+            "Type": "Intermediate",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "ViscocityCF([Gas Type],[Temperature,R])",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Q,cfm",
+            "Type": "Intermediate",
+            "Unit": "scfm",
+            "CurrentValue": 0,
+            "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[DP InchH20])+([Calibration Constant B]*[DP InchH20]*[DP InchH20]))",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Rstd/Ract",
+            "Type": "Intermediate",
+            "Unit": "N/A",
+            "CurrentValue": 0,
+            "Equation": "MW([Standard Gas Type]) / MW([Flow Gas Type])",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Qstd,scfm",
+            "Type": "Intermediate",
+            "Unit": "scfm",
+            "CurrentValue": 0,
+            "Equation": "[Tstd/T] * [P/Pstd] * [Q, cfm] * [Rstd/Ract]",
+            "DataType": "double",
+            "Log": 1
+
+        },
+        {
+            "Name": "Q,sccm",
+            "Type": "Display",
+            "Unit": "sccm",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Qstd,cfm],[Air Flow Unit])",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "RangeMinDisplay",
+            "Type": "Display",
+            "Unit": "[Air Flow Unit]",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([RangeMin],[Air Flow Unit])",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "RangeMaxDisplay",
+            "Type": "Display",
+            "Unit": "[Air Flow Unit]",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([RangeMax],[Air Flow Unit])",
+            "DataType": "double",
+            "Log": 1
+
+        }
+    ]
+}

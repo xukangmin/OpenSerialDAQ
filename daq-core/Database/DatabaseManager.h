@@ -5,10 +5,8 @@
 #include "Channel/ChannelDao.h"
 #include "Device/DeviceDao.h"
 #include "Variable/VariableDao.h"
-#include "Unit/UnitDao.h"
-#include "UnitType/UnitTypeDao.h"
 #include "Data/DataDao.h"
-#include "UnitConversion/UnitConversionDao.h"
+#include "VariableGroup/VariableGroupDao.h"
 
 class QSqlDatabase;
 class QSqlQuery;
@@ -66,9 +64,7 @@ public:
     const DeviceDao deviceDao;
     const VariableDao variableDao;
     const DataDao dataDao;
-    const UnitDao unitDao;
-    const UnitTypeDao unitTypeDao;
-    const UnitConversionDao unitConversionDao;
+    const VariableGroupDao variableGroupDao;
 };
 
 #endif // DATABASEMANAGER_H

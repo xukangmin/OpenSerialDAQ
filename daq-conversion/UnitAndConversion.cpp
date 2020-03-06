@@ -4,6 +4,10 @@ UnitAndConversion::UnitAndConversion()
 {
 }
 
+UnitAndConversion::~UnitAndConversion()
+{
+}
+
 UnitAndConversion& UnitAndConversion::instance() {
     static UnitAndConversion singleton;
     return singleton;

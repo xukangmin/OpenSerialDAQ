@@ -2,7 +2,6 @@
 #define DATA_H
 
 #include <QObject>
-#include "Unit/Unit.h"
 #include <QDateTime>
 #include <QVector>
 #include <QMetaType>

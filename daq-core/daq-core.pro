@@ -26,18 +26,12 @@ SOURCES += \
     Thread/ThreadChannel.cpp \
     Thread/ThreadDataProcessor.cpp \
     Packet/Packet.cpp \
-    Unit/Unit.cpp \
-    Unit/UnitDao.cpp \
-    Unit/UnitModel.cpp \
-    UnitConversion/UnitConversion.cpp \
-    UnitConversion/UnitConversionDao.cpp \
-    UnitConversion/UnitConversionModel.cpp \
-    UnitType/UnitType.cpp \
-    UnitType/UnitTypeDao.cpp \
-    UnitType/UnitTypeModel.cpp \
     Variable/Variable.cpp \
     Variable/VariableDao.cpp \
-    Variable/VariableModel.cpp
+    Variable/VariableModel.cpp \
+    VariableGroup/VariableGroup.cpp \
+    VariableGroup/VariableGroupDao.cpp \
+    VariableGroup/VariableGroupModel.cpp
 
 HEADERS += \
     Channel/Channel.h \
@@ -57,26 +51,19 @@ HEADERS += \
     Thread/ThreadChannel.h \
     Thread/ThreadDataProcessor.h \
     Packet/Packet.h \
-    Unit/Unit.h \
-    Unit/UnitDao.h \
-    Unit/UnitModel.h \
-    UnitConversion/UnitConversion.h \
-    UnitConversion/UnitConversionDao.h \
-    UnitConversion/UnitConversionModel.h \
-    UnitType/UnitType.h \
-    UnitType/UnitTypeDao.h \
-    UnitType/UnitTypeModel.h \
     Variable/Variable.h \
     Variable/VariableDao.h \
     Variable/VariableModel.h \
+    VariableGroup/VariableGroup.h \
+    VariableGroup/VariableGroupDao.h \
+    VariableGroup/VariableGroupModel.h \
     daq-core_global.h
 
 RESOURCES += \
     Definition/definitions.qrc
 
 DISTFILES += \
-    Definition/equation.json \
-    Definition/gas.json \
+    Definition/EquationLaminar.json \
     Definition/protocol.json \
     Definition/stationconfig.json \
     Definition/units.json

@@ -1,4 +1,5 @@
 #include "VariableModel.h"
+#include <Models.h>
 #include <QDebug>
 #include <QSerialPortInfo>
 
@@ -57,12 +58,99 @@ bool VariableModel::isVariableExists(QHash<QString,QVariant> property)
 
 }
 
+bool VariableModel::resolveDependency(int group_id)
+{
 
-QModelIndex VariableModel::addVariable(QHash<QString,QVariant> properties)
+    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+
+        QString eqn = var->equation;
+
+        QList<QString> matches;
+
+        QRegularExpression reA("Device\\((.*?)\\)|\\[(.*?)\\]", QRegularExpression::CaseInsensitiveOption);
+
+        QRegularExpressionMatchIterator i = reA.globalMatch(eqn);
+        while (i.hasNext()) {
+            QRegularExpressionMatch match = i.next();
+            if (match.hasMatch()) {
+                 matches.append(match.captured(1));
+            }
+        }
+
+        foreach(QString match, matches) {
+            // find corresponding variable
+
+            if (match.contains("Device")) {
+                // first find device id in device model
+                match.remove("Device");
+                match.remove("(");
+                match.remove(")");
+
+                QStringList result = match.split(',');
+
+                int devid = Models::instance().mDeviceModel->getDeviceIDByNameAndNode(result.at(0),result.at(1).toInt());
+
+                if (devid != -1) {
+                    // find variable with name and dev id
+                    shared_ptr<Variable> t;
+                    if (findVariableByNameAndDeviceID(result.at(2),devid,t)) {
+                        var->required.push_back(t);
+                        connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+
+                    }
+                }
+            } else { // find
+                match.remove("[");
+                match.remove("]");
+
+                shared_ptr<Variable> t;
+                if (Models::instance().mVariableModel->findVariableByNameAndGroupID(match,group_id,t)) {
+                    var->required.push_back(t);
+                    t->requiredBy.push_back(var);
+                    connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+                }
+            }
+        }
+    }
+
+
+
+    return true;
+}
+
+bool VariableModel::findVariableByNameAndDeviceID(QString name, int device_id, shared_ptr<Variable>& var_ret)
+{
+
+    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+        if ((*var).getSingleProperty("Name").toString() == name &&
+            (*var).getSingleProperty("DeviceID").toInt() == device_id){
+            var_ret = var;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool VariableModel::findVariableByNameAndGroupID(QString name, int group_id, shared_ptr<Variable>& var_ret)
+{
+
+    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+        if ((*var).getSingleProperty("Name").toString() == name &&
+            (*var).getSingleProperty("VariableGroupID").toInt() == group_id){
+            var_ret = var;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+QModelIndex VariableModel::addVariable(QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Variable> newVariable(new Variable(0, properties));
+    unique_ptr<Variable> newVariable(new Variable(0, properties, group_properties));
     mDb.variableDao.addVariable(*newVariable);
     mVariables->push_back(move(newVariable));
     endInsertRows();
