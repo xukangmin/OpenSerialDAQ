@@ -63,7 +63,7 @@ bool VariableModel::resolveDependency(int group_id)
 
     foreach(const shared_ptr<Variable>& var, (*mVariables)) {
 
-        QString eqn = var->equation;
+        QString eqn = var->getSingleProperty("Equation").toString();
 
         QList<QString> matches;
 
@@ -73,7 +73,7 @@ bool VariableModel::resolveDependency(int group_id)
         while (i.hasNext()) {
             QRegularExpressionMatch match = i.next();
             if (match.hasMatch()) {
-                 matches.append(match.captured(1));
+                 matches.append(match.captured(0));
             }
         }
 
@@ -88,7 +88,7 @@ bool VariableModel::resolveDependency(int group_id)
 
                 QStringList result = match.split(',');
 
-                int devid = Models::instance().mDeviceModel->getDeviceIDByNameAndNode(result.at(0),result.at(1).toInt());
+                int devid = m_dev_model->getDeviceIDByNameAndNode(result.at(0),result.at(1).toInt());
 
                 if (devid != -1) {
                     // find variable with name and dev id
@@ -104,7 +104,7 @@ bool VariableModel::resolveDependency(int group_id)
                 match.remove("]");
 
                 shared_ptr<Variable> t;
-                if (Models::instance().mVariableModel->findVariableByNameAndGroupID(match,group_id,t)) {
+                if (findVariableByNameAndGroupID(match,group_id,t)) {
                     var->required.push_back(t);
                     t->requiredBy.push_back(var);
                     connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);

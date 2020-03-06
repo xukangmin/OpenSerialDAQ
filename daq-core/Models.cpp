@@ -19,6 +19,6 @@ Models::Models(QObject *parent) :
     mDeviceModel(new DeviceModel(this)),
     mVariableModel(new VariableModel(mDeviceModel,this)),
     mDataModel(new DataModel(this)),
-    mVariableGroupModel(new VariableGroupModel(this))
+    mVariableGroupModel(new VariableGroupModel(mVariableModel,this))
 {
 }

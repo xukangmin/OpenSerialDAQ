@@ -10,10 +10,11 @@
 
 using namespace std;
 
-VariableGroupModel::VariableGroupModel(QObject* parent) :
+VariableGroupModel::VariableGroupModel(VariableModel *variableModel, QObject* parent) :
     QAbstractTableModel(parent),
     mDb(DatabaseManager::instance()),
-    mVariableGroups(mDb.variableGroupDao.variablegroups())
+    mVariableGroups(mDb.variableGroupDao.variablegroups()),
+    mVariableModel(variableModel)
 {
     loadGroupsFromConfigFile();
 }
@@ -119,12 +120,12 @@ void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QHash<
                     QJsonValue value = singleEquation[key];
                     var_properties.insert(key, value.toVariant());
                 }
-
-                Models::instance().mVariableModel->addVariable(var_properties, specific_properties);
+                var_properties["VariableGroupID"] = properties["VariableGroupID"];
+                mVariableModel->addVariable(var_properties, specific_properties);
 
             }
 
-            Models::instance().mVariableModel->resolveDependency(properties["VariableGroupID"].toInt());
+            mVariableModel->resolveDependency(properties["VariableGroupID"].toInt());
        }
     }
 }

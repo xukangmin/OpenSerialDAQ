@@ -8,6 +8,7 @@
 #include <Device/DeviceModel.h>
 #include "VariableGroup.h"
 #include "Database/DatabaseManager.h"
+#include "Variable/VariableModel.h"
 
 class DAQCORESHARED_EXPORT VariableGroupModel : public QAbstractTableModel
 {
@@ -25,7 +26,8 @@ public:
            DataBitsRole,
            StopBitsRole
     };
-    VariableGroupModel(QObject* parent = nullptr);
+    VariableGroupModel(VariableModel *variableModel, QObject* parent = nullptr);
+
 
     //bool isVariableGroupExists(QString portName);
     void loadGroupsFromConfigFile(QString configFilePath = ":/stationconfig.json");
@@ -47,6 +49,7 @@ private:
 private:
     DatabaseManager& mDb;
     std::unique_ptr<std::vector<std::shared_ptr<VariableGroup>>> mVariableGroups;
+    VariableModel *mVariableModel;
 };
 
 

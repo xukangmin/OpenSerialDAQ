@@ -333,11 +333,13 @@ void Device::loadFromConfig(QString protocol_name) {
                                     property[VariableHeaderList[1]] = m_id;
                                     property[VariableHeaderList[2]] = -1;
                                     property[VariableHeaderList[3]] = parseFormat.name;
-                                    property[VariableHeaderList[4]] = "DigitalSource"; // Type
+                                    property[VariableHeaderList[4]] = "DigitalInput"; // Type
                                     property[VariableHeaderList[5]] = "N/A";
                                     property[VariableHeaderList[6]] = parseFormat.unit;
-                                    property[VariableHeaderList[7]] = "[]";
-                                    property[VariableHeaderList[8]] = "[]";
+                                    property[VariableHeaderList[7]] = 0;
+                                    property[VariableHeaderList[8]] = QDateTime();
+                                    property[VariableHeaderList[9]] = "double";
+                                    property[VariableHeaderList[10]] = 1;
 
                                     mVariablePropertiesList.push_back(property);
                                 }
