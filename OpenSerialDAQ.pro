@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    daq-conversion \
     daq-core \
     daq-desktop
 

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>gas.json</file>
+        <file>units.json</file>
+    </qresource>
+</RCC>
