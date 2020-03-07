@@ -2,6 +2,7 @@
 #define UNITANDCONVERSION_H
 
 #include "daq-conversion_global.h"
+#include <QHash>
 #include <QString>
 #include <QVector>
 
@@ -39,6 +40,12 @@ protected:
 
 private:
     QVector<UnitType> mUnitTypes;
+    void loadGasConfig(QString gasConfigPath = ":/gas.json");
+    void loadUnitConfig( QString unitConfigPath = ":/units.json");
+
+    QHash<QString,QString> viscosity_equations;
+    QHash<QString,QString> viscosity_cf_equations;
+
 };
 
 #endif // UNITANDCONVERSION_H
