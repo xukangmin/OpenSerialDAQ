@@ -22,7 +22,8 @@ SOURCES += \
 
 HEADERS += \
     daq-conversion_global.h \
-    UnitAndConversion.h
+    UnitAndConversion.h \
+    exprtk.hpp
 
 # Default rules for deployment.
 unix {

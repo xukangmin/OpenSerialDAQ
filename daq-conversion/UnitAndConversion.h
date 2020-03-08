@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QString>
 #include <QVector>
+#include "exprtk.hpp"
 
 enum ConversionMethod {
     Factor,
@@ -15,11 +16,14 @@ enum ConversionMethod {
 struct Unit{
     QString name;
     double conversion_factor;
+    int index;
     QVector<QString> equation;
+    QVector<QString> alias;
 };
 
 struct UnitType{
     QString name;
+    QString conversion_type;
     QVector<Unit> mUnits;
 };
 
@@ -42,10 +46,10 @@ private:
     QVector<UnitType> mUnitTypes;
     void loadGasConfig(QString gasConfigPath = ":/gas.json");
     void loadUnitConfig( QString unitConfigPath = ":/units.json");
-
+    double evalSimpleEquation(double val, QString eqn, QString valName = "");
     QHash<QString,QString> viscosity_equations;
     QHash<QString,QString> viscosity_cf_equations;
-
+    QHash<QString,double> gas_mw;
 };
 
 #endif // UNITANDCONVERSION_H

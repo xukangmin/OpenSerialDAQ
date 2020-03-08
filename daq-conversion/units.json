@@ -120,25 +120,25 @@
                 {
                     "Name": "C",
                     "Alias": ["ccm","standard centimeter per minute"],
-                    "Conversion": ["[U]","([U] * 9 / 5) + 32","[U] + 273.15","[U] * 9 / 5 + 491.67"],
+                    "Conversion": ["x","(x * 9 / 5) + 32","x + 273.15","x * 9 / 5 + 491.67"],
                     "UnicodeSymbol": "U+2103°C"
                 },
                 {
                     "Name": "F",
                     "Alias": ["lpm"],
-                    "Conversion": ["([U] - 32) * 5 / 9","[U]","([U]-32) * 5 / 9 + 273.15","[U] + 459.67"],
+                    "Conversion": ["(x - 32) * 5 / 9","x","(x-32) * 5 / 9 + 273.15","x + 459.67"],
                     "UnicodeSymbol": "U+2103°C"
                 },
                 {
                     "Name": "K",
                     "Alias": ["cfm"],
-                    "Conversion": ["[U] - 273.15","([U] - 273.15) * 9 / 5 + 32","[U]","[U] * 9 / 5"],
+                    "Conversion": ["x - 273.15","(x - 273.15) * 9 / 5 + 32","x","x * 9 / 5"],
                     "UnicodeSymbol": "U+2103°C"
                 },
                 {
                     "Name": "R",
                     "Alias": ["ccm"],
-                    "Conversion": ["([U] - 491.67) * 5 / 9","[U] - 459.67","[U] * 5 / 9","[U]"],
+                    "Conversion": ["(x - 491.67) * 5 / 9","x - 459.67","x * 5 / 9","x"],
                     "UnicodeSymbol": "U+2103°C"
                 }
             ]

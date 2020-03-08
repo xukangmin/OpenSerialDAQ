@@ -5,6 +5,7 @@
 #include <QMetaType>
 #include <QTableView>
 #include "Channel/ChannelModel.h"
+#include "UnitAndConversion.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -15,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
       allModels(Models::instance())
 {
     ui->setupUi(this);
+
+    double test = UnitAndConversion::instance().voscocity(123,"Air");
 
     // Tool bar actions
     connect(ui->actionOverView,SIGNAL(triggered(bool)),this,SLOT(showOverViewPage()));

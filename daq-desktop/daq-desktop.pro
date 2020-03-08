@@ -49,10 +49,12 @@ RESOURCES += \
     Icons/icons.qrc
 
 
-LIBS += -L$$OUT_PWD/../daq-core/ -ldaq-core
+LIBS += -L$$OUT_PWD/../daq-core/ -L$$OUT_PWD/../daq-conversion/ -ldaq-core -ldaq-conversion
 
-INCLUDEPATH += $$PWD/../daq-core
-DEPENDPATH += $$PWD/../daq-core
+INCLUDEPATH += $$PWD/../daq-core $$PWD/../daq-conversion
+DEPENDPATH += $$PWD/../daq-core $$PWD/../daq-conversion
+
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

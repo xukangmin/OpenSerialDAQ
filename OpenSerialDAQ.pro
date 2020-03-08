@@ -5,4 +5,4 @@ SUBDIRS += \
     daq-core \
     daq-desktop
 
-daq-desktop.depends = daq-core
+daq-desktop.depends = daq-core daq-conversion

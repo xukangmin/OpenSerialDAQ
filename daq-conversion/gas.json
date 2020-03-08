@@ -3,14 +3,14 @@
     [
         {
             "Name": "Air",
-            "Viscosity": "(14.58 * [IN] ^ 1.5) / (110.4 + [IN])",
-            "ViscosityCF": "181.8718 / [Viscosity]",
+            "Viscosity": "(14.58 * TempR ^ 1.5) / (110.4 + TempR)",
+            "ViscosityCF": "181.8718 / Viscosity",
             "MW": 28.96247
         },
         {
             "Name": "Nitrogen",
-            "Viscosity": "((7.632E-07 * [IN] ^ 0.58823) * 10^7)/(1+(67.75/[IN])))",
-            "ViscosityCF": "181.8718 / [Viscosity]",
+            "Viscosity": "((7.632E-07 * x ^ 0.58823) * 10^7)/(1+(67.75/x)))",
+            "ViscosityCF": "181.8718 / Viscosity",
             "MW": 28.96247
         }
     ]
