@@ -3,7 +3,7 @@
     [
         {
             "Name": "Air",
-            "Viscosity": "(14.58 * TempR ^ 1.5) / (110.4 + TempR)",
+            "Viscosity": "(14.58 * x ^ 1.5) / (110.4 + x)",
             "ViscosityCF": "181.8718 / Viscosity",
             "MW": 28.96247
         },

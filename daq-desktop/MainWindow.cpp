@@ -5,7 +5,6 @@
 #include <QMetaType>
 #include <QTableView>
 #include "Channel/ChannelModel.h"
-#include "UnitAndConversion.h"
 #include <memory>
 #include <vector>
 
@@ -21,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    double test = UnitAndConversion::instance().voscocity(123,"Air");
+ //   double test = UnitAndConversion::instance().voscocity(123,"Air");
 
 
 
@@ -32,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionTestButton1,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton1()));
     connect(ui->actionTestButton2,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton2()));
     connect(ui->actionTestButton3,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton3()));
-
+    connect(ui->actionTestButton4,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton4()));
     // UI dialogs
 
     // Add new Channel UI
@@ -46,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addAction(ui->actionTestButton1);
     ui->toolBar->addAction(ui->actionTestButton2);
     ui->toolBar->addAction(ui->actionTestButton3);
+    ui->toolBar->addAction(ui->actionTestButton4);
 
     if (allModels.mChannelModel->rowCount() == 0) {
         // populate test data
@@ -127,6 +127,11 @@ void MainWindow::showOverViewPage() {
 
 void MainWindow::triggerTestButton1() {
     // load new definitions
+    Models::instance().mVariableGroupModel->loadGroupsFromConfigFile();
+}
+
+
+void MainWindow::triggerTestButton2() {
     shared_ptr<Variable> var;
     if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("Pressure",1,var)) {
         QHash<QString,QVariant> data;
@@ -138,11 +143,26 @@ void MainWindow::triggerTestButton1() {
 
 }
 
+void MainWindow::triggerTestButton3() {
+    shared_ptr<Variable> var;
+    if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("Temperature",1,var)) {
+        QHash<QString,QVariant> data;
 
-void MainWindow::triggerTestButton2() {
+        data["TimeStamp"] = QDateTime::currentDateTime();
+        data["Value"] = 4.1;
+        var->addDataToVariable(data);
+    }
 }
 
-void MainWindow::triggerTestButton3() {
+void MainWindow::triggerTestButton4() {
+    shared_ptr<Variable> var;
+    if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("DP",2,var)) {
+        QHash<QString,QVariant> data;
+
+        data["TimeStamp"] = QDateTime::currentDateTime();
+        data["Value"] = 6.1;
+        var->addDataToVariable(data);
+    }
 }
 
 void MainWindow::showNewChannelDialog() {

@@ -16,7 +16,10 @@ VariableGroupModel::VariableGroupModel(VariableModel *variableModel, QObject* pa
     mVariableGroups(mDb.variableGroupDao.variablegroups()),
     mVariableModel(variableModel)
 {
-    loadGroupsFromConfigFile();
+    foreach(auto& vgrp, *mVariableGroups) {
+        mVariableModel->resolveDependency(vgrp->m_id);
+    }
+
 }
 
 

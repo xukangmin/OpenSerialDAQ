@@ -67,3 +67,8 @@ DISTFILES += \
     Definition/protocol.json \
     Definition/stationconfig.json \
     Definition/units.json
+
+LIBS += -L$$OUT_PWD/../daq-conversion/ -ldaq-conversion
+
+INCLUDEPATH += $$PWD/../daq-conversion
+DEPENDPATH += $$PWD/../daq-conversion

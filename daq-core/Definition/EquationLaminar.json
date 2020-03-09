@@ -133,7 +133,7 @@
         {
             "Name": "Delta Pressure",
             "Type": "DigitalInput",
-            "Unit": "sccm",
+            "Unit": "psia",
             "CurrentValue": 0,
             "Equation": "Device(DP,1,DP)",
             "DataType": "double",
@@ -154,7 +154,7 @@
             "Type": "Intermediate",
             "Unit": "InchH20",
             "CurrentValue": 0,
-            "Equation": "UnitConv([Delta Pressure],InchH20)",
+            "Equation": "UnitConv([Delta Pressure],psia,InchH20)",
             "DataType": "double",
             "Log": 1
         },
@@ -163,7 +163,7 @@
             "Type": "Intermediate",
             "Unit": "R",
             "CurrentValue": 0,
-            "Equation": "UnitConv([Temperature],R)",
+            "Equation": "UnitConv([Temperature],F,R)",
             "DataType": "double",
             "Log": 1
         },
@@ -236,7 +236,7 @@
             "Type": "Display",
             "Unit": "[Air Flow Unit]",
             "CurrentValue": 0,
-            "Equation": "UnitConv([RangeMin],[Air Flow Unit])",
+            "Equation": "UnitConv([RangeMin],sccm,[Air Flow Unit])",
             "DataType": "double",
             "Log": 1
         },
@@ -245,7 +245,7 @@
             "Type": "Display",
             "Unit": "[Air Flow Unit]",
             "CurrentValue": 0,
-            "Equation": "UnitConv([RangeMax],[Air Flow Unit])",
+            "Equation": "UnitConv([RangeMax],sccm,[Air Flow Unit])",
             "DataType": "double",
             "Log": 1
 

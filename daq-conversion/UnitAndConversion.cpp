@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include "tinyexpr.h"
 
 UnitAndConversion::UnitAndConversion()
 {
@@ -23,6 +24,17 @@ UnitAndConversion& UnitAndConversion::instance() {
     return singleton;
 }
 
+QList<QString> UnitAndConversion::getFunctionNameList() {
+    QList<QString> tmp;
+    for(int i = 0; i < FunctionNameLength; i++) {
+        tmp.append(FunctionNameList[i]);
+    }
+
+//    funList.append(&UnitAndConversion::unitConvert);
+
+    return tmp;
+
+}
 
 void UnitAndConversion::loadGasConfig(QString gasConfigPath)
 {
@@ -171,7 +183,7 @@ double UnitAndConversion::unitConvert(double val, QString unit_in, QString unit_
         }
         else if (unit_conv_type == "EQUATION")
         {
-            return evalSimpleEquation(val, "x", unit_in_def.equation.at(unit_out_def.index));
+            return evalSimpleEquation(unit_in_def.equation.at(unit_out_def.index), val, "x");
         }
     }
 
@@ -179,78 +191,45 @@ double UnitAndConversion::unitConvert(double val, QString unit_in, QString unit_
     return 0;
 }
 
-double UnitAndConversion::evalSimpleEquation(double val, QString eqn, QString valName)
+double UnitAndConversion::evalSimpleEquation(QString eqn, double val, QString valName)
 {
-    typedef exprtk::symbol_table<double> symbol_table_t;
-    typedef exprtk::expression<double> expression_t;
-    typedef exprtk::parser<double>     parser_t;
 
-    symbol_table_t symbol_table;
+    te_variable vars[] = {{valName.toStdString().c_str(), &val}};
 
-    if (valName.size() > 0 && valName != "N/A")
-    {
-        symbol_table.add_variable(valName.toStdString(), val);
+    double ret = 0;
+
+    /* This will compile the expression and check for errors. */
+    int err;
+    te_expr *n = te_compile(eqn.toStdString().c_str(), vars, 1, &err);
+
+    if (n) {
+        /* The variables can be changed here, and eval can be called as many
+         * times as you like. This is fairly efficient because the parsing has
+         * already been done. */
+        ret = te_eval(n);
+        te_free(n);
+        return ret;
     }
-
-    expression_t expression;
-    expression.register_symbol_table(symbol_table);
-
-    parser_t parser;
-
-    if (!parser.compile(eqn.toStdString(),expression)) {
-        qDebug() << "exprtk compile error";
-        return 0;
+    else {
+        return -1;
     }
-
-    return expression.value();
 }
 
 double UnitAndConversion::voscocity(double tempR, QString gas_type)
 {
-    typedef exprtk::symbol_table<double> symbol_table_t;
-    typedef exprtk::expression<double> expression_t;
-    typedef exprtk::parser<double>     parser_t;
 
     QString eqn = viscosity_equations[gas_type.toUpper()];
 
-    symbol_table_t symbol_table;
-    symbol_table.add_variable("TempR",tempR);
-
-    expression_t expression;
-    expression.register_symbol_table(symbol_table);
-
-    parser_t parser;
-
-    if (!parser.compile(eqn.toStdString(),expression)) {
-        qDebug() << "exprtk compile error";
-        return 0;
-    }
-
-    return expression.value();
+    return evalSimpleEquation(eqn,tempR,"x");
 }
 
 double UnitAndConversion::voscocityCF(double tempR, QString gas_type)
 {
-    typedef exprtk::symbol_table<double> symbol_table_t;
-    typedef exprtk::expression<double> expression_t;
-    typedef exprtk::parser<double>     parser_t;
+
 
     QString eqn = viscosity_cf_equations[gas_type.toUpper()];
 
-    symbol_table_t symbol_table;
-    symbol_table.add_variable("TempR",tempR);
-
-    expression_t expression;
-    expression.register_symbol_table(symbol_table);
-
-    parser_t parser;
-
-    if (!parser.compile(eqn.toStdString(),expression)) {
-        qDebug() << "exprtk compile error";
-        return 0;
-    }
-
-    return expression.value();
+    return evalSimpleEquation(eqn,tempR,"x");
 }
 
 double UnitAndConversion::MW(QString gas_type)

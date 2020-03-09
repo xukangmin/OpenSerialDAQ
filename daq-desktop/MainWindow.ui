@@ -43,7 +43,7 @@
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menutest">
@@ -120,6 +120,15 @@
    </property>
    <property name="text">
     <string>TestButton3</string>
+   </property>
+  </action>
+  <action name="actionTestButton4">
+   <property name="icon">
+    <iconset resource="Icons/icons.qrc">
+     <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
+   </property>
+   <property name="text">
+    <string>TestButton4</string>
    </property>
   </action>
  </widget>

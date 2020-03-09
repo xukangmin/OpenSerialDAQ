@@ -5,7 +5,6 @@
 #include <QHash>
 #include <QString>
 #include <QVector>
-#include "exprtk.hpp"
 
 enum ConversionMethod {
     Factor,
@@ -27,6 +26,8 @@ struct UnitType{
     QVector<Unit> mUnits;
 };
 
+static const QString FunctionNameList[] = {"UnitConv", "Viscocity", "ViscocityCF","MW"};
+static const int FunctionNameLength = 4;
 
 class DAQCONVERSION_EXPORT UnitAndConversion
 {
@@ -38,6 +39,9 @@ public:
     double voscocity(double tempR, QString gas_type);
     double voscocityCF(double tempR, QString gas_type);
     double MW(QString gas_type);
+    //QList<double (UnitAndConversion::*) (double, QString,QString)> funList;
+    QList<QString> getFunctionNameList();
+    double evalSimpleEquation(QString eqn, double val = 0, QString valName = "");
 
 protected:
     UnitAndConversion();
@@ -46,7 +50,6 @@ private:
     QVector<UnitType> mUnitTypes;
     void loadGasConfig(QString gasConfigPath = ":/gas.json");
     void loadUnitConfig( QString unitConfigPath = ":/units.json");
-    double evalSimpleEquation(double val, QString eqn, QString valName = "");
     QHash<QString,QString> viscosity_equations;
     QHash<QString,QString> viscosity_cf_equations;
     QHash<QString,double> gas_mw;

@@ -46,7 +46,7 @@ public slots:
     void triggerTestButton1();
     void triggerTestButton2();
     void triggerTestButton3();
-
+    void triggerTestButton4();
 private slots:
 
 };

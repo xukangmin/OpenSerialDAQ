@@ -88,9 +88,9 @@ void VariableDao::updateVariable(const Variable &dev) const
 
         setStr += VariableHeaderList[i] + " = ";
         setStr += dev.getSingleProperty(VariableHeaderList[i]).isNull() ? "NULL," :
-                    ((VariableDataType[i] == "TEXT" ? "'" : "") +
+                    (((VariableDataType[i] == "TEXT" || VariableDataType[i] == "DATETIME") ? "'" : "") +
                    dev.getSingleProperty(VariableHeaderList[i]).toString()
-                   + (VariableDataType[i] == "TEXT" ? "'" : "") + ",");
+                   + ((VariableDataType[i] == "TEXT" || VariableDataType[i] == "DATETIME") ? "'" : "") + ",");
     }
 
     setStr = setStr.left(setStr.length() - 1);
