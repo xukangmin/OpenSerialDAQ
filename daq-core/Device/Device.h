@@ -66,7 +66,6 @@ public:
 
     QVector<QTimer*> m_timer_pool;
 
-
     QVector<Command> m_commands;
 
     std::vector<QHash<QString, QVariant>> mVariablePropertiesList;

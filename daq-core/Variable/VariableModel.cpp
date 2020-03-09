@@ -65,6 +65,8 @@ bool VariableModel::resolveDependency(int group_id)
 
         QString eqn = var->getSingleProperty("Equation").toString();
 
+        var->equation = eqn;
+
         QList<QString> matches;
 
         QRegularExpression reA("Device\\((.*?)\\)|\\[(.*?)\\]", QRegularExpression::CaseInsensitiveOption);
@@ -82,11 +84,12 @@ bool VariableModel::resolveDependency(int group_id)
 
             if (match.contains("Device")) {
                 // first find device id in device model
-                match.remove("Device");
-                match.remove("(");
-                match.remove(")");
+                QString tmp_match = match;
+                tmp_match.remove("Device");
+                tmp_match.remove("(");
+                tmp_match.remove(")");
 
-                QStringList result = match.split(',');
+                QStringList result = tmp_match.split(',');
 
                 int devid = m_dev_model->getDeviceIDByNameAndNode(result.at(0),result.at(1).toInt());
 
@@ -94,28 +97,59 @@ bool VariableModel::resolveDependency(int group_id)
                     // find variable with name and dev id
                     shared_ptr<Variable> t;
                     if (findVariableByNameAndDeviceID(result.at(2),devid,t)) {
+                        var->equation = var->equation.replace(match, "{" + QString::number(t->m_id) + "}");
+                        var->setSingleProperty("Equation", var->equation);
                         var->required.push_back(t);
+                        t->requiredBy.push_back(var);
                         connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-
                     }
                 }
             } else { // find
-                match.remove("[");
-                match.remove("]");
-
+                QString tmp_match = match;
+                tmp_match.remove("[");
+                tmp_match.remove("]");
                 shared_ptr<Variable> t;
-                if (findVariableByNameAndGroupID(match,group_id,t)) {
-                    var->required.push_back(t);
-                    t->requiredBy.push_back(var);
-                    connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+                if (findVariableByNameAndGroupID(tmp_match,group_id,t)) {
+
+
+
+                    if (t->getSingleProperty("Type").toString() == "UserInput")
+                    {
+                        var->equation = var->equation.replace(match, "{" + QString::number(t->m_id) + "}");
+                        t->requiredBy.push_back(var);
+                        connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+                    }
+                    else if (t->getSingleProperty("Type").toString() == "RangeSpecific")  // constant
+                    {
+                        // constant, do nothing
+                        var->equation = var->equation.replace(match, t->getSingleProperty("CurrentValue").toString());
+                    }
+                    else
+                    {
+                        var->equation = var->equation.replace(match, "{" + QString::number(t->m_id) + "}");
+                        t->requiredBy.push_back(var);
+                        var->required.push_back(t);
+                        connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+                    }
+
                 }
             }
         }
+
+        // update
+        var->setSingleProperty("Equation",var->equation);
+        mDb.variableDao.updateVariable(*var);
+
     }
 
 
 
     return true;
+}
+
+void VariableModel::addDataToVariable(QHash<QString,QVariant> data, shared_ptr<Variable> &var)
+{
+    var->addDataToVariable(data);
 }
 
 bool VariableModel::findVariableByNameAndDeviceID(QString name, int device_id, shared_ptr<Variable>& var_ret)

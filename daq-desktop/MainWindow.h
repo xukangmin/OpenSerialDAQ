@@ -43,6 +43,9 @@ public slots:
     void showOverViewPage();
     void showDevicePage();
     void showNewChannelDialog();
+    void triggerTestButton1();
+    void triggerTestButton2();
+    void triggerTestButton3();
 
 private slots:
 

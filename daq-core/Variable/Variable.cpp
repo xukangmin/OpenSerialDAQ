@@ -28,37 +28,66 @@ Variable::Variable(int id, QHash<QString,QVariant> properties, QHash<QString,QVa
 
 }
 
-void Variable::addDataToVariable(QVariant data)
+void Variable::addDataToVariable(QHash<QString,QVariant> data)
 {
-    currentData = data;
-    currentTimeStamp = QDateTime::currentDateTime();
+    currentData = data["Value"];
+    currentTimeStamp = data["TimeStamp"].toDateTime();
+
+    QHash<QString,QVariant> prop;
+
+    prop["VariableID"] = this->getSingleProperty("id");
+    prop["Value"] = data["Value"];
+    if (currentData.canConvert<double>())
+    {
+        prop["RealValue"] = currentData.toDouble();
+    }
+    else if (currentData.canConvert<QString>()) {
+        prop["StringValue"] = currentData.toString();
+    }
+    prop["TimeStamp"] = currentTimeStamp;
 
     if (this->getSingleProperty("Log").toInt() == 1) { // save to db
-        QHash<QString,QVariant> prop;
 
-        prop["VariableID"] = this->getSingleProperty("id");
-        prop["Value"] = data;
-        prop["TimeStamp"] = currentTimeStamp;
         Models::instance().mDataModel->addData(prop);
     }
 
-    if (!this->required.empty()) {
-        foreach(auto& rev, required) {
-            emit sendDataToRequiredBy(rev->m_id, data);
+    if (!this->requiredBy.empty()) {
+        foreach(auto& rev, requiredBy) {
+            emit sendDataToRequiredBy(prop);
         }
     }
 }
 
-void Variable::getDataFromRequired(int var_id, QVariant data)
+void Variable::getDataFromRequired(QHash<QString,QVariant> data)
 {
+    toCalculate[data["VariableID"].toInt()] = data["Value"];
+
     if (toCalculate.size() == (int)required.size()) {
         // perform calculation and empty toCalculate
+        QString eqn = this->getSingleProperty("Equation").toString();
 
-        qDebug() << this->getSingleProperty("Equation");
+        foreach(auto singleID, toCalculate.keys()) {
+            eqn.replace("{" + QString::number(singleID) + "}",toCalculate[singleID].toString());
+        }
+
+        if (eqn.contains("UnitConv")) {
+            // resolve unit conv
+
+        }
+
+        if (eqn.contains("Viscocity"))
+        {
+
+        }
+
+        if (eqn.contains("ViscocityCF"))
+        {
+
+        }
+
+
 
         toCalculate.clear();
-    } else {
-        toCalculate[var_id] = data;
     }
 }
 

@@ -9,9 +9,9 @@
 #include <Generic/GenericDefinition.h>
 
 
-static const QString DataHeaderList[] = {"id","VariableID","TimeStamp","Value"};
-static const QString DataDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","INTEGER","DATETIME DEFAULT CURRENT_TIMESTAMP", "DOUBLE"};
-static const int DataColumnSize = 4;
+static const QString DataHeaderList[] = {"id","VariableID","TimeStamp","RealValue", "StringValue"};
+static const QString DataDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","INTEGER","DATETIME DEFAULT CURRENT_TIMESTAMP", "DOUBLE", "TEXT"};
+static const int DataColumnSize = 5;
 
 class Data : public QObject, public GenericDefinition
 {

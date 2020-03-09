@@ -35,13 +35,13 @@ public:
 
     QHash<int,QVariant> toCalculate;
 
-    void addDataToVariable(QVariant data);
+    void addDataToVariable(QHash<QString,QVariant> data);
 
 signals:
-    void sendDataToRequiredBy(int var_id, QVariant data);
+    void sendDataToRequiredBy(QHash<QString,QVariant> data);
 
 public slots:
-    void getDataFromRequired(int var_id, QVariant data);
+    void getDataFromRequired(QHash<QString,QVariant> data);
 
 };
 

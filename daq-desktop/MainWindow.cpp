@@ -6,6 +6,10 @@
 #include <QTableView>
 #include "Channel/ChannelModel.h"
 #include "UnitAndConversion.h"
+#include <memory>
+#include <vector>
+
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -19,10 +23,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     double test = UnitAndConversion::instance().voscocity(123,"Air");
 
+
+
     // Tool bar actions
     connect(ui->actionOverView,SIGNAL(triggered(bool)),this,SLOT(showOverViewPage()));
     connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
 
+    connect(ui->actionTestButton1,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton1()));
+    connect(ui->actionTestButton2,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton2()));
+    connect(ui->actionTestButton3,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton3()));
 
     // UI dialogs
 
@@ -33,6 +42,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addAction(ui->actionOverView);
     ui->toolBar->addAction(ui->actionDevices);
     ui->toolBar->addAction(ui->actionAddNewChannel);
+
+    ui->toolBar->addAction(ui->actionTestButton1);
+    ui->toolBar->addAction(ui->actionTestButton2);
+    ui->toolBar->addAction(ui->actionTestButton3);
 
     if (allModels.mChannelModel->rowCount() == 0) {
         // populate test data
@@ -110,6 +123,26 @@ void MainWindow::showDevicePage() {
 
 void MainWindow::showOverViewPage() {
     mStackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::triggerTestButton1() {
+    // load new definitions
+    shared_ptr<Variable> var;
+    if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("Pressure",1,var)) {
+        QHash<QString,QVariant> data;
+
+        data["TimeStamp"] = QDateTime::currentDateTime();
+        data["Value"] = 2.3;
+        var->addDataToVariable(data);
+    }
+
+}
+
+
+void MainWindow::triggerTestButton2() {
+}
+
+void MainWindow::triggerTestButton3() {
 }
 
 void MainWindow::showNewChannelDialog() {

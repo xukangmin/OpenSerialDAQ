@@ -190,7 +190,7 @@
             "Type": "Intermediate",
             "Unit": "N/A",
             "CurrentValue": 0,
-            "Equation": "ViscocityCF([Gas Type],[Temperature,R])",
+            "Equation": "ViscocityCF([Temperature,R],[Flow Gas Type])",
             "DataType": "double",
             "Log": 1
         },
@@ -199,7 +199,7 @@
             "Type": "Intermediate",
             "Unit": "scfm",
             "CurrentValue": 0,
-            "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[DP InchH20])+([Calibration Constant B]*[DP InchH20]*[DP InchH20]))",
+            "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[Delta InchH20])+([Calibration Constant B]*[Delta InchH20]*[Delta InchH20]))",
             "DataType": "double",
             "Log": 1
         },
@@ -217,7 +217,7 @@
             "Type": "Intermediate",
             "Unit": "scfm",
             "CurrentValue": 0,
-            "Equation": "[Tstd/T] * [P/Pstd] * [Q, cfm] * [Rstd/Ract]",
+            "Equation": "[Tstd/T] * [P/Pstd] * [Q,cfm] * [Rstd/Ract]",
             "DataType": "double",
             "Log": 1
 
@@ -227,7 +227,7 @@
             "Type": "Display",
             "Unit": "sccm",
             "CurrentValue": 0,
-            "Equation": "UnitConv([Qstd,cfm],[Air Flow Unit])",
+            "Equation": "UnitConv([Qstd,scfm],[Air Flow Unit])",
             "DataType": "double",
             "Log": 1
         },

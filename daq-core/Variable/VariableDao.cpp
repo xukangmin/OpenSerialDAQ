@@ -84,8 +84,11 @@ void VariableDao::updateVariable(const Variable &dev) const
     QString setStr = "";
 
     for(int i = 1; i < VariableColumnSize; i++) {
-        setStr += (VariableHeaderList[i] + " = "
-                   + (VariableDataType[i] == "TEXT" ? "'" : "") +
+
+
+        setStr += VariableHeaderList[i] + " = ";
+        setStr += dev.getSingleProperty(VariableHeaderList[i]).isNull() ? "NULL," :
+                    ((VariableDataType[i] == "TEXT" ? "'" : "") +
                    dev.getSingleProperty(VariableHeaderList[i]).toString()
                    + (VariableDataType[i] == "TEXT" ? "'" : "") + ",");
     }

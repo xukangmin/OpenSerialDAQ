@@ -34,7 +34,6 @@ void ThreadDataProcessor::run() {
     auto parData = m_dev->parseRxData(m_rx_data, m_cmd_id);
     // log to database
 
-
     mutex.lock();
     if (!parData.empty()) {
         for(auto da : parData) {
