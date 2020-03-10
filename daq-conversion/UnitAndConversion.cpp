@@ -194,25 +194,16 @@ double UnitAndConversion::unitConvert(double val, QString unit_in, QString unit_
 double UnitAndConversion::evalSimpleEquation(QString eqn, double val, QString valName)
 {
 
-    te_variable vars[] = {{valName.toStdString().c_str(), &val}};
+    eqn.replace(valName,QString::number(val));
 
     double ret = 0;
 
-    /* This will compile the expression and check for errors. */
     int err;
-    te_expr *n = te_compile(eqn.toStdString().c_str(), vars, 1, &err);
 
-    if (n) {
-        /* The variables can be changed here, and eval can be called as many
-         * times as you like. This is fairly efficient because the parsing has
-         * already been done. */
-        ret = te_eval(n);
-        te_free(n);
-        return ret;
-    }
-    else {
-        return -1;
-    }
+    ret = te_interp(eqn.toStdString().c_str(), &err);
+
+
+    return ret;
 }
 
 double UnitAndConversion::voscocity(double tempR, QString gas_type)
@@ -234,6 +225,7 @@ double UnitAndConversion::voscocityCF(double tempR, QString gas_type)
 
 double UnitAndConversion::MW(QString gas_type)
 {
-    return gas_mw[gas_type];
+
+    return gas_mw[gas_type.toUpper()];
 }
 

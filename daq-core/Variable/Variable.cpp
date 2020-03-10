@@ -59,16 +59,16 @@ void Variable::addDataToVariable(QHash<QString,QVariant> data)
     }
 }
 
-void Variable::getDataFromRequired(QHash<QString,QVariant> data)
-{
+bool Variable::calculate(QHash<QString,QVariant> data) {
+
     toCalculate[data["VariableID"].toInt()] = data["Value"];
 
     if (toCalculate.size() == (int)required.size()) {
         // perform calculation and empty toCalculate
         QString eqn = this->getSingleProperty("Equation").toString();
 
-        foreach(auto singleID, toCalculate.keys()) {
-            eqn.replace("{" + QString::number(singleID) + "}",toCalculate[singleID].toString());
+        foreach(auto singleID, this->toCalculate.keys()) {
+            eqn.replace("{" + QString::number(singleID) + "}",this->toCalculate[singleID].toString());
         }
 
         // resolve remaining var id values with current data
@@ -98,9 +98,6 @@ void Variable::getDataFromRequired(QHash<QString,QVariant> data)
                 eqn.replace(m,t->getSingleProperty("CurrentValue").toString());
             }
         }
-
-
-
 
 
         QList<QString> matches;
@@ -142,19 +139,6 @@ void Variable::getDataFromRequired(QHash<QString,QVariant> data)
 
                 eqn.replace(m,QString::number(result));
             }
-            else if (m.contains("Viscocity")) {
-                    inner = m;
-                    inner.remove("Viscocity");
-                    inner.remove("(");
-                    inner.remove(")");
-
-                    QList<QString> args;
-                    args = inner.split(',');
-
-                    double result = UnitAndConversion::instance().voscocity(args.at(0).toDouble(), args.at(1));
-
-                    eqn.replace(m,QString::number(result));
-            }
             else if (m.contains("ViscocityCF")) {
                     inner = m;
                     inner.remove("ViscocityCF");
@@ -165,6 +149,19 @@ void Variable::getDataFromRequired(QHash<QString,QVariant> data)
                     args = inner.split(',');
 
                     double result = UnitAndConversion::instance().voscocityCF(args.at(0).toDouble(), args.at(1));
+
+                    eqn.replace(m,QString::number(result));
+            }
+            else if (m.contains("Viscocity")) {
+                    inner = m;
+                    inner.remove("Viscocity");
+                    inner.remove("(");
+                    inner.remove(")");
+
+                    QList<QString> args;
+                    args = inner.split(',');
+
+                    double result = UnitAndConversion::instance().voscocity(args.at(0).toDouble(), args.at(1));
 
                     eqn.replace(m,QString::number(result));
             }
@@ -192,12 +189,12 @@ void Variable::getDataFromRequired(QHash<QString,QVariant> data)
 
         prop["VariableID"] = this->getSingleProperty("id");
         prop["Value"] = ret;
-        if (currentData.canConvert<double>())
+        if (this->currentData.canConvert<double>())
         {
-            prop["RealValue"] = currentData.toDouble();
+            prop["RealValue"] = this->currentData.toDouble();
         }
-        else if (currentData.canConvert<QString>()) {
-            prop["StringValue"] = currentData.toString();
+        else if (this->currentData.canConvert<QString>()) {
+            prop["StringValue"] = this->currentData.toString();
         }
         prop["TimeStamp"] = this->currentTimeStamp;
 
@@ -209,7 +206,18 @@ void Variable::getDataFromRequired(QHash<QString,QVariant> data)
 
         this->addDataToVariable(prop);
 
-        toCalculate.clear();
+        this->toCalculate.clear();
+
+
     }
+
+    return true;
+
+}
+
+void Variable::getDataFromRequired(QHash<QString,QVariant> data)
+{
+    this->calculate(data);
+
 }
 

@@ -150,11 +150,11 @@
 
         },
         {
-            "Name": "Delta InchH20",
+            "Name": "Delta InchH2O",
             "Type": "Intermediate",
-            "Unit": "InchH20",
+            "Unit": "InchH2O",
             "CurrentValue": 0,
-            "Equation": "UnitConv([Delta Pressure],psia,InchH20)",
+            "Equation": "UnitConv([Delta Pressure],psia,InchH2O)",
             "DataType": "double",
             "Log": 1
         },
@@ -199,13 +199,13 @@
             "Type": "Intermediate",
             "Unit": "scfm",
             "CurrentValue": 0,
-            "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[Delta InchH20])+([Calibration Constant B]*[Delta InchH20]*[Delta InchH20]))",
+            "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[Delta InchH2O])+([Calibration Constant B]*[Delta InchH2O]*[Delta InchH2O]))",
             "DataType": "double",
             "Log": 1
         },
         {
             "Name": "Rstd/Ract",
-            "Type": "Intermediate",
+            "Type": "UserInput",
             "Unit": "N/A",
             "CurrentValue": 0,
             "Equation": "MW([Standard Gas Type]) / MW([Flow Gas Type])",
@@ -227,7 +227,7 @@
             "Type": "Display",
             "Unit": "sccm",
             "CurrentValue": 0,
-            "Equation": "UnitConv([Qstd,scfm],[Air Flow Unit])",
+            "Equation": "UnitConv([Qstd,scfm],scfm,[Air Flow Unit])",
             "DataType": "double",
             "Log": 1
         },

@@ -41,7 +41,7 @@ public:
     double MW(QString gas_type);
     //QList<double (UnitAndConversion::*) (double, QString,QString)> funList;
     QList<QString> getFunctionNameList();
-    double evalSimpleEquation(QString eqn, double val = 0, QString valName = "");
+    double evalSimpleEquation(QString eqn, double val = 0, QString valName = "N/A");
 
 protected:
     UnitAndConversion();

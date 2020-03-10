@@ -35,7 +35,8 @@ public:
     bool findVariableByNameAndDeviceID(QString name, int device_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByNameAndGroupID(QString name, int group_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByID(int var_id, std::shared_ptr<Variable>& var_ret);
-
+    bool calculateVariable(const std::shared_ptr<Variable>& var);
+    bool isVariableExistsInVector(const std::shared_ptr<Variable>& t, std::vector<std::shared_ptr<Variable>>& v);
     bool isVariableExists(QHash<QString,QVariant> property);
     bool resolveDependency(int group_id);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
