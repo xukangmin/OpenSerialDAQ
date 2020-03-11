@@ -1,6 +1,7 @@
 #include "VariableModel.h"
 #include <Models.h>
 #include <QDebug>
+#include <QRegularExpression>
 #include <QSerialPortInfo>
 #include <UnitAndConversion.h>
 

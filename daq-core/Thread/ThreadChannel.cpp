@@ -16,6 +16,7 @@ ThreadChannel::ThreadChannel(Channel& ch, QObject *parent) :
      m_ch(ch),
      m_stop(false)
 {
+    qRegisterMetaType<QSerialPort::SerialPortError>("QSerialPort::SerialPortError");
     qDebug() << "thread channel " << m_ch_id << " created";
 }
 
@@ -70,6 +71,8 @@ void ThreadChannel::removeDeviceFromChannel(int dev_id) {
 
 void ThreadChannel::startChannel() {
     if (!isRunning()){
+
+        qDebug() << "channel started";
         m_stop = false;
         start();
         startDAQ();
@@ -79,6 +82,7 @@ void ThreadChannel::startChannel() {
 
 void ThreadChannel::stopChannel() {
     if (isRunning()) {
+        qDebug() << "channel stoped";
         m_stop = true;
         stopDAQ();
         //quit();
@@ -111,18 +115,17 @@ void ThreadChannel::run()
 
     // To do
 
+    connect(&serial,&QSerialPort::errorOccurred,this,&ThreadChannel::stopChannel);
+
 //    serial.setParity(m_ch.getProperty("Parity").toString());
 
 //    serial.setDataBits(m_ch.getProperty("DataBits").toString());
 
 //    serial.setStopBits(m_ch.getProperty("StopBits").toString());
 
-    qDebug() << "channel started";
-
     if (!serial.open(QIODevice::ReadWrite)) {
         //Todo: emit a signal here
-        qDebug() << "com port in use";
-        return;
+        qDebug() << serial.errorString();
     }
 
     while(!m_stop) {

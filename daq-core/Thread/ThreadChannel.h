@@ -27,7 +27,7 @@ public:
     int m_ch_id;
     Channel& m_ch;
 private:
-
+    int m_error;
     QObject* par;
     bool m_stop;
     void run() override;
@@ -50,7 +50,6 @@ public slots:
 
 signals:
     void sendData(QVector<DeviceData> data, int ch_id);
-
 public slots:
     void getData(QVector<DeviceData> data);
     void startChannel();

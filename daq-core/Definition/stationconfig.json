@@ -10,7 +10,13 @@
                 "Calibration Constant B": 7.58E-08,
                 "Calibration Constant C": 1.01E-04
             },
-            "EquationTempelate": "Laminar"
+            "EquationTempelate": "Laminar",
+            "AdditionalCommands": [
+                "Device(SOLENOID,0,CLOSE)",
+                "Device(SOLENOID,1,OPEN)",
+                "Device(SOLENOID,2,CLOSE)",
+                "Device(SOLENOID,2,CLOSE)"
+            ]
         }
     ]
 }
