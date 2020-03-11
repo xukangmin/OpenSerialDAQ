@@ -94,7 +94,7 @@ void VariableGroupDao::updateVariableGroup(const VariableGroup &dev) const
 
     QString queryStr = "UPDATE VariableGroups SET " + setStr + " WHERE id = " + dev.getSingleProperty(VariableGroupHeaderList[0]).toString();
 
-    qDebug() << queryStr;
+//    qDebug() << queryStr;
 
     query.prepare(queryStr);
 

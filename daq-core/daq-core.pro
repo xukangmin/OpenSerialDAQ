@@ -25,6 +25,7 @@ SOURCES += \
     Models.cpp \
     Thread/ThreadChannel.cpp \
     Thread/ThreadDataProcessor.cpp \
+    Thread/ThreadCalculationProcessor.cpp \
     Packet/Packet.cpp \
     Variable/Variable.cpp \
     Variable/VariableDao.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     Models.h \
     Thread/ThreadChannel.h \
     Thread/ThreadDataProcessor.h \
+    Thread/ThreadCalculationProcessor.h \
     Packet/Packet.h \
     Variable/Variable.h \
     Variable/VariableDao.h \

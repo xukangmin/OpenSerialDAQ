@@ -97,7 +97,7 @@ void VariableDao::updateVariable(const Variable &dev) const
 
     QString queryStr = "UPDATE Variables SET " + setStr + " WHERE id = " + dev.getSingleProperty(VariableHeaderList[0]).toString();
 
-    qDebug() << queryStr;
+//    qDebug() << queryStr;
 
     query.prepare(queryStr);
 

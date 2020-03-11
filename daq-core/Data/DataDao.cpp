@@ -94,7 +94,7 @@ void DataDao::updateData(const Data &data) const
 
     QString queryStr = "UPDATE Datas SET " + setStr + " WHERE id = " + data.getSingleProperty(DataHeaderList[0]).toString();
 
-    qDebug() << queryStr;
+//    qDebug() << queryStr;
 
     query.prepare(queryStr);
 

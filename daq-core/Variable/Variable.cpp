@@ -4,7 +4,9 @@
 #include "Models.h"
 #include <memory>
 #include <QDebug>
+#include <QThreadPool>
 #include "UnitAndConversion.h"
+#include <Thread/ThreadCalculationProcessor.h>
 
 using namespace std;
 
@@ -61,155 +63,150 @@ void Variable::addDataToVariable(QHash<QString,QVariant> data)
 
 bool Variable::calculate(QHash<QString,QVariant> data) {
 
-    toCalculate[data["VariableID"].toInt()] = data["Value"];
 
-    if (toCalculate.size() == (int)required.size()) {
-        // perform calculation and empty toCalculate
-        QString eqn = this->getSingleProperty("Equation").toString();
+    // perform calculation and empty toCalculate
+    QString eqn = this->getSingleProperty("Equation").toString();
 
-        foreach(auto singleID, this->toCalculate.keys()) {
-            eqn.replace("{" + QString::number(singleID) + "}",this->toCalculate[singleID].toString());
+    foreach(auto singleID, this->toCalculate.keys()) {
+        eqn.replace("{" + QString::number(singleID) + "}",this->toCalculate[singleID].toString());
+    }
+
+    // resolve remaining var id values with current data
+    QList<QString> id_matches;
+
+    QRegularExpression id_reA("\\{.*?\\}", QRegularExpression::CaseInsensitiveOption);
+
+    QRegularExpressionMatchIterator i_id = id_reA.globalMatch(eqn);
+    while (i_id.hasNext()) {
+        QRegularExpressionMatch id_match = i_id.next();
+        if (id_match.hasMatch()) {
+             id_matches.append(id_match.captured(0));
         }
+    }
 
-        // resolve remaining var id values with current data
-        QList<QString> id_matches;
+    foreach(QString m, id_matches)
+    {
+        QString id_tmp;
+        id_tmp = m;
+        id_tmp.remove("{");
+        id_tmp.remove("}");
 
-        QRegularExpression id_reA("\\{.*?\\}", QRegularExpression::CaseInsensitiveOption);
+        shared_ptr<Variable> t;
 
-        QRegularExpressionMatchIterator i_id = id_reA.globalMatch(eqn);
-        while (i_id.hasNext()) {
-            QRegularExpressionMatch id_match = i_id.next();
-            if (id_match.hasMatch()) {
-                 id_matches.append(id_match.captured(0));
-            }
-        }
-
-        foreach(QString m, id_matches)
+        if (Models::instance().mVariableModel->findVariableByID(id_tmp.toInt(),t))
         {
-            QString id_tmp;
-            id_tmp = m;
-            id_tmp.remove("{");
-            id_tmp.remove("}");
-
-            shared_ptr<Variable> t;
-
-            if (Models::instance().mVariableModel->findVariableByID(id_tmp.toInt(),t))
-            {
-                eqn.replace(m,t->getSingleProperty("CurrentValue").toString());
-            }
+            eqn.replace(m,t->getSingleProperty("CurrentValue").toString());
         }
+    }
 
 
-        QList<QString> matches;
-        QList<QString> functionList;
+    QList<QString> matches;
+    QList<QString> functionList;
 
-        functionList = UnitAndConversion::instance().getFunctionNameList();
+    functionList = UnitAndConversion::instance().getFunctionNameList();
 
-        QString reg_str = "";
+    QString reg_str = "";
 
-        foreach(QString s, functionList) {
-            reg_str += s + "\\((.*?)\\)|";
+    foreach(QString s, functionList) {
+        reg_str += s + "\\((.*?)\\)|";
+    }
+
+    reg_str = reg_str.left(reg_str.length() - 1);
+
+    QRegularExpression reA(reg_str, QRegularExpression::CaseInsensitiveOption);
+
+    QRegularExpressionMatchIterator i = reA.globalMatch(eqn);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        if (match.hasMatch()) {
+             matches.append(match.captured(0));
         }
+    }
 
-        reg_str = reg_str.left(reg_str.length() - 1);
+    foreach(auto m, matches) {
+        QString inner;
 
-        QRegularExpression reA(reg_str, QRegularExpression::CaseInsensitiveOption);
+        if (m.contains("UnitConv")) {
+            inner = m;
+            inner.remove("UnitConv");
+            inner.remove("(");
+            inner.remove(")");
 
-        QRegularExpressionMatchIterator i = reA.globalMatch(eqn);
-        while (i.hasNext()) {
-            QRegularExpressionMatch match = i.next();
-            if (match.hasMatch()) {
-                 matches.append(match.captured(0));
-            }
+            QList<QString> args;
+            args = inner.split(',');
+
+            double result = UnitAndConversion::instance().unitConvert(args.at(0).toDouble(), args.at(1), args.at(2));
+
+            eqn.replace(m,QString::number(result));
         }
-
-        foreach(auto m, matches) {
-            QString inner;
-
-            if (m.contains("UnitConv")) {
+        else if (m.contains("ViscocityCF")) {
                 inner = m;
-                inner.remove("UnitConv");
+                inner.remove("ViscocityCF");
                 inner.remove("(");
                 inner.remove(")");
 
                 QList<QString> args;
                 args = inner.split(',');
 
-                double result = UnitAndConversion::instance().unitConvert(args.at(0).toDouble(), args.at(1), args.at(2));
+                double result = UnitAndConversion::instance().voscocityCF(args.at(0).toDouble(), args.at(1));
 
                 eqn.replace(m,QString::number(result));
-            }
-            else if (m.contains("ViscocityCF")) {
-                    inner = m;
-                    inner.remove("ViscocityCF");
-                    inner.remove("(");
-                    inner.remove(")");
-
-                    QList<QString> args;
-                    args = inner.split(',');
-
-                    double result = UnitAndConversion::instance().voscocityCF(args.at(0).toDouble(), args.at(1));
-
-                    eqn.replace(m,QString::number(result));
-            }
-            else if (m.contains("Viscocity")) {
-                    inner = m;
-                    inner.remove("Viscocity");
-                    inner.remove("(");
-                    inner.remove(")");
-
-                    QList<QString> args;
-                    args = inner.split(',');
-
-                    double result = UnitAndConversion::instance().voscocity(args.at(0).toDouble(), args.at(1));
-
-                    eqn.replace(m,QString::number(result));
-            }
-            else if (m.contains("MW")) {
-                    inner = m;
-                    inner.remove("MW");
-                    inner.remove("(");
-                    inner.remove(")");
-
-                    double result = UnitAndConversion::instance().MW(inner);
-
-                    eqn.replace(m,QString::number(result));
-            }
         }
+        else if (m.contains("Viscocity")) {
+                inner = m;
+                inner.remove("Viscocity");
+                inner.remove("(");
+                inner.remove(")");
 
-        qDebug() << eqn;
+                QList<QString> args;
+                args = inner.split(',');
 
-        double ret = UnitAndConversion::instance().evalSimpleEquation(eqn);
+                double result = UnitAndConversion::instance().voscocity(args.at(0).toDouble(), args.at(1));
 
-        this->currentData = ret;
-
-        this->currentTimeStamp = data["TimeStamp"].toDateTime();
-
-        QHash<QString,QVariant> prop;
-
-        prop["VariableID"] = this->getSingleProperty("id");
-        prop["Value"] = ret;
-        if (this->currentData.canConvert<double>())
-        {
-            prop["RealValue"] = this->currentData.toDouble();
+                eqn.replace(m,QString::number(result));
         }
-        else if (this->currentData.canConvert<QString>()) {
-            prop["StringValue"] = this->currentData.toString();
+        else if (m.contains("MW")) {
+                inner = m;
+                inner.remove("MW");
+                inner.remove("(");
+                inner.remove(")");
+
+                double result = UnitAndConversion::instance().MW(inner);
+
+                eqn.replace(m,QString::number(result));
         }
-        prop["TimeStamp"] = this->currentTimeStamp;
-
-        this->setSingleProperty("CurrentValue",ret);
-
-        this->setSingleProperty("CurrentTimeStamp",this->currentTimeStamp);
-
-        Models::instance().mVariableModel->updateVariable(*this);
-
-        this->addDataToVariable(prop);
-
-        this->toCalculate.clear();
-
-
     }
+
+    qDebug() << eqn;
+
+    double ret = UnitAndConversion::instance().evalSimpleEquation(eqn);
+
+    this->currentData = ret;
+
+    this->currentTimeStamp = data["TimeStamp"].toDateTime();
+
+    QHash<QString,QVariant> prop;
+
+    prop["VariableID"] = this->getSingleProperty("id");
+    prop["Value"] = ret;
+    if (this->currentData.canConvert<double>())
+    {
+        prop["RealValue"] = this->currentData.toDouble();
+    }
+    else if (this->currentData.canConvert<QString>()) {
+        prop["StringValue"] = this->currentData.toString();
+    }
+    prop["TimeStamp"] = this->currentTimeStamp;
+
+    this->setSingleProperty("CurrentValue",ret);
+
+    this->setSingleProperty("CurrentTimeStamp",this->currentTimeStamp);
+
+    Models::instance().mVariableModel->updateVariable(*this);
+
+    this->addDataToVariable(prop);
+
+    this->toCalculate.clear();
 
     return true;
 
@@ -217,7 +214,13 @@ bool Variable::calculate(QHash<QString,QVariant> data) {
 
 void Variable::getDataFromRequired(QHash<QString,QVariant> data)
 {
-    this->calculate(data);
+    toCalculate[data["VariableID"].toInt()] = data["Value"];
+
+    if (toCalculate.size() == (int)required.size()) {
+        ThreadCalculationProcessor *calProc = new ThreadCalculationProcessor(*this,data);
+
+        QThreadPool::globalInstance()->start(calProc);
+    }
 
 }
 

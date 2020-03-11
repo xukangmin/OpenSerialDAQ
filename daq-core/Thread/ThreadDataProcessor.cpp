@@ -2,8 +2,10 @@
 #include <QDebug>
 #include <QMutex>
 #include "Models.h"
+#include <memory>
+#include <vector>
 
-QMutex mutex;
+using namespace std;
 
 ThreadDataProcessor::ThreadDataProcessor(Packet* pac) :
     m_dev(pac->m_dev),
@@ -34,13 +36,17 @@ void ThreadDataProcessor::run() {
     auto parData = m_dev->parseRxData(m_rx_data, m_cmd_id);
     // log to database
 
-    mutex.lock();
+    Models::instance().mutex_global.lock();
+
+
     if (!parData.empty()) {
         for(auto da : parData) {
-            Models::instance().mDataModel->addData(da);
+            shared_ptr<Variable> var;
+            Models::instance().mVariableModel->findVariableByID(da["VariableID"].toInt(),var);
+            var->addDataToVariable(da);
         }
     }
-    mutex.unlock();
+    Models::instance().mutex_global.unlock();
 
     //data.values = m_dev->m_devData
     //data.timestamp = m_dev->m_deviceData.currentTimeStamp;

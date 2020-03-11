@@ -94,7 +94,7 @@ void DeviceDao::updateDevice(const Device &dev) const
 
     QString queryStr = "UPDATE Devices SET " + setStr + " WHERE id = " + dev.getSingleProperty(DeviceHeaderList[0]).toString();
 
-    qDebug() << queryStr;
+//    qDebug() << queryStr;
 
     query.prepare(queryStr);
 

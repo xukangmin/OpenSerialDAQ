@@ -11,6 +11,9 @@
 
 #include <Data/DataModel.h>
 
+#include <QMutex>
+
+
 
 class DAQCORESHARED_EXPORT Models : public QObject
 {
@@ -21,6 +24,7 @@ public:
     static Models& instance();
     ~Models();
 
+    QMutex mutex_global;
     ChannelModel *mChannelModel;
     DeviceModel *mDeviceModel;
     VariableModel *mVariableModel;
