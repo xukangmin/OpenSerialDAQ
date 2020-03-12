@@ -1,13 +1,64 @@
 #include "DeviceModel.h"
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 using namespace std;
 
 DeviceModel::DeviceModel(QObject* parent) :
-    QAbstractTableModel(parent),
+    QAbstractItemModel(parent),
     mDb(DatabaseManager::instance()),
     mDevices(mDb.deviceDao.devices())
 {
+}
+
+QList<QString> DeviceModel::getAvailableProtocols() {
+    QFile loadFile(":/protocol.json");
+
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+    }
+
+    int dataIndex = 0;
+
+    QByteArray saveData = loadFile.readAll();
+
+    loadFile.close();
+
+    QJsonDocument  loadDoc(QJsonDocument::fromJson(saveData));
+
+    QJsonObject json = loadDoc.object();
+
+    QString proName, queryStr, regexStr;
+
+    QList<QString> protocols_list;
+
+    if (json.contains("Protocols")) {
+        QJsonObject protocols = json["Protocols"].toObject();
+        QJsonArray pArr = json["Protocols"].toArray();
+        QJsonObject singleProtocol;
+        for(int i = 0; i < pArr.size(); i++){
+           singleProtocol = pArr[i].toObject();
+
+           if (singleProtocol.contains("ProtocolName"))
+           {
+               protocols_list.append(singleProtocol["ProtocolName"].toString());
+           }
+
+        }
+    }
+
+    return protocols_list;
+}
+
+bool DeviceModel::isDeviceExists(QString name, int node) {
+    if (getDeviceIDByNameAndNode(name,node) == -1) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 int DeviceModel::getDeviceIDByNameAndNode(QString name, int node) {
@@ -67,6 +118,10 @@ void DeviceModel::removeDeviceFromChannel(const QModelIndex& dev_index, ChannelM
     endResetModel();
 }
 
+QModelIndex DeviceModel::index(int row, int column,
+                  const QModelIndex &parent) const {
+    return createIndex(row,column);
+}
 
 int DeviceModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
@@ -129,6 +184,10 @@ bool DeviceModel::removeRows(int row, int count, const QModelIndex& parent) {
     endRemoveRows();
     return true;
 
+}
+QModelIndex DeviceModel::parent(const QModelIndex &index) const
+{
+    return QModelIndex();
 }
 
 QHash<int, QByteArray> DeviceModel::roleNames() const {

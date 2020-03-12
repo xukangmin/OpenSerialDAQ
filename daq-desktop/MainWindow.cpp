@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionOverView,SIGNAL(triggered(bool)),this,SLOT(showOverViewPage()));
     connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
 
-    connect(ui->actionTestButton1,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton1()));
+    connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
     connect(ui->actionTestButton2,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton2()));
     connect(ui->actionTestButton3,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton3()));
     connect(ui->actionTestButton4,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton4()));
@@ -37,15 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Add new Channel UI
     connect(ui->actionAddNewChannel, SIGNAL(triggered()), this, SLOT(showNewChannelDialog()));
 
-    // setup toolbar
-    ui->toolBar->addAction(ui->actionOverView);
-    ui->toolBar->addAction(ui->actionDevices);
-    ui->toolBar->addAction(ui->actionAddNewChannel);
 
-    ui->toolBar->addAction(ui->actionTestButton1);
-    ui->toolBar->addAction(ui->actionTestButton2);
-    ui->toolBar->addAction(ui->actionTestButton3);
-    ui->toolBar->addAction(ui->actionTestButton4);
 
     if (allModels.mChannelModel->rowCount() == 0) {
         // populate test data
@@ -97,9 +89,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(allModels.mChannelModel, &ChannelModel::rowsInserted, m_widgetChannelList, &WidgetChannelList::updateWidgets);
     connect(allModels.mChannelModel, &ChannelModel::rowsRemoved, m_widgetChannelList, &WidgetChannelList::updateWidgets);
 
-    mWidgetDevicePage->setModel(&allModels);
-
-
     mStackedWidget->addWidget(m_widgetChannelList);
 
     mStackedWidget->addWidget(mWidgetDevicePage);
@@ -108,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(mStackedWidget);
 
+    showOverViewPage();
 }
 
 
@@ -117,16 +107,41 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::showDevicePage() {
+
+    ui->toolBar->clear();
+
+    // setup toolbar
+    ui->toolBar->addAction(ui->actionOverView);
+    ui->toolBar->addAction(ui->actionDevices);
+
+    ui->toolBar->addSeparator();
+
+    ui->toolBar->addAction(ui->actionAddNewDevice);
+    ui->toolBar->addAction(ui->actionTestButton2);
+    ui->toolBar->addAction(ui->actionTestButton3);
+    ui->toolBar->addAction(ui->actionTestButton4);
+
     mStackedWidget->setCurrentIndex(1);
 }
 
 
 void MainWindow::showOverViewPage() {
+
+    ui->toolBar->clear();
+
+    // setup toolbar
+    ui->toolBar->addAction(ui->actionOverView);
+    ui->toolBar->addAction(ui->actionDevices);
+
+    ui->toolBar->addSeparator();
+
+    ui->toolBar->addAction(ui->actionAddNewChannel);
+
     mStackedWidget->setCurrentIndex(0);
 }
 
 void MainWindow::triggerTestButton1() {
-    // load new definitions
+    // add new Device
     Models::instance().mVariableGroupModel->loadGroupsFromConfigFile();
 }
 
@@ -163,6 +178,29 @@ void MainWindow::triggerTestButton4() {
         data["Value"] = 6.1;
         var->addDataToVariable(data);
     }
+}
+
+void MainWindow::showNewDeviceDialog() {
+    mDialogNewDevice = new DialogNewDevice(this);
+
+    if (mDialogNewDevice->exec() == QDialog::Accepted) {
+        QHash<QString, QVariant> properties = mDialogNewDevice->getDeviceInfo();
+
+        if (!allModels.mDeviceModel->isDeviceExists(properties["Name"].toString(), properties["NodeID"].toInt()))
+        {
+            allModels.mDeviceModel->addDevice(properties);
+        }
+        else
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Device Name And Node already exists");
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.exec();
+        }
+
+    }
+
+    mDialogNewChannel->deleteLater();
 }
 
 void MainWindow::showNewChannelDialog() {

@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     DialogAddDeviceToChannel.cpp \
+    DialogNewDevice.cpp \
     MainWindow.cpp \
     DialogNewChannel.cpp \
     WidgetChannel.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 
 HEADERS += \
     DialogAddDeviceToChannel.h \
+    DialogNewDevice.h \
     MainWindow.h \
     DialogNewChannel.h \
     WidgetChannel.h \
@@ -37,6 +39,7 @@ HEADERS += \
 FORMS += \
     DialogAddDeviceToChannel.ui \
     DialogNewChannel.ui \
+    DialogNewDevice.ui \
     WidgetChannel.ui \
     WidgetChannelList.ui \
     WidgetCommand.ui \

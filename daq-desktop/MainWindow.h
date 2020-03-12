@@ -10,6 +10,7 @@
 #include "WidgetChannelList.h"
 #include "WidgetDevicePage.h"
 #include "Device/DeviceModel.h"
+#include "DialogNewDevice.h"
 #include "Models.h"
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +37,8 @@ private:
 
     // UI - dialogs
     DialogNewChannel* mDialogNewChannel;
+    DialogNewDevice* mDialogNewDevice;
+
 
     Models& allModels;
 
@@ -43,6 +46,7 @@ public slots:
     void showOverViewPage();
     void showDevicePage();
     void showNewChannelDialog();
+    void showNewDeviceDialog();
     void triggerTestButton1();
     void triggerTestButton2();
     void triggerTestButton3();

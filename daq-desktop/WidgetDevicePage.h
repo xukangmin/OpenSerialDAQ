@@ -3,6 +3,7 @@
 
 #include "Models.h"
 
+#include <QTreeView>
 #include <QWidget>
 
 #include <Channel/ChannelModel.h>
@@ -21,10 +22,7 @@ public:
     explicit WidgetDevicePage(QWidget *parent = nullptr);
     ~WidgetDevicePage();
 
-    void setModel(Models* models);
 private:
-    ChannelModel *m_ch_model;
-    DeviceModel *m_dev_model;
     Ui::WidgetDevicePage *ui;
 };
 

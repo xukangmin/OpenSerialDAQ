@@ -43,7 +43,7 @@
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menutest">
@@ -95,13 +95,16 @@
     <string>AddNewChannel</string>
    </property>
   </action>
-  <action name="actionTestButton1">
+  <action name="actionAddNewDevice">
    <property name="icon">
     <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/tools-16.png</normaloff>:/icons/tools-16.png</iconset>
+     <normaloff>:/icons/Header16.png</normaloff>:/icons/Header16.png</iconset>
    </property>
    <property name="text">
-    <string>TestButton1</string>
+    <string>AddNewDevice</string>
+   </property>
+   <property name="toolTip">
+    <string>Add New Device</string>
    </property>
   </action>
   <action name="actionTestButton2">

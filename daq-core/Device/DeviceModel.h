@@ -11,7 +11,7 @@
 #include <Channel/ChannelModel.h>
 #include "Variable/Variable.h"
 
-class DAQCORESHARED_EXPORT DeviceModel : public QAbstractTableModel
+class DAQCORESHARED_EXPORT DeviceModel : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -30,18 +30,24 @@ public:
     DeviceModel(QObject* parent = nullptr);
 
     QModelIndex addDevice(QHash<QString,QVariant> properties);
+    bool isDeviceExists(QString name, int node);
     void addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
     void removeDeviceFromChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
     int getDeviceIDByNameAndNode(QString name, int node);
     void addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index);
     std::vector<QHash<QString, QVariant>> getVariableDefinitionFromDevice(const QModelIndex& dev_index);
 
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    QModelIndex parent(const QModelIndex &index) const override;
+
     QHash<int, QByteArray> roleNames() const override;
+    QList<QString> getAvailableProtocols();
 
 private:
     bool isIndexValid(const QModelIndex& index) const;
