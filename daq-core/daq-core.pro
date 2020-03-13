@@ -1,5 +1,4 @@
 QT       += sql serialport
-QT       -= gui
 
 TARGET = daq-core
 TEMPLATE = lib

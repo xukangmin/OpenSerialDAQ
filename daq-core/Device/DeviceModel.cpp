@@ -12,6 +12,7 @@ DeviceModel::DeviceModel(QObject* parent) :
     mDb(DatabaseManager::instance()),
     mDevices(mDb.deviceDao.devices())
 {
+    root = new QStandardItem("Root");
 }
 
 QList<QString> DeviceModel::getAvailableProtocols() {
@@ -120,7 +121,136 @@ void DeviceModel::removeDeviceFromChannel(const QModelIndex& dev_index, ChannelM
 
 QModelIndex DeviceModel::index(int row, int column,
                   const QModelIndex &parent) const {
-    return createIndex(row,column);
+
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+
+    GenericDefinition* genericItem;
+    Device* deviceItem;
+    Variable* variableItem;
+
+    if (!parent.isValid()) {
+        return createIndex(row, column);
+    }
+
+    if (parent.internalPointer() == this) {
+        // root item, get pointer to child of row
+        return createIndex(row, column, this->mDevices->at(row).get());
+    }
+
+    genericItem = static_cast<GenericDefinition*>(parent.internalPointer());
+
+    if (genericItem->m_properties.keys().contains("Procotol")) {
+        // Device
+        deviceItem = static_cast<Device*>(genericItem);
+
+        if (deviceItem->m_var_list.size() >= row)
+        {
+            return createIndex(row, column, deviceItem->m_var_list.at(row).get());
+        }
+        else {
+            return QModelIndex();
+        }
+
+    }
+    else if (genericItem->m_properties.keys().contains("Equation"))
+    {
+        // variable
+        variableItem = static_cast<Variable*>(genericItem);
+        return QModelIndex();
+    }
+    else {
+        return QModelIndex();
+    }
+}
+
+int DeviceModel::rowCount(const QModelIndex& parent) const {
+
+    if (!parent.isValid()) {
+        return mDevices->size();
+    }
+
+    qDebug() << "parent.internalPointer()=" << QString::number((long)parent.internalPointer(),16);
+
+    qDebug() << "this=" << QString::number((long)this,16);
+
+    if (!parent.internalPointer()) {
+        return 0;
+    }
+
+    if (!parent.isValid()) {
+        // root item
+        return mDevices->size();
+    }
+
+    GenericDefinition* genericItem;
+    Device* deviceItem;
+    //Variable* variableItem;
+
+    genericItem = static_cast<GenericDefinition*>(parent.internalPointer());
+
+
+    if (genericItem->m_properties.keys().contains("Procotol")) {
+        // Device
+        deviceItem = static_cast<Device*>(genericItem);
+        return deviceItem->m_var_list.size();
+    }
+    else if (genericItem->m_properties.keys().contains("Equation"))
+    {
+        // variable
+        return 0;
+    } else {
+        return 0;
+    }
+
+
+}
+
+QModelIndex DeviceModel::parent(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QModelIndex();
+
+    GenericDefinition* genericItem;
+    Variable* variableItem;
+    Device* deviceItem;
+
+    if (index.internalPointer() == this) {
+        // root item
+        return QModelIndex();
+    }
+
+    genericItem = static_cast<GenericDefinition*>(index.internalPointer());
+
+    if (genericItem->m_properties.keys().contains("Procotol")) {
+        // Device
+        deviceItem = static_cast<Device*>(genericItem);
+
+        QVariant devid_id = deviceItem->getSingleProperty("id");
+
+        for(auto i = 0; i < (*mDevices).size(); i++) {
+            if ((*mDevices).at(i)->getSingleProperty("id") == devid_id) {
+                return createIndex(i, 0, (void*)this);
+            }
+        }
+        return QModelIndex();
+    }
+    else if (genericItem->m_properties.keys().contains("Equation"))
+    {
+        // variable
+        variableItem = static_cast<Variable*>(genericItem);
+        QVariant var_id = variableItem->getSingleProperty("id");
+
+        foreach(auto& dev, (*mDevices)) {
+            for(int i = 0; i < dev->m_var_list.size(); i++)
+            {
+                if (dev->m_var_list.at(i)->getSingleProperty("id") == var_id) {
+                    return createIndex(i,0,dev.get());
+                }
+            }
+        }
+        return QModelIndex();
+    }
 }
 
 int DeviceModel::columnCount(const QModelIndex &parent) const {
@@ -128,10 +258,7 @@ int DeviceModel::columnCount(const QModelIndex &parent) const {
     return DeviceColumnSize;
 }
 
-int DeviceModel::rowCount(const QModelIndex& parent) const {
-    Q_UNUSED(parent);
-    return mDevices->size();
-}
+
 
 
 QVariant DeviceModel::data(const QModelIndex& index, int role) const {
@@ -140,17 +267,68 @@ QVariant DeviceModel::data(const QModelIndex& index, int role) const {
         return QVariant();
     }
 
-    const Device& device = *mDevices->at(index.row());
-
-
-    switch (role) {
-        case Qt::DisplayRole:
-            return device.m_properties[DeviceHeaderList[index.column()]];
-        case Roles::IdRole:
-            return device.m_properties[DeviceHeaderList[0]];
-        default:
-            return QVariant();
+    if (index.internalPointer() == this) {
+        // root item
+        return QVariant();
     }
+
+    GenericDefinition* genericItem;
+    Variable* variableItem;
+    Device* deviceItem;
+
+    genericItem = static_cast<GenericDefinition*>(index.internalPointer());
+
+    if (!genericItem) {
+        // Device
+        const Device& device = *mDevices->at(index.row());
+
+
+        switch (role) {
+            case Qt::DisplayRole:
+                return device.m_properties[DeviceHeaderList[0]];
+            case Roles::IdRole:
+                return device.m_properties[DeviceHeaderList[0]];
+            default:
+                return QVariant();
+        }
+    }
+
+    if (genericItem->m_properties.keys().contains("Procotol")) {
+        // Device
+        const Device& device = *mDevices->at(index.row());
+
+
+        switch (role) {
+            case Qt::DisplayRole:
+                return device.m_properties[DeviceHeaderList[index.column()]];
+            case Roles::IdRole:
+                return device.m_properties[DeviceHeaderList[0]];
+            default:
+                return QVariant();
+        }
+    }
+    else if (genericItem->m_properties.keys().contains("Equation"))
+    {
+        // variable
+        variableItem = static_cast<Variable*>(genericItem);
+        QVariant dev_id = variableItem->getSingleProperty("DeviceID");
+
+        for(auto i = 0; i < (*mDevices).size(); i++) {
+            if ((*mDevices).at(i)->getSingleProperty("id") == dev_id) {
+                deviceItem = (*mDevices).at(i).get();
+            }
+        }
+
+        switch (role) {
+            case Qt::DisplayRole:
+                return variableItem->m_properties[VariableHeaderList[0]];
+            default:
+                return QVariant();
+        }
+    }
+
+
+
 
 }
 
@@ -185,10 +363,7 @@ bool DeviceModel::removeRows(int row, int count, const QModelIndex& parent) {
     return true;
 
 }
-QModelIndex DeviceModel::parent(const QModelIndex &index) const
-{
-    return QModelIndex();
-}
+
 
 QHash<int, QByteArray> DeviceModel::roleNames() const {
 

@@ -10,6 +10,7 @@
 #include "Database/DatabaseManager.h"
 #include <Channel/ChannelModel.h>
 #include "Variable/Variable.h"
+#include <QStandardItem>
 
 class DAQCORESHARED_EXPORT DeviceModel : public QAbstractItemModel
 {
@@ -58,6 +59,7 @@ private:
     DatabaseManager& mDb;
     std::unique_ptr<std::vector<std::shared_ptr<Device>>> mDevices;
     int getIndexFromID(int id);
+    QStandardItem* root;
 };
 
 class DAQCORESHARED_EXPORT DeviceProxyModel: public QSortFilterProxyModel

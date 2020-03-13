@@ -9,7 +9,7 @@ WidgetDevicePage::WidgetDevicePage(QWidget *parent) :
 {
     ui->setupUi(this);
 
-   // ui->treeView->setModel(Models::instance().mDeviceModel);
+    ui->treeView->setModel(Models::instance().mDeviceModel);
 }
 
 
