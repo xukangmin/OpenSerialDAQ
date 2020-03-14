@@ -1,26 +1,22 @@
-#ifndef DEVICEWIDGET_H
-#define DEVICEWIDGET_H
+#ifndef WIDGETDEVICE_H
+#define WIDGETDEVICE_H
 
 #include <QWidget>
 
 namespace Ui {
-class DeviceWidget;
+class WidgetDevice;
 }
 
-class DeviceWidget : public QWidget
+class WidgetDevice : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DeviceWidget(Device* dev, QVector<Channel> ch_list, QWidget *parent = nullptr);
-    ~DeviceWidget();
-
-    Device* m_dev;
-
-    QVector<Channel> m_ch_list;
+    explicit WidgetDevice(QWidget *parent = nullptr);
+    ~WidgetDevice();
 
 private:
-    Ui::DeviceWidget *ui;
+    Ui::WidgetDevice *ui;
 };
 
-#endif // DEVICEWIDGET_H
+#endif // WIDGETDEVICE_H

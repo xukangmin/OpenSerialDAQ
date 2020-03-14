@@ -2,8 +2,8 @@
  <author/>
  <comment/>
  <exportmacro/>
- <class>WidgetDevice</class>
- <widget name="WidgetDevice" class="QWidget">
+ <class>WidgetVariable</class>
+ <widget name="WidgetVariable" class="QWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
