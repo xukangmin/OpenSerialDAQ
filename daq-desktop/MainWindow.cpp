@@ -200,7 +200,7 @@ void MainWindow::showNewDeviceDialog() {
 
     }
 
-    mDialogNewChannel->deleteLater();
+    mDialogNewDevice->deleteLater();
 }
 
 void MainWindow::showNewChannelDialog() {

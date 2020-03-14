@@ -13,6 +13,8 @@ using namespace std;
 Variable::Variable(int id, QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties):
             GenericDefinition(id,properties)
 {
+    this->setProperty("ObjType","variable");
+
     if (m_properties.contains("CurrentValue")) {
         currentData = m_properties["CurrentValue"];
     }

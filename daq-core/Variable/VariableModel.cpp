@@ -31,7 +31,7 @@ VariableModel::VariableModel(DeviceModel* dev_model, QObject* parent) :
         for(int i = 0; i < dev_model->rowCount(); i++) {
             QModelIndex idIndex = dev_model->index(i,0);
 
-            if (dev_model->data(idIndex) == var->getSingleProperty("DeviceID")) {
+            if (dev_model->data(idIndex,Roles::IdRole) == var->getSingleProperty("DeviceID")) {
                 dev_model->addVariableToDevice(var,idIndex);
             }
 

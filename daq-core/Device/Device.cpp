@@ -13,9 +13,8 @@ using namespace std;
 Device::Device(int id, QHash<QString, QVariant> properties) :
             GenericDefinition(id, properties)
 {
-    if (properties.contains("Protocol")) {
-        loadFromConfig(properties["Protocol"].toString());
-    }
+    loadFromConfig(properties["Protocol"].toString());
+    this->setProperty("ObjType","device");
 }
 
 //Device::Device(int node_id):
@@ -341,7 +340,16 @@ void Device::loadFromConfig(QString protocol_name) {
                                     property[VariableHeaderList[9]] = "double";
                                     property[VariableHeaderList[10]] = 1;
 
-                                    mVariablePropertiesList.push_back(property);
+                                    auto it = find_if(mVariablePropertiesList.begin(),mVariablePropertiesList.end(),[&property](QHash<QString, QVariant>& singleProperty)
+                                    {
+                                       return singleProperty["Name"] == property["Name"];
+                                    });
+
+                                    if (it == mVariablePropertiesList.end())
+                                    {
+                                        mVariablePropertiesList.push_back(property);
+                                    }
+
                                 }
 
 //                                if (parseFormat.usage == "Data") {

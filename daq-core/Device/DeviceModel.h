@@ -46,7 +46,8 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QModelIndex parent(const QModelIndex &index) const override;
-
+    QVariant headerData(int section, Qt::Orientation orientation,
+                                   int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     QList<QString> getAvailableProtocols();
 
@@ -59,7 +60,6 @@ private:
     DatabaseManager& mDb;
     std::unique_ptr<std::vector<std::shared_ptr<Device>>> mDevices;
     int getIndexFromID(int id);
-    QStandardItem* root;
 };
 
 class DAQCORESHARED_EXPORT DeviceProxyModel: public QSortFilterProxyModel

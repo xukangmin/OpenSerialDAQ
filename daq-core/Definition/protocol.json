@@ -326,7 +326,7 @@
                             },
                             {
                                 "Type": "unsigned long",
-                                "Name": "ParameterValue",
+                                "Name": "ParaValue26",
                                 "Unit": "N/A",
                                 "Usage": "Data",
                                 "Location": 6

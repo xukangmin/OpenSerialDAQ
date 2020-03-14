@@ -24,6 +24,11 @@ public:
 
 private:
     Ui::WidgetDevicePage *ui;
+    QItemSelectionModel* mSelectionModel;
+
+private slots:
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
 };
 
 #endif // WIDGETDEVICEPAGE_H

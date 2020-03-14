@@ -124,10 +124,11 @@ unique_ptr<vector<shared_ptr<Device>>> DeviceDao::devices() const
             properties[DeviceHeaderList[i]] = query.value(DeviceHeaderList[i]);
         }
 
-
-        shared_ptr<Device> dev(new Device(query.value("id").toInt(),properties));
-
-        list->push_back(move(dev));
+        if (!properties["Protocol"].toString().isEmpty())
+        {
+            shared_ptr<Device> dev(new Device(query.value("id").toInt(),properties));
+            list->push_back(move(dev));
+        }
     }
     return list;
 }
