@@ -6,6 +6,8 @@
 #include "Device/Device.h"
 #include "Variable/Variable.h"
 
+using namespace std;
+
 WidgetDevicePage::WidgetDevicePage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetDevicePage)
@@ -34,15 +36,42 @@ void WidgetDevicePage::selectionChanged(const QItemSelection &selected, const QI
     if (obj->property("ObjType").toString() == "device")
     {
         Device* dev = static_cast<Device*>(obj);
-        qDebug() << dev->getSingleProperty("Name");
-        qDebug() << dev->getSingleProperty("NodeID");
-        qDebug() << dev->getSingleProperty("Protocol");
+
+        auto it = find_if(mWidgetDeviceList.begin(), mWidgetDeviceList.end(), [&dev] (WidgetDevice* wd) {
+            return dev->m_id == wd->mDevID;
+        });
+
+        if (it == mWidgetDeviceList.end()) {
+            WidgetDevice* wd = new WidgetDevice(dev, this);
+            mWidgetDeviceList.append(wd);
+
+            this->ui->stackedWidget->addWidget(wd);
+            this->ui->stackedWidget->setCurrentWidget(wd);
+        }
+        else {
+            this->ui->stackedWidget->setCurrentWidget(*it);
+        }
+
+
     }
     else if (obj->property("ObjType").toString() == "variable")
     {
         Variable* var = static_cast<Variable*>(obj);
-        qDebug() << var->getSingleProperty("Name");
-        qDebug() << var->getSingleProperty("DeviceID");
-        qDebug() << var->getSingleProperty("Unit");
+
+
+        auto it = find_if(mWidgetVariableList.begin(), mWidgetVariableList.end(), [&var] (WidgetVariable* wv) {
+            return var->m_id == wv->m_var_id;
+        });
+
+        if (it == mWidgetVariableList.end()) {
+            WidgetVariable* wv = new WidgetVariable(var, this);
+            mWidgetVariableList.append(wv);
+
+            this->ui->stackedWidget->addWidget(wv);
+            this->ui->stackedWidget->setCurrentWidget(wv);
+        }
+        else {
+            this->ui->stackedWidget->setCurrentWidget(*it);
+        }
     }
 }

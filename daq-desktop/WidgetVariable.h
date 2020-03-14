@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <Variable/Variable.h>
+
 namespace Ui {
 class WidgetVariable;
 }
@@ -12,10 +14,13 @@ class WidgetVariable : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetVariable(QWidget *parent = nullptr);
+    explicit WidgetVariable(Variable* var, QWidget *parent = nullptr);
     ~WidgetVariable();
 
+    int m_var_id;
+
 private:
+    Variable* mVariable;
     Ui::WidgetVariable *ui;
 };
 

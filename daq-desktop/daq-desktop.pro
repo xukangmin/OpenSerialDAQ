@@ -1,4 +1,4 @@
-QT       += core gui quickwidgets
+QT       += core gui quickwidgets charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,8 +22,10 @@ SOURCES += \
     DialogNewChannel.cpp \
     WidgetChannel.cpp \
     WidgetChannelList.cpp \
+    WidgetDevice.cpp \
     WidgetDevicePage.cpp \
     WidgetMiniDevice.cpp \
+    WidgetVariable.cpp \
     main.cpp
 
 HEADERS += \
@@ -33,8 +35,10 @@ HEADERS += \
     DialogNewChannel.h \
     WidgetChannel.h \
     WidgetChannelList.h \
+    WidgetDevice.h \
     WidgetDevicePage.h \
-    WidgetMiniDevice.h
+    WidgetMiniDevice.h \
+    WidgetVariable.h
 
 FORMS += \
     DialogAddDeviceToChannel.ui \
@@ -46,7 +50,8 @@ FORMS += \
     WidgetDevice.ui \
     WidgetDevicePage.ui \
     WidgetMiniDevice.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    WidgetVariable.ui
 
 RESOURCES += \
     Icons/icons.qrc

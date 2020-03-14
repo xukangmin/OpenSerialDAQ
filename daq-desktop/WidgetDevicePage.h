@@ -2,9 +2,12 @@
 #define WIDGETDEVICEPAGE_H
 
 #include "Models.h"
+#include "WidgetDevice.h"
+#include "WidgetVariable.h"
 
 #include <QTreeView>
 #include <QWidget>
+#include <ui_WidgetDevice.h>
 
 #include <Channel/ChannelModel.h>
 
@@ -25,6 +28,8 @@ public:
 private:
     Ui::WidgetDevicePage *ui;
     QItemSelectionModel* mSelectionModel;
+    QVector<WidgetDevice*> mWidgetDeviceList;
+    QVector<WidgetVariable*> mWidgetVariableList;
 
 private slots:
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
