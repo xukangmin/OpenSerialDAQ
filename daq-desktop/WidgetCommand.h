@@ -3,20 +3,24 @@
 
 #include <QGroupBox>
 
+#include <Device/Device.h>
+
 namespace Ui {
-class CommandWidget;
+class WidgetCommand;
 }
 
-class CommandWidget : public QGroupBox
+class WidgetCommand : public QGroupBox
 {
     Q_OBJECT
 
 public:
-    explicit CommandWidget(QWidget *parent = nullptr);
-    ~CommandWidget();
+    explicit WidgetCommand(Device* dev, int cmdIndex, QWidget *parent = nullptr);
+    ~WidgetCommand();
 
 private:
-    Ui::CommandWidget *ui;
+    Ui::WidgetCommand *ui;
+    Device* mDevice;
+    Command mCmd;
 };
 
 #endif // COMMANDWIDGET_H

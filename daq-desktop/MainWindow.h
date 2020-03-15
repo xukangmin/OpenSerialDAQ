@@ -7,7 +7,7 @@
 #include <QStackedWidget>
 #include "DialogNewChannel.h"
 #include "WidgetChannel.h"
-#include "WidgetChannelList.h"
+#include "WidgetChannelListPage.h"
 #include "WidgetDevicePage.h"
 #include "Device/DeviceModel.h"
 #include "DialogNewDevice.h"
@@ -32,7 +32,7 @@ private:
 
     // Widgets
     QStackedWidget* mStackedWidget;
-    WidgetChannelList* m_widgetChannelList;
+    WidgetChannelListPage* mWidgetChannelListPage;
     WidgetDevicePage* mWidgetDevicePage;
 
     // UI - dialogs

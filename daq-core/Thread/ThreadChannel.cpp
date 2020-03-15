@@ -36,7 +36,7 @@ ThreadChannel::~ThreadChannel()
 void ThreadChannel::addDevice(const shared_ptr<Device>& dev) {
     m_device_pool.push_back(dev);
 
-    foreach(Command cmd, dev->m_commands) {
+    foreach(Command cmd, dev->mCommands) {
         if (cmd.isDAQ) {
             QTimer *m_timer = new QTimer(dev.get());
 
@@ -49,7 +49,7 @@ void ThreadChannel::addDevice(const shared_ptr<Device>& dev) {
                 qDebug() << "enqueu";
                 m_packet_queue.enqueue(pac);
             });
-            dev->m_timer_pool.append(m_timer);
+            dev->mTimerPool.append(m_timer);
         }
     }
 }
@@ -58,11 +58,11 @@ void ThreadChannel::removeDeviceFromChannel(int dev_id) {
 
     for (auto it = m_device_pool.begin(); it != m_device_pool.end(); it++) {
         if ((*(*it)).getSingleProperty("id").toInt() == dev_id) {
-            foreach(auto timer, (*(*it)).m_timer_pool) {
+            foreach(auto timer, (*(*it)).mTimerPool) {
                 timer->stop();
                 timer->deleteLater();
             }
-            (*(*it)).m_timer_pool.clear();
+            (*(*it)).mTimerPool.clear();
             m_device_pool.erase(it);
             break;
         }
@@ -91,7 +91,7 @@ void ThreadChannel::stopChannel() {
 
 void ThreadChannel::startDAQ() {
     foreach(auto& dev, m_device_pool) {
-        foreach(QTimer* tm, dev->m_timer_pool) {
+        foreach(QTimer* tm, dev->mTimerPool) {
             tm->start();
         }
     }
@@ -99,7 +99,7 @@ void ThreadChannel::startDAQ() {
 
 void ThreadChannel::stopDAQ() {
     foreach(auto& dev, m_device_pool) {
-        foreach(QTimer* tm, dev->m_timer_pool) {
+        foreach(QTimer* tm, dev->mTimerPool) {
             tm->stop();
         }
     }

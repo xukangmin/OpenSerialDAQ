@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
       mStackedWidget(new QStackedWidget(this)),
-      m_widgetChannelList(new WidgetChannelList(this)),
+      mWidgetChannelListPage(new WidgetChannelListPage(this)),
       mWidgetDevicePage(new WidgetDevicePage(this)),
       allModels(Models::instance())
 {
@@ -84,12 +84,12 @@ MainWindow::MainWindow(QWidget *parent)
 //    setCentralWidget(tb);
 
 
-    m_widgetChannelList->setModel(&allModels);
+    mWidgetChannelListPage->setModel(&allModels);
 
-    connect(allModels.mChannelModel, &ChannelModel::rowsInserted, m_widgetChannelList, &WidgetChannelList::updateWidgets);
-    connect(allModels.mChannelModel, &ChannelModel::rowsRemoved, m_widgetChannelList, &WidgetChannelList::updateWidgets);
+    connect(allModels.mChannelModel, &ChannelModel::rowsInserted, mWidgetChannelListPage, &WidgetChannelListPage::updateWidgets);
+    connect(allModels.mChannelModel, &ChannelModel::rowsRemoved, mWidgetChannelListPage, &WidgetChannelListPage::updateWidgets);
 
-    mStackedWidget->addWidget(m_widgetChannelList);
+    mStackedWidget->addWidget(mWidgetChannelListPage);
 
     mStackedWidget->addWidget(mWidgetDevicePage);
 
@@ -210,7 +210,7 @@ void MainWindow::showNewChannelDialog() {
         QHash<QString, QVariant> properties = mDialogNewChannel->getChannelInfo();
 
         if (!allModels.mChannelModel->isPortExists(properties["ComPort"].toString())) {
-            m_widgetChannelList->addNewChannel(properties);
+            mWidgetChannelListPage->addNewChannel(properties);
         } else {
             QMessageBox msgBox;
             msgBox.setText("Same Com port already exists!");
