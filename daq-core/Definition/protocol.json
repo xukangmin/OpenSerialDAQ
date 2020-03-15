@@ -10,6 +10,8 @@
                     "Description": "Read data",
                     "DAQ": 1,
                     "Interval": 5000,
+                    "Type": "READ",
+                    "Node": "[NodeID] + 0x41",
                     "QueryCmdList": ["[Node]","\r"],
                     "ParseMethod": "Delimited",
                     "Delimiter": " ",
@@ -45,7 +47,9 @@
                     "Name": "Zero",
                     "Description": "Zero data",
                     "DAQ": 0,
-                    "QueryCmd": "[Node]$$V\r",
+                    "Type": "READ|CTRL",
+                    "Node": "[NodeID]+0x41",
+                    "QueryCmdList": ["[Node]","$","$","V","\r"],
                     "ParseMethod": "Delimited",
                     "Delimiter": " ",
                     "ParseList": [
@@ -77,11 +81,41 @@
                     ]
                 },
                 {
-                    "Name": "Read Parameter 1",
+                    "Name": "Read Parameter 26",
                     "Description": "Read Parameter data",
                     "DAQ": 0,
-                    "ParameterIndex": 21,
-                    "QueryCmd": "[Node]$$R[ParameterIndex]\r",
+                    "Type": "READ",
+                    "ParameterIndex": 26,
+                    "Node": "[NodeID]+0x41",
+                    "QueryCmdList": ["[Node]","$","$","R","[ParameterIndex]","\r"],
+                    "ParseMethod": "Delimited",
+                    "Delimiter": " ",
+                    "ParseList": [
+                        {
+                            "Type": "string",
+                            "Name": "Node",
+                            "Unit": "N/A"
+                        },
+                        {
+                            "Type": "int",
+                            "Name": "ParameterIndex",
+                            "Unit": "psia"
+                        },
+                        {
+                            "Type": "unsigned long",
+                            "Name": "ParameterValue",
+                            "Unit": "F"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Write Parameter 1",
+                    "Description": "Read Parameter data",
+                    "DAQ": 0,
+                    "Type": "WRITE",
+                    "ParameterIndex": 26,
+                    "Node": "[NodeID]+0x41",
+                    "QueryCmdList": ["[Node]","$","$","W","[ParameterIndex]","=","[Value]","\r"],
                     "ParseMethod": "Delimited",
                     "Delimiter": " ",
                     "ParseList": [
@@ -117,6 +151,7 @@
                         "Header": "0x8F",
                         "Length": "0x04",
                         "Cmd": "0x01",
+                        "Node": "[NodeID]",
                         "CheckSumRule": "Simple",
                         "QueryCmdList": [
                             "[Header]","0x04","[Api]","[Node]","[Cmd]","[CheckSum]"

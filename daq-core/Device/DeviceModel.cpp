@@ -270,6 +270,8 @@ QVariant DeviceModel::data(const QModelIndex& index, int role) const {
                 return dev->m_properties["Name"].toString() + "-" + dev->m_properties["NodeID"].toString();
             case Roles::IdRole:
                 return dev->m_properties[DeviceHeaderList[0]];
+            case Roles::RawDataRole:
+                return dev->m_properties[DeviceHeaderList[index.column()]];
             default:
                 return QVariant();
         }
@@ -279,6 +281,8 @@ QVariant DeviceModel::data(const QModelIndex& index, int role) const {
         switch (role) {
             case Qt::DisplayRole:
                 return var->m_properties["Name"];
+            case Roles::RawDataRole:
+                return var->m_properties[VariableHeaderList[index.column()]];
             default:
                 return QVariant();
         }
@@ -289,7 +293,7 @@ QVariant DeviceModel::data(const QModelIndex& index, int role) const {
 
 bool DeviceModel::setData(const QModelIndex& index, const QVariant& value, int role) {
     if (!isIndexValid(index)
-            || role != Roles::NameRole) {
+            || role != Roles::IdRole) {
         return false;
     }
     Device& device = *mDevices->at(index.row());
@@ -323,7 +327,6 @@ QHash<int, QByteArray> DeviceModel::roleNames() const {
 
     QHash<int, QByteArray> roles;
     roles[Roles::IdRole] = "id";
-    roles[Roles::NameRole] = "name";
     return roles;
 }
 
@@ -342,7 +345,7 @@ bool DeviceProxyModel::filterAcceptsRow(int sourceRow,
 {
     QModelIndex index = sourceModel()->index(sourceRow, 4, sourceParent);
 
-    QVariant tmp = sourceModel()->data(index);
+    QVariant tmp = sourceModel()->data(index, DeviceModel::Roles::RawDataRole);
 
     return (tmp.toInt() == mChID);
 }
@@ -358,7 +361,7 @@ QVariant DeviceProxyModel::data(const QModelIndex &index, int role) const noexce
 
     switch (role) {
         case Qt::DisplayRole:
-            return sourceModel()->data(in);
+            return sourceModel()->data(in, DeviceModel::Roles::RawDataRole);
         default:
             return QVariant();
     }

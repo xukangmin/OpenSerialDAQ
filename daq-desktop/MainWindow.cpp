@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
       mStackedWidget(new QStackedWidget(this)),
       mWidgetChannelListPage(new WidgetChannelListPage(this)),
       mWidgetDevicePage(new WidgetDevicePage(this)),
+      mWidgetStationPage(new WidgetStationPage(this)),
+      mWidgetSettingPage(new WidgetSettingPage(this)),
       allModels(Models::instance())
 {
     ui->setupUi(this);
@@ -27,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Tool bar actions
     connect(ui->actionOverView,SIGNAL(triggered(bool)),this,SLOT(showOverViewPage()));
     connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
+    connect(ui->actionStation,SIGNAL(triggered(bool)),this,SLOT(showStationPage()));
+    connect(ui->actionSetting,SIGNAL(triggered(bool)),this,SLOT(showSettingPage()));
 
     connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
     connect(ui->actionTestButton2,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton2()));
@@ -93,7 +97,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     mStackedWidget->addWidget(mWidgetDevicePage);
 
+    mStackedWidget->addWidget(mWidgetStationPage);
 
+    mStackedWidget->addWidget(mWidgetSettingPage);
 
     setCentralWidget(mStackedWidget);
 
@@ -113,6 +119,8 @@ void MainWindow::showDevicePage() {
     // setup toolbar
     ui->toolBar->addAction(ui->actionOverView);
     ui->toolBar->addAction(ui->actionDevices);
+    ui->toolBar->addAction(ui->actionStation);
+    ui->toolBar->addAction(ui->actionSetting);
 
     ui->toolBar->addSeparator();
 
@@ -132,12 +140,44 @@ void MainWindow::showOverViewPage() {
     // setup toolbar
     ui->toolBar->addAction(ui->actionOverView);
     ui->toolBar->addAction(ui->actionDevices);
+    ui->toolBar->addAction(ui->actionStation);
+    ui->toolBar->addAction(ui->actionSetting);
 
     ui->toolBar->addSeparator();
 
     ui->toolBar->addAction(ui->actionAddNewChannel);
 
     mStackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::showStationPage() {
+
+    ui->toolBar->clear();
+
+    // setup toolbar
+    ui->toolBar->addAction(ui->actionOverView);
+    ui->toolBar->addAction(ui->actionDevices);
+    ui->toolBar->addAction(ui->actionStation);
+    ui->toolBar->addAction(ui->actionSetting);
+
+    ui->toolBar->addSeparator();
+
+    mStackedWidget->setCurrentWidget(mWidgetStationPage);
+}
+
+void MainWindow::showSettingPage() {
+
+    ui->toolBar->clear();
+
+    // setup toolbar
+    ui->toolBar->addAction(ui->actionOverView);
+    ui->toolBar->addAction(ui->actionDevices);
+    ui->toolBar->addAction(ui->actionStation);
+    ui->toolBar->addAction(ui->actionSetting);
+
+    ui->toolBar->addSeparator();
+
+    mStackedWidget->setCurrentWidget(mWidgetSettingPage);
 }
 
 void MainWindow::triggerTestButton1() {
