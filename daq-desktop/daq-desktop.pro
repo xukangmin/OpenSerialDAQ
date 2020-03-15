@@ -21,10 +21,13 @@ SOURCES += \
     MainWindow.cpp \
     DialogNewChannel.cpp \
     WidgetChannel.cpp \
-    WidgetChannelList.cpp \
+    WidgetChannelListPage.cpp \
+    WidgetCommand.cpp \
     WidgetDevice.cpp \
     WidgetDevicePage.cpp \
     WidgetMiniDevice.cpp \
+    WidgetSettingPage.cpp \
+    WidgetStationPage.cpp \
     WidgetVariable.cpp \
     main.cpp
 
@@ -34,10 +37,13 @@ HEADERS += \
     MainWindow.h \
     DialogNewChannel.h \
     WidgetChannel.h \
-    WidgetChannelList.h \
+    WidgetChannelListPage.h \
+    WidgetCommand.h \
     WidgetDevice.h \
     WidgetDevicePage.h \
     WidgetMiniDevice.h \
+    WidgetSettingPage.h \
+    WidgetStationPage.h \
     WidgetVariable.h
 
 FORMS += \
@@ -45,12 +51,14 @@ FORMS += \
     DialogNewChannel.ui \
     DialogNewDevice.ui \
     WidgetChannel.ui \
-    WidgetChannelList.ui \
+    WidgetChannelListPage.ui \
     WidgetCommand.ui \
     WidgetDevice.ui \
     WidgetDevicePage.ui \
     WidgetMiniDevice.ui \
     MainWindow.ui \
+    WidgetSettingPage.ui \
+    WidgetStationPage.ui \
     WidgetVariable.ui
 
 RESOURCES += \

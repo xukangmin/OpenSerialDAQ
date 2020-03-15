@@ -77,7 +77,7 @@ int DeviceModel::getDeviceIDByNameAndNode(QString name, int node) {
 void DeviceModel::addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index)
 {
     shared_ptr<Device>& device = mDevices->at(dev_index.row());
-    device->m_var_list.push_back(var);
+    device->mVariableList.push_back(var);
 }
 
 vector<QHash<QString, QVariant>> DeviceModel::getVariableDefinitionFromDevice(const QModelIndex& dev_index)
@@ -101,7 +101,7 @@ QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
 
             Models::instance().mVariableModel->findVariableByNameAndDeviceID(prop["Name"].toString(),newDevice->m_id,var);
 
-            newDevice->m_var_list.push_back(var);
+            newDevice->mVariableList.push_back(var);
         //}
     }
 
@@ -153,9 +153,9 @@ QModelIndex DeviceModel::index(int row, int column,
     {
         Device* dev = static_cast<Device*>(parent.internalPointer());
         // is device
-        if (dev->m_var_list.size() >= row)
+        if (dev->mVariableList.size() >= row)
         {
-            return createIndex(row, column, dev->m_var_list.at(row).get());
+            return createIndex(row, column, dev->mVariableList.at(row).get());
         }
         else {
             return QModelIndex();
@@ -186,7 +186,7 @@ int DeviceModel::rowCount(const QModelIndex& parent) const {
     else if (obj->property("ObjType").toString() == "device") {
         // is device
         Device* dev = static_cast<Device*>(parent.internalPointer());
-        return dev->m_var_list.size();
+        return dev->mVariableList.size();
     }
     else if (obj->property("ObjType").toString() == "variable")
     {
@@ -220,9 +220,9 @@ QModelIndex DeviceModel::parent(const QModelIndex &index) const
         QVariant var_id = var->getSingleProperty("id");
 
         foreach(auto& dev, (*mDevices)) {
-            for(int i = 0; i < dev->m_var_list.size(); i++)
+            for(int i = 0; i < dev->mVariableList.size(); i++)
             {
-                if (dev->m_var_list.at(i)->getSingleProperty("id") == var_id) {
+                if (dev->mVariableList.at(i)->getSingleProperty("id") == var_id) {
                     return createIndex(i,index.column(),dev.get());
                 }
             }

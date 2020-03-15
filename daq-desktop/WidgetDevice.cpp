@@ -12,6 +12,13 @@ WidgetDevice::WidgetDevice(Device *dev, QWidget *parent) :
     ui->sbNode->setValue(dev->getSingleProperty("NodeID").toInt());
 
     ui->leProtocol->setText(dev->getSingleProperty("Protocol").toString());
+
+    for (int i = 0; i < dev->mCommands.size(); i++) {
+        WidgetCommand* wc = new WidgetCommand(dev,i,this);
+        mWidgetCommandList.append(wc);
+        ui->verticalLayout_3->setAlignment(Qt::AlignTop);
+        ui->verticalLayout_3->addWidget(wc);
+    }
 }
 
 WidgetDevice::~WidgetDevice()

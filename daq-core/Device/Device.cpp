@@ -104,20 +104,20 @@ QByteArray Device::buildQueryCmd(Command cmd) {
 
 QByteArray Device::buildQueryCmd(QString cmdName) {
     int index = 0;
-    for(int i = 0; i < m_commands.size(); i++) {
-        if (cmdName == m_commands[i].name) {
+    for(int i = 0; i < mCommands.size(); i++) {
+        if (cmdName == mCommands[i].name) {
             index = i;
             break;
         }
     }
 
-    return buildQueryCmd(m_commands[index]);
+    return buildQueryCmd(mCommands[index]);
 }
 
 
 vector<QHash<QString,QVariant>> Device::parseRxData(QByteArray rx_data, int cmd_id) {
 
-    Command cmd = m_commands[cmd_id];
+    Command cmd = mCommands[cmd_id];
 
     QDateTime now = QDateTime::currentDateTime();
 
@@ -172,7 +172,7 @@ vector<QHash<QString,QVariant>> Device::parseRxData(QByteArray rx_data, int cmd_
                     qDebug() << data << " " << fm.name;
 
 
-                    auto it = find_if(m_var_list.begin(),m_var_list.end(),[&fm](const shared_ptr<Variable>& var){
+                    auto it = find_if(mVariableList.begin(),mVariableList.end(),[&fm](const shared_ptr<Variable>& var){
                        if (var->getSingleProperty("Name") == fm.name) {
                            return true;
                        } else {
@@ -180,7 +180,7 @@ vector<QHash<QString,QVariant>> Device::parseRxData(QByteArray rx_data, int cmd_
                        }
                     });
 
-                    if (it != m_var_list.end()) {
+                    if (it != mVariableList.end()) {
                         QHash<QString,QVariant> singleData;
                         //singleData[DataHeaderList[0]] = ""; // id
                         singleData[DataHeaderList[1]] = (*it)->m_id; // VariableID
@@ -384,7 +384,7 @@ void Device::loadFromConfig(QString protocol_name) {
                         }
 
 
-                        m_commands.append(cmd);
+                        mCommands.append(cmd);
                     }
                }
            }
@@ -393,6 +393,6 @@ void Device::loadFromConfig(QString protocol_name) {
 
     buildQueryCmd("ReadData");
 
-    qDebug() << m_commands.size();
+    qDebug() << mCommands.size();
 
 }

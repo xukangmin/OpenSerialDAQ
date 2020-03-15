@@ -1,5 +1,5 @@
-#ifndef WIDGETCHANNELLIST_H
-#define WIDGETCHANNELLIST_H
+#ifndef WIDGETCHANNELLISTPAGE_H
+#define WIDGETCHANNELLISTPAGE_H
 
 #include <QScrollArea>
 #include <QWidget>
@@ -11,13 +11,13 @@ namespace Ui {
 class WidgetChannelList;
 }
 
-class WidgetChannelList : public QWidget
+class WidgetChannelListPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WidgetChannelList(QWidget *parent = nullptr);
-    ~WidgetChannelList();
+    explicit WidgetChannelListPage(QWidget *parent = nullptr);
+    ~WidgetChannelListPage();
 
     void setModel(Models *models);
     void addNewChannel(QHash<QString, QVariant> properties);
@@ -35,4 +35,4 @@ public slots:
     void updateWidgets();
 };
 
-#endif // WIDGETCHANNELLIST_H
+#endif // WIDGETCHANNELLISTPAGE_H

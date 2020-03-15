@@ -62,11 +62,11 @@ public:
 
     //QVector<Variable*> *m_var_list;
 
-    std::vector<std::shared_ptr<Variable>> m_var_list;
+    std::vector<std::shared_ptr<Variable>> mVariableList;
 
-    QVector<QTimer*> m_timer_pool;
+    QVector<QTimer*> mTimerPool;
 
-    QVector<Command> m_commands;
+    QVector<Command> mCommands;
 
     std::vector<QHash<QString, QVariant>> mVariablePropertiesList;
 

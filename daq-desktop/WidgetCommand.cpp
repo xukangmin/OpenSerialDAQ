@@ -1,14 +1,19 @@
 #include "WidgetCommand.h"
 #include "ui_WidgetCommand.h"
 
-CommandWidget::CommandWidget(QWidget *parent) :
-    QGroupBox(parent),
-    ui(new Ui::CommandWidget)
+WidgetCommand::WidgetCommand(Device* dev, int cmdIndex, QWidget *parent) :
+    QGroupBox(parent), mCmd(dev->mCommands[cmdIndex]),
+    ui(new Ui::WidgetCommand)
 {
     ui->setupUi(this);
+
+    ui->lblCmdName->setText(mCmd.name);
+
+    ui->lblDescription->setText(mCmd.description);
+
 }
 
-CommandWidget::~CommandWidget()
+WidgetCommand::~WidgetCommand()
 {
     delete ui;
 }
