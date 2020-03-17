@@ -26,6 +26,7 @@ SOURCES += \
     WidgetDevice.cpp \
     WidgetDevicePage.cpp \
     WidgetMiniDevice.cpp \
+    WidgetMiniVariable.cpp \
     WidgetSettingPage.cpp \
     WidgetStationPage.cpp \
     WidgetVariable.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     WidgetDevice.h \
     WidgetDevicePage.h \
     WidgetMiniDevice.h \
+    WidgetMiniVariable.h \
     WidgetSettingPage.h \
     WidgetStationPage.h \
     WidgetVariable.h
@@ -57,6 +59,7 @@ FORMS += \
     WidgetDevicePage.ui \
     WidgetMiniDevice.ui \
     MainWindow.ui \
+    WidgetMiniVariable.ui \
     WidgetSettingPage.ui \
     WidgetStationPage.ui \
     WidgetVariable.ui

@@ -417,6 +417,7 @@ void VariableModel::addDataToVariable(QHash<QString,QVariant> data, shared_ptr<V
     var->addDataToVariable(data);
 }
 
+
 bool VariableModel::findVariableByNameAndDeviceID(QString name, int device_id, shared_ptr<Variable>& var_ret)
 {
 
@@ -442,6 +443,18 @@ bool VariableModel::findVariableByID(int var_id, shared_ptr<Variable>& var_ret)
     }
 
     return false;
+}
+
+bool VariableModel::findVariablesByGroupID(int group_id, vector<shared_ptr<Variable>>& var_ret)
+{
+
+    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+        if ((*var).getSingleProperty("VariableGroupID").toInt() == group_id){
+            var_ret.push_back(var);
+        }
+    }
+
+    return true;
 }
 
 bool VariableModel::findVariableByNameAndGroupID(QString name, int group_id, shared_ptr<Variable>& var_ret)
@@ -544,4 +557,37 @@ QHash<int, QByteArray> VariableModel::roleNames() const {
 bool VariableModel::isIndexValid(const QModelIndex& index) const
 {
     return index.isValid() && index.row() < rowCount();
+}
+
+
+VariableProxyModel::VariableProxyModel(QObject *parent) :
+    QSortFilterProxyModel(parent)
+{
+}
+
+bool VariableProxyModel::filterAcceptsRow(int sourceRow,
+                                              const QModelIndex &sourceParent) const
+{
+    QModelIndex index = sourceModel()->index(sourceRow, 2, sourceParent);
+
+    QVariant tmp = sourceModel()->data(index);
+
+    return (tmp.toInt() == mGroupID);
+}
+
+void VariableProxyModel::setGroupID(int id) {
+    mGroupID = id;
+}
+
+QVariant VariableProxyModel::data(const QModelIndex &index, int role) const noexcept
+{
+
+    QModelIndex in = sourceModel()->index(mapToSource(index).row(),mapToSource(index).column());
+
+    switch (role) {
+        case Qt::DisplayRole:
+            return sourceModel()->data(in);
+        default:
+            return QVariant();
+    }
 }

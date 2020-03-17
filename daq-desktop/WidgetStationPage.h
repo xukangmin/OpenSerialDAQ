@@ -2,6 +2,7 @@
 #define WIDGETSTATIONPAGE_H
 
 #include <QWidget>
+#include <Variable/VariableModel.h>
 
 namespace Ui {
 class WidgetStationPage;
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::WidgetStationPage *ui;
+    VariableProxyModel* mProxyModel;
 };
 
 #endif // WIDGETSTATIONPAGE_H

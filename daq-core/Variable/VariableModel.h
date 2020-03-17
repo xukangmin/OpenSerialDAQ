@@ -45,6 +45,7 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
+    bool findVariablesByGroupID(int group_id, std::vector<std::shared_ptr<Variable>>& var_ret);
 
 private:
     bool isIndexValid(const QModelIndex& index) const;
@@ -56,5 +57,23 @@ private:
     std::unique_ptr<std::vector<std::shared_ptr<Variable>>> mVariables;
 };
 
+class DAQCORESHARED_EXPORT VariableProxyModel: public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+    VariableProxyModel(QObject *parent = nullptr);
+
+    void setGroupID(int id);
+
+    int mGroupID;
+    QVariant data(const QModelIndex &index, int role) const noexcept override;
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
+    //bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+
+};
 
 #endif // VARIABLEMODEL_H
