@@ -65,7 +65,8 @@ FORMS += \
     WidgetVariable.ui
 
 RESOURCES += \
-    Icons/icons.qrc
+    Icons/IconSet.qrc \
+    Qml/qdef.qrc
 
 LIBS += -L$$OUT_PWD/../daq-core/ -ldaq-core
 
@@ -81,3 +82,6 @@ DEPENDPATH += $$PWD/../daq-conversion
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    Qml/station.qml

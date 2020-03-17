@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(mStackedWidget);
 
-    showOverViewPage();
+    showStationPage();
 }
 
 
@@ -112,19 +112,32 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setupCommonToolBar() {
+    // setup toolbar
+    ui->toolBar->addAction(ui->actionStation);
+    ui->toolBar->addAction(ui->actionDevices);
+    ui->toolBar->addAction(ui->actionOverView);
+
+    ui->toolBar->addSeparator();
+
+
+    ui->toolBar->addAction(ui->actionStartAll);
+
+    ui->toolBar->addAction(ui->actionStopAll);
+
+    ui->toolBar->addSeparator();
+}
+
 void MainWindow::showDevicePage() {
 
     ui->toolBar->clear();
 
-    // setup toolbar
-    ui->toolBar->addAction(ui->actionOverView);
-    ui->toolBar->addAction(ui->actionDevices);
-    ui->toolBar->addAction(ui->actionStation);
-    ui->toolBar->addAction(ui->actionSetting);
-
-    ui->toolBar->addSeparator();
+    setupCommonToolBar();
 
     ui->toolBar->addAction(ui->actionAddNewDevice);
+
+    ui->toolBar->addAction(ui->actionLoad_Device_Config);
+
     ui->toolBar->addAction(ui->actionTestButton2);
     ui->toolBar->addAction(ui->actionTestButton3);
     ui->toolBar->addAction(ui->actionTestButton4);
@@ -137,30 +150,20 @@ void MainWindow::showOverViewPage() {
 
     ui->toolBar->clear();
 
-    // setup toolbar
-    ui->toolBar->addAction(ui->actionOverView);
-    ui->toolBar->addAction(ui->actionDevices);
-    ui->toolBar->addAction(ui->actionStation);
-    ui->toolBar->addAction(ui->actionSetting);
-
-    ui->toolBar->addSeparator();
+    setupCommonToolBar();
 
     ui->toolBar->addAction(ui->actionAddNewChannel);
 
-    mStackedWidget->setCurrentIndex(0);
+    mStackedWidget->setCurrentWidget(mWidgetChannelListPage);
 }
 
 void MainWindow::showStationPage() {
 
     ui->toolBar->clear();
 
-    // setup toolbar
-    ui->toolBar->addAction(ui->actionOverView);
-    ui->toolBar->addAction(ui->actionDevices);
-    ui->toolBar->addAction(ui->actionStation);
-    ui->toolBar->addAction(ui->actionSetting);
+    setupCommonToolBar();
 
-    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(ui->actionLoad_Station_Config);
 
     mStackedWidget->setCurrentWidget(mWidgetStationPage);
 }
@@ -169,13 +172,7 @@ void MainWindow::showSettingPage() {
 
     ui->toolBar->clear();
 
-    // setup toolbar
-    ui->toolBar->addAction(ui->actionOverView);
-    ui->toolBar->addAction(ui->actionDevices);
-    ui->toolBar->addAction(ui->actionStation);
-    ui->toolBar->addAction(ui->actionSetting);
-
-    ui->toolBar->addSeparator();
+   setupCommonToolBar();
 
     mStackedWidget->setCurrentWidget(mWidgetSettingPage);
 }

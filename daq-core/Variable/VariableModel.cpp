@@ -575,6 +575,11 @@ bool VariableProxyModel::filterAcceptsRow(int sourceRow,
     return (tmp.toInt() == mGroupID);
 }
 
+bool VariableProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
+{
+    return true;
+}
+
 void VariableProxyModel::setGroupID(int id) {
     mGroupID = id;
 }

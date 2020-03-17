@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>432</height>
+    <width>824</width>
+    <height>552</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,16 +42,37 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
-     <height>20</height>
+     <width>824</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menutest">
     <property name="title">
-     <string>test</string>
+     <string>File</string>
+    </property>
+    <addaction name="actionLoad_Device_Config"/>
+    <addaction name="actionLoad_Station_Config"/>
+    <addaction name="separator"/>
+    <addaction name="actionSetting_2"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionChannels"/>
+    <addaction name="actionDevices_2"/>
+    <addaction name="actionStation_2"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
     </property>
    </widget>
    <addaction name="menutest"/>
+   <addaction name="menuView"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -67,20 +88,20 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOverView">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/serial-pot-16.png</normaloff>:/icons/serial-pot-16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/cable.png</normaloff>:/Images/cable.png</iconset>
    </property>
    <property name="text">
     <string>OverView</string>
    </property>
    <property name="toolTip">
-    <string>Over View</string>
+    <string>View Channels</string>
    </property>
   </action>
   <action name="actionDevices">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/connect-24.png</normaloff>:/icons/connect-24.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/server-1.png</normaloff>:/Images/server-1.png</iconset>
    </property>
    <property name="text">
     <string>Devices</string>
@@ -88,8 +109,8 @@
   </action>
   <action name="actionAddNewChannel">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/add-3.png</normaloff>:/Images/add-3.png</iconset>
    </property>
    <property name="text">
     <string>AddNewChannel</string>
@@ -97,8 +118,8 @@
   </action>
   <action name="actionAddNewDevice">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/Header16.png</normaloff>:/icons/Header16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/app.png</normaloff>:/Images/app.png</iconset>
    </property>
    <property name="text">
     <string>AddNewDevice</string>
@@ -109,7 +130,7 @@
   </action>
   <action name="actionTestButton2">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
+    <iconset>
      <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
    </property>
    <property name="text">
@@ -118,7 +139,7 @@
   </action>
   <action name="actionTestButton3">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
+    <iconset>
      <normaloff>:/icons/Header16.png</normaloff>:/icons/Header16.png</iconset>
    </property>
    <property name="text">
@@ -127,7 +148,7 @@
   </action>
   <action name="actionTestButton4">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
+    <iconset>
      <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
    </property>
    <property name="text">
@@ -136,8 +157,8 @@
   </action>
   <action name="actionStation">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/TV-16.png</normaloff>:/icons/TV-16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/radar.png</normaloff>:/Images/radar.png</iconset>
    </property>
    <property name="text">
     <string>Station</string>
@@ -145,8 +166,98 @@
   </action>
   <action name="actionSetting">
    <property name="icon">
-    <iconset resource="Icons/icons.qrc">
-     <normaloff>:/icons/tools-16.png</normaloff>:/icons/tools-16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/settings-4.png</normaloff>:/Images/settings-4.png</iconset>
+   </property>
+   <property name="text">
+    <string>Setting</string>
+   </property>
+  </action>
+  <action name="actionChannels">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/ethernet (1).png</normaloff>:/Images/ethernet (1).png</iconset>
+   </property>
+   <property name="text">
+    <string>Channel</string>
+   </property>
+  </action>
+  <action name="actionDevices_2">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/server-1.png</normaloff>:/Images/server-1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Device</string>
+   </property>
+  </action>
+  <action name="actionStation_2">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/radar.png</normaloff>:/Images/radar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Station</string>
+   </property>
+  </action>
+  <action name="actionLoad_Device_Config">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/folder-10.png</normaloff>:/Images/folder-10.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Device Config</string>
+   </property>
+  </action>
+  <action name="actionLoad_Station_Config">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/folder-14.png</normaloff>:/Images/folder-14.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Station Config</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/exit-1.png</normaloff>:/Images/exit-1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionStartAll">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/play-button.png</normaloff>:/Images/play-button.png</iconset>
+   </property>
+   <property name="text">
+    <string>StartAll</string>
+   </property>
+   <property name="toolTip">
+    <string>Start all data acquisition</string>
+   </property>
+  </action>
+  <action name="actionStopAll">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/stop-1.png</normaloff>:/Images/stop-1.png</iconset>
+   </property>
+   <property name="text">
+    <string>StopAll</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop All Data Acquisition</string>
+   </property>
+  </action>
+  <action name="actionSetting_2">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/settings-4.png</normaloff>:/Images/settings-4.png</iconset>
    </property>
    <property name="text">
     <string>Setting</string>
@@ -154,7 +265,7 @@
   </action>
  </widget>
  <resources>
-  <include location="Icons/icons.qrc"/>
+  <include location="Icons/IconSet.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -22,6 +22,10 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
 
     ui->tableView->setModel(mProxyModel);
 
+    ui->tabWidget->setCurrentWidget(ui->display);
+
+    ui->quickWidget->setSource(QUrl("qrc:/qml/station.qml"));
+
 }
 
 WidgetStationPage::~WidgetStationPage()

@@ -1,5 +1,5 @@
 #include "WidgetChannelListPage.h"
-#include "ui_WidgetChannelList.h"
+#include "ui_WidgetChannelListPage.h"
 #include "WidgetChannel.h"
 
 WidgetChannelListPage::WidgetChannelListPage(QWidget *parent) :

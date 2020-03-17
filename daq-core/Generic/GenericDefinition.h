@@ -3,8 +3,9 @@
 
 #include <QHash>
 #include <QVariant>
+#include "daq-core_global.h"
 
-class GenericDefinition
+class DAQCORESHARED_EXPORT GenericDefinition
 {
 
 public:

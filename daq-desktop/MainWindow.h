@@ -46,6 +46,8 @@ private:
 
     Models& allModels;
 
+    void setupCommonToolBar();
+
 public slots:
     void showOverViewPage();
     void showDevicePage();
