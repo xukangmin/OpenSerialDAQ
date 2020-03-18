@@ -4,7 +4,6 @@ import QtCharts 2.3
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Universal 2.0
-import Qt.labs.animation 1.0
 
 Rectangle {
     id: page
@@ -85,6 +84,16 @@ Rectangle {
 
                 ComboBox {
                     id: comboBox
+                    currentIndex: 0
+                    model: ListModel {
+                        id: model
+                        ListElement { text: "500" }
+                        ListElement { text: "1000" }
+                        ListElement { text: "2000" }
+                        ListElement { text: "5000" }
+                        ListElement { text: "10000" }
+                        ListElement { text: "25000" }
+                    }
                     Layout.preferredHeight: 20
                     Layout.preferredWidth: 101
                 }
@@ -198,6 +207,11 @@ Rectangle {
                 renderType: Text.NativeRendering
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 18
+                readOnly: true
+                onFocusChanged:{
+                   if(focus)
+                       selectAll()
+              }
             }
 
             TextField {
@@ -209,6 +223,11 @@ Rectangle {
                 text: qsTr("scfh")
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 18
+                readOnly: true
+                onFocusChanged:{
+                   if(focus)
+                       selectAll()
+              }
             }
 
             TextField {
@@ -217,6 +236,7 @@ Rectangle {
                 y: 43
                 width: 194
                 height: 42
+                readOnly: true
                 text: qsTr("12345")
                 font.pointSize: 18
             }
@@ -363,7 +383,6 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:2;anchors_height:84;anchors_width:179;anchors_x:8;anchors_y:13}D{i:10;anchors_height:84;anchors_width:179;anchors_x:8;anchors_y:149}
-D{i:29;anchors_x:165;anchors_y:13}
+    D{i:0;autoSize:true;height:480;width:640}
 }
 ##^##*/
