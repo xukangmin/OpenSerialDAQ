@@ -33,7 +33,7 @@ Variable::Variable(int id, QHash<QString,QVariant> properties, QHash<QString,QVa
 
 }
 
-void Variable::addDataToVariable(QHash<QString,QVariant> data)
+void Variable::addDataToVariable(QHash<QString,QVariant> data, int isInit)
 {
     currentData = data["Value"];
     currentTimeStamp = data["TimeStamp"].toDateTime();
@@ -51,7 +51,7 @@ void Variable::addDataToVariable(QHash<QString,QVariant> data)
     }
     prop["TimeStamp"] = currentTimeStamp;
 
-    if (this->getSingleProperty("Log").toInt() == 1) { // save to db
+    if (this->getSingleProperty("Log").toInt() == 1 && isInit == 1)  { // save to db
 
         Models::instance().mDataModel->addData(prop);
     }
@@ -204,9 +204,11 @@ bool Variable::calculate(QHash<QString,QVariant> data) {
 
     this->setSingleProperty("CurrentTimeStamp",this->currentTimeStamp);
 
-    Models::instance().mVariableModel->updateVariable(*this);
+    Models::instance().mVariableModel->addDataToVariableModel(prop);
 
-    this->addDataToVariable(prop);
+    //Models::instance().mVariableModel->updateVariable(*this);
+
+    //this->addDataToVariable(prop);
 
     this->toCalculate.clear();
 

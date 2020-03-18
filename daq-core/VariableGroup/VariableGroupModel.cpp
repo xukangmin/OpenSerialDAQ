@@ -165,9 +165,13 @@ QVariant VariableGroupModel::data(const QModelIndex& index, int role) const {
 
     switch (role) {
         case Qt::DisplayRole:
-            return VariableGroup.m_properties[VariableGroupHeaderList[index.column()]];
+            return VariableGroup.m_properties[VariableGroupHeaderList[1]];
         case Roles::IdRole:
             return VariableGroup.m_properties[VariableGroupHeaderList[0]];
+        case Roles::NameRole:
+            return VariableGroup.m_properties[VariableGroupHeaderList[1]];
+        case Roles::DataRole:
+            return VariableGroup.m_properties[VariableGroupHeaderList[index.column()]];
         default:
             return QVariant();
     }

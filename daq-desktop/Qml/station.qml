@@ -13,6 +13,8 @@ Rectangle {
     ColumnLayout {
         x: 18
         y: 22
+        width: 143
+        height: 563
         Layout.preferredHeight: 557
         Layout.preferredWidth: 141
 
@@ -29,10 +31,13 @@ Rectangle {
                 width: 143
                 height: 92
                 RowLayout {
-                    Label {
+                    Button {
                         id: label1
                         text: qsTr("Pressure")
                         font.bold: false
+                        onClicked: {
+                            console.log("123")
+                        }
                     }
 
                     TextField {
@@ -77,13 +82,34 @@ Rectangle {
                 transformOrigin: Item.Center
 
                 Label {
-                    id: label2
-                    text: qsTr("Flow")
+                    id: lbSubStation
+                    text: qsTr("Sub Station")
+                    font.bold: false
+                    onFocusChanged: {
+                        console.log("123")
+                    }
+                }
+
+                ComboBox {
+                    id: cbSubStation
+                    Layout.preferredHeight: 20
+                    currentIndex: 0
+                    Layout.preferredWidth: 101
+                    textRole: "name"
+                    model: variableGroupModel
+                    onActivated: {
+                        variableProxyModel.setGroupID(index);
+                    }
+                }
+
+                Label {
+                    id: lbFlowUnit
+                    text: qsTr("Flow Unit")
                     font.bold: false
                 }
 
                 ComboBox {
-                    id: comboBox
+                    id: cbFlowUnit
                     currentIndex: 0
                     model: ListModel {
                         id: model
@@ -96,6 +122,11 @@ Rectangle {
                     }
                     Layout.preferredHeight: 20
                     Layout.preferredWidth: 101
+                    onActivated: {
+                        console.log(index);
+                        console.log("123");
+                        console.log(currentText);
+                    }
                 }
 
                 Label {
@@ -181,6 +212,8 @@ Rectangle {
                     Layout.preferredWidth: 101
                     Layout.preferredHeight: 20
                 }
+
+
             }
         }
     }
@@ -381,8 +414,4 @@ Rectangle {
 
 }
 
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/
+

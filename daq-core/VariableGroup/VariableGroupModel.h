@@ -19,12 +19,7 @@ public:
     enum Roles {
            IdRole = Qt::UserRole + 1,
            NameRole,
-           TypeRole,
-           ComPortRole,
-           BaudRateRole,
-           ParityRole,
-           DataBitsRole,
-           StopBitsRole
+           DataRole
     };
     VariableGroupModel(VariableModel *variableModel, QObject* parent = nullptr);
 

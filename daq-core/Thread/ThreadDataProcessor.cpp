@@ -41,9 +41,7 @@ void ThreadDataProcessor::run() {
 
     if (!parData.empty()) {
         for(auto da : parData) {
-            shared_ptr<Variable> var;
-            Models::instance().mVariableModel->findVariableByID(da["VariableID"].toInt(),var);
-            var->addDataToVariable(da);
+            Models::instance().mVariableModel->addDataToVariableModel(da);
         }
     }
     Models::instance().mutex_global.unlock();

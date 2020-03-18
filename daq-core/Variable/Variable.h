@@ -35,7 +35,7 @@ public:
 
     QHash<int,QVariant> toCalculate;
 
-    void addDataToVariable(QHash<QString,QVariant> data);
+    void addDataToVariable(QHash<QString,QVariant> data, int isInit);
     bool calculate(QHash<QString,QVariant> data);
 signals:
     void sendDataToRequiredBy(QHash<QString,QVariant> data);

@@ -17,21 +17,14 @@ public:
 
     enum Roles {
            IdRole = Qt::UserRole + 1,
-           NameRole,
-           TypeRole,
-           ComPortRole,
-           BaudRateRole,
-           ParityRole,
-           DataBitsRole,
-           StopBitsRole
+           UpdateDataRole,
     };
     VariableModel(DeviceModel* dev_model, QObject* parent = nullptr);
 
     DeviceModel* m_dev_model;
     //bool isVariableExists(QString portName);
     QModelIndex addVariable(QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties = QHash<QString,QVariant>());
-    void updateVariable(Variable& var);
-    void addDataToVariable(QHash<QString,QVariant> data, std::shared_ptr<Variable> &var);
+    void addDataToVariableModel(QHash<QString,QVariant> data, int isInit = 1);
     bool findVariableByNameAndDeviceID(QString name, int device_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByNameAndGroupID(QString name, int group_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByID(int var_id, std::shared_ptr<Variable>& var_ret);
@@ -46,7 +39,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
     bool findVariablesByGroupID(int group_id, std::vector<std::shared_ptr<Variable>>& var_ret);
-
+    QModelIndex getIndexByVariable(Variable &var);
 private:
     bool isIndexValid(const QModelIndex& index) const;
 
@@ -64,7 +57,7 @@ class DAQCORESHARED_EXPORT VariableProxyModel: public QSortFilterProxyModel
 public:
     VariableProxyModel(QObject *parent = nullptr);
 
-    void setGroupID(int id);
+    Q_INVOKABLE void setGroupID(int id);
 
     int mGroupID;
     QVariant data(const QModelIndex &index, int role) const noexcept override;

@@ -223,8 +223,9 @@ bool VariableModel::calculateVariable(const shared_ptr<Variable>& var) {
 
     var->setSingleProperty("CurrentTimeStamp",var->currentTimeStamp);
 
-    updateVariable(*var);
+    //updateVariable(*var);
 
+    addDataToVariableModel(prop, 0);
     //var->addDataToVariable(prop);
 
     var->toCalculate.clear();
@@ -412,9 +413,25 @@ bool VariableModel::resolveDependency(int group_id)
     return true;
 }
 
-void VariableModel::addDataToVariable(QHash<QString,QVariant> data, shared_ptr<Variable> &var)
+QModelIndex VariableModel::getIndexByVariable(Variable &var)
 {
-    var->addDataToVariable(data);
+    for(int i = 0; i < (*mVariables).size(); i++) {
+        if ((*mVariables).at(i)->m_id == var.m_id) {
+            return index(i,7);
+        }
+    }
+}
+
+void VariableModel::addDataToVariableModel(QHash<QString,QVariant> data, int isInit)
+{
+    for(auto i = 0; i < (*mVariables).size(); i++)
+    {
+        if ((*mVariables).at(i)->m_id == data["VariableID"].toInt())
+        {
+            (*mVariables).at(i)->addDataToVariable(data,isInit);
+            setData(this->index(i,0),data,Roles::UpdateDataRole);
+        }
+    }
 }
 
 
@@ -471,10 +488,6 @@ bool VariableModel::findVariableByNameAndGroupID(QString name, int group_id, sha
     return false;
 }
 
-void VariableModel::updateVariable(Variable& var) {
-     mDb.variableDao.updateVariable(var);
-}
-
 QModelIndex VariableModel::addVariable(QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties)
 {
     int rowIndex = rowCount();
@@ -516,15 +529,34 @@ QVariant VariableModel::data(const QModelIndex& index, int role) const {
 
 
 bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-    if (!isIndexValid(index)
-            || role != Roles::NameRole) {
-        return false;
+    if (isIndexValid(index) && role == Roles::UpdateDataRole) {
+        Variable& variable = *mVariables->at(index.row());
+
+        QHash<QString,QVariant> inData = qvariant_cast<QHash<QString,QVariant>>(value);
+
+        if (inData.contains("Value")) {
+            inData["CurrentValue"] = inData["Value"];
+        }
+
+        if (inData.contains("TimeStamp")) {
+            inData["CurrentTimeStamp"] = inData["TimeStamp"];
+        }
+
+        for(int i = 1; i < VariableColumnSize; i++) {
+            if (inData.keys().contains(VariableHeaderList[i]))
+            {
+                variable.setSingleProperty(VariableHeaderList[i],inData[VariableHeaderList[i]]);
+            }
+        }
+
+        mDb.variableDao.updateVariable(variable);
+        emit dataChanged(index, this->index(index.row(),VariableColumnSize));
+
+        return true;
     }
-    Variable& Variable = *mVariables->at(index.row());
-//    Variable.m_portName =  value.toString();
-    mDb.variableDao.updateVariable(Variable);
-    emit dataChanged(index, index);
-    return true;
+
+
+    return false;
 }
 
 bool VariableModel::removeRows(int row, int count, const QModelIndex& parent) {
@@ -550,7 +582,6 @@ QHash<int, QByteArray> VariableModel::roleNames() const {
 
     QHash<int, QByteArray> roles;
     roles[Roles::IdRole] = "id";
-    roles[Roles::NameRole] = "name";
     return roles;
 }
 

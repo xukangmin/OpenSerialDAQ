@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <Variable/VariableModel.h>
+#include <QQuickWidget>
 
 namespace Ui {
 class WidgetStationPage;

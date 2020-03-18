@@ -130,17 +130,22 @@
   </action>
   <action name="actionTestButton2">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/key.png</normaloff>:/Images/key.png</iconset>
    </property>
    <property name="text">
     <string>TestButton2</string>
    </property>
+   <property name="font">
+    <font>
+     <family>MS Shell Dlg 2</family>
+    </font>
+   </property>
   </action>
   <action name="actionTestButton3">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icons/Header16.png</normaloff>:/icons/Header16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/key.png</normaloff>:/Images/key.png</iconset>
    </property>
    <property name="text">
     <string>TestButton3</string>
@@ -148,8 +153,8 @@
   </action>
   <action name="actionTestButton4">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icons/bullet-green-16.png</normaloff>:/icons/bullet-green-16.png</iconset>
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/key.png</normaloff>:/Images/key.png</iconset>
    </property>
    <property name="text">
     <string>TestButton4</string>
@@ -261,6 +266,15 @@
    </property>
    <property name="text">
     <string>Setting</string>
+   </property>
+  </action>
+  <action name="actionTestButton1">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/key.png</normaloff>:/Images/key.png</iconset>
+   </property>
+   <property name="text">
+    <string>TestButton1</string>
    </property>
   </action>
  </widget>

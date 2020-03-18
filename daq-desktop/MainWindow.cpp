@@ -7,6 +7,7 @@
 #include "Channel/ChannelModel.h"
 #include <memory>
 #include <vector>
+#include <QRandomGenerator>
 
 using namespace std;
 
@@ -33,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionSetting,SIGNAL(triggered(bool)),this,SLOT(showSettingPage()));
 
     connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
+
+    connect(ui->actionTestButton1,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton1()));
     connect(ui->actionTestButton2,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton2()));
     connect(ui->actionTestButton3,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton3()));
     connect(ui->actionTestButton4,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton4()));
@@ -112,6 +115,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setupTestToolBar() {
+    // setup toolbar
+    ui->toolBar->addSeparator();
+
+    ui->toolBar->addAction(ui->actionTestButton1);
+    ui->toolBar->addAction(ui->actionTestButton2);
+    ui->toolBar->addAction(ui->actionTestButton3);
+    ui->toolBar->addAction(ui->actionTestButton4);
+}
+
 void MainWindow::setupCommonToolBar() {
     // setup toolbar
     ui->toolBar->addAction(ui->actionStation);
@@ -138,11 +151,9 @@ void MainWindow::showDevicePage() {
 
     ui->toolBar->addAction(ui->actionLoad_Device_Config);
 
-    ui->toolBar->addAction(ui->actionTestButton2);
-    ui->toolBar->addAction(ui->actionTestButton3);
-    ui->toolBar->addAction(ui->actionTestButton4);
+    setupTestToolBar();
 
-    mStackedWidget->setCurrentIndex(1);
+    mStackedWidget->setCurrentWidget(mWidgetDevicePage);
 }
 
 
@@ -153,6 +164,8 @@ void MainWindow::showOverViewPage() {
     setupCommonToolBar();
 
     ui->toolBar->addAction(ui->actionAddNewChannel);
+
+    setupTestToolBar();
 
     mStackedWidget->setCurrentWidget(mWidgetChannelListPage);
 }
@@ -165,6 +178,8 @@ void MainWindow::showStationPage() {
 
     ui->toolBar->addAction(ui->actionLoad_Station_Config);
 
+    setupTestToolBar();
+
     mStackedWidget->setCurrentWidget(mWidgetStationPage);
 }
 
@@ -173,6 +188,8 @@ void MainWindow::showSettingPage() {
     ui->toolBar->clear();
 
    setupCommonToolBar();
+
+   setupTestToolBar();
 
     mStackedWidget->setCurrentWidget(mWidgetSettingPage);
 }
@@ -188,9 +205,13 @@ void MainWindow::triggerTestButton2() {
     if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("Pressure",1,var)) {
         QHash<QString,QVariant> data;
 
+        data["VariableID"] = var->m_id;
         data["TimeStamp"] = QDateTime::currentDateTime();
-        data["Value"] = 2.3;
-        var->addDataToVariable(data);
+        data["Value"] = 14 + QRandomGenerator::global()->generateDouble();
+
+        Models::instance().mutex_global.lock();
+        Models::instance().mVariableModel->addDataToVariableModel(data);
+        Models::instance().mutex_global.unlock();
     }
 
 }
@@ -200,9 +221,12 @@ void MainWindow::triggerTestButton3() {
     if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("Temperature",1,var)) {
         QHash<QString,QVariant> data;
 
+        data["VariableID"] = var->m_id;
         data["TimeStamp"] = QDateTime::currentDateTime();
-        data["Value"] = 4.1;
-        var->addDataToVariable(data);
+        data["Value"] = 20 + QRandomGenerator::global()->generateDouble() * 5.0F;
+        Models::instance().mutex_global.lock();
+        Models::instance().mVariableModel->addDataToVariableModel(data);
+        Models::instance().mutex_global.unlock();
     }
 }
 
@@ -211,9 +235,12 @@ void MainWindow::triggerTestButton4() {
     if (Models::instance().mVariableModel->findVariableByNameAndDeviceID("DP",2,var)) {
         QHash<QString,QVariant> data;
 
+        data["VariableID"] = var->m_id;
         data["TimeStamp"] = QDateTime::currentDateTime();
-        data["Value"] = 6.1;
-        var->addDataToVariable(data);
+        data["Value"] = QRandomGenerator::global()->generateDouble() * 4.0F;
+        Models::instance().mutex_global.lock();
+        Models::instance().mVariableModel->addDataToVariableModel(data);
+        Models::instance().mutex_global.unlock();
     }
 }
 
