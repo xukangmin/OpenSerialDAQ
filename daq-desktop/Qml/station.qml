@@ -98,7 +98,7 @@ Rectangle {
                     textRole: "name"
                     model: variableGroupModel
                     onActivated: {
-                        variableProxyModel.setGroupID(index);
+                        variableProxyModel.setGroupIndex(index);
                     }
                 }
 
@@ -111,21 +111,11 @@ Rectangle {
                 ComboBox {
                     id: cbFlowUnit
                     currentIndex: 0
-                    model: ListModel {
-                        id: model
-                        ListElement { text: "500" }
-                        ListElement { text: "1000" }
-                        ListElement { text: "2000" }
-                        ListElement { text: "5000" }
-                        ListElement { text: "10000" }
-                        ListElement { text: "25000" }
-                    }
+                    model: unitAndConversion.getUnitNameList("AirFlow")
                     Layout.preferredHeight: 20
                     Layout.preferredWidth: 101
                     onActivated: {
-                        console.log(index);
-                        console.log("123");
-                        console.log(currentText);
+                        variableProxyModel.setDataByName("Air Flow Unit",currentText)
                     }
                 }
 
@@ -231,16 +221,20 @@ Rectangle {
             title: qsTr("Result")
 
             TextField {
-                id: textField2
+                id: tfStandardFlowrate
                 x: 32
                 y: 43
                 width: 234
                 height: 42
-                text: qsTr("12345.23")
+                text: variableProxyModel.getDataByName("Q,sccm")
                 renderType: Text.NativeRendering
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 18
                 readOnly: true
+                Connections {
+                    target: variableProxyModel
+                    onDataChanged: tfStandardFlowrate.text = variableProxyModel.getDataByName("Q,sccm")
+                }
                 onFocusChanged:{
                    if(focus)
                        selectAll()

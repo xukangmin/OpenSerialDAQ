@@ -550,13 +550,24 @@ bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int
         }
 
         mDb.variableDao.updateVariable(variable);
-        emit dataChanged(index, this->index(index.row(),VariableColumnSize));
+        emit dataChanged(index, this->index(index.row(),VariableColumnSize - 1));
 
         return true;
     }
 
 
     return false;
+}
+
+QVariant VariableModel::headerData(int section, Qt::Orientation orientation, int role) const {
+
+    if (/*role != Qt::DisplayRole || */orientation != Qt::Horizontal || section > columnCount())
+        return QVariant();
+
+    if (role == Qt::DisplayRole)
+        return VariableHeaderList[section];
+
+    return QVariant();
 }
 
 bool VariableModel::removeRows(int row, int count, const QModelIndex& parent) {
@@ -608,11 +619,68 @@ bool VariableProxyModel::filterAcceptsRow(int sourceRow,
 
 bool VariableProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
-    return true;
+    if (source_column == 3 || source_column == 6 || source_column == 7 || source_column == 8)
+    {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+
 }
 
-void VariableProxyModel::setGroupID(int id) {
-    mGroupID = id;
+void VariableProxyModel::setGroupIndex(int groupIndex) {
+
+    beginResetModel();
+
+    QModelIndex in = Models::instance().mVariableGroupModel->index(groupIndex,0);
+
+    mGroupID = Models::instance().mVariableGroupModel->data(in, VariableGroupModel::Roles::IdRole).toInt();
+
+    endResetModel();
+}
+
+
+void VariableProxyModel::setDataByName(QString varName, QVariant inData)
+{
+    for(int i = 0; i < sourceModel()->rowCount(); i++) {
+
+        QString varNameModel = sourceModel()->data(sourceModel()->index(i,3)).toString().toUpper();
+        int varGroupID = sourceModel()->data(sourceModel()->index(i,2)).toInt();
+        int varID = sourceModel()->data(sourceModel()->index(i,0)).toInt();
+        if (varNameModel == varName.toUpper() &&
+            varGroupID == mGroupID)
+        {
+            VariableModel* model = static_cast<VariableModel*>(sourceModel());
+
+            QHash<QString,QVariant> data;
+
+            data["VariableID"] = varID;
+            data["Value"] = inData;
+            data["TimeStamp"] = QDateTime::currentDateTime();
+
+            model->addDataToVariableModel(data);
+        }
+    }
+
+}
+
+QVariant VariableProxyModel::getDataByName(QString varName) {
+
+    for(int i = 0; i < sourceModel()->rowCount(); i++) {
+
+        QString toCompare = sourceModel()->data(sourceModel()->index(i,3)).toString().toUpper();
+        int toCom = sourceModel()->data(sourceModel()->index(i,2)).toInt();
+        if (toCompare == varName.toUpper() &&
+            toCom == mGroupID)
+        {
+             QModelIndex in_data = sourceModel()->index(i,7);
+             return sourceModel()->data(in_data);
+        }
+    }
+
+    return "N/A";
 }
 
 QVariant VariableProxyModel::data(const QModelIndex &index, int role) const noexcept

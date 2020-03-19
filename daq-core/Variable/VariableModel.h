@@ -8,7 +8,7 @@
 #include <Device/DeviceModel.h>
 #include "Variable.h"
 #include "Database/DatabaseManager.h"
-
+#include "VariableGroup/VariableGroup.h"
 class DAQCORESHARED_EXPORT VariableModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -36,6 +36,7 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+    QVariant headerData(int section, Qt::Orientation orientation,int role = Qt::DisplayRole) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
     bool findVariablesByGroupID(int group_id, std::vector<std::shared_ptr<Variable>>& var_ret);
@@ -55,13 +56,21 @@ class DAQCORESHARED_EXPORT VariableProxyModel: public QSortFilterProxyModel
     Q_OBJECT
 
 public:
+
+    enum Roles {
+           IdRole = Qt::UserRole + 1,
+    };
+
     VariableProxyModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void setGroupID(int id);
+    Q_INVOKABLE void setGroupIndex(int groupIndex);
 
     int mGroupID;
+
     QVariant data(const QModelIndex &index, int role) const noexcept override;
 
+    Q_INVOKABLE QVariant getDataByName(QString varName);
+    Q_INVOKABLE void setDataByName(QString varName, QVariant inData);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;

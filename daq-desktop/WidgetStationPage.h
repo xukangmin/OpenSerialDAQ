@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <Variable/VariableModel.h>
 #include <QQuickWidget>
-
+#include "UnitAndConversion.h"
 namespace Ui {
 class WidgetStationPage;
 }

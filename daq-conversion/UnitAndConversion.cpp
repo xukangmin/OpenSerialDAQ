@@ -24,6 +24,22 @@ UnitAndConversion& UnitAndConversion::instance() {
     return singleton;
 }
 
+QStringList UnitAndConversion::getUnitNameList(QString unitType) {
+    QStringList tmp;
+
+    foreach(auto tp, mUnitTypes)
+    {
+        if (unitType.toUpper() == tp.name) {
+            foreach(auto unit, tp.mUnits){
+                tmp << unit.name;
+            }
+        }
+    }
+
+    return tmp;
+}
+
+
 QList<QString> UnitAndConversion::getFunctionNameList() {
     QList<QString> tmp;
     for(int i = 0; i < FunctionNameLength; i++) {

@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QString>
 #include <QVector>
+#include <QObject>
 
 enum ConversionMethod {
     Factor,
@@ -29,10 +30,12 @@ struct UnitType{
 static const QString FunctionNameList[] = {"UnitConv", "Viscocity", "ViscocityCF","MW"};
 static const int FunctionNameLength = 4;
 
-class DAQCONVERSION_EXPORT UnitAndConversion
+class DAQCONVERSION_EXPORT UnitAndConversion : public QObject
 {
+Q_OBJECT
+
 public:
-    static UnitAndConversion& instance();
+    Q_INVOKABLE static UnitAndConversion& instance();
     ~UnitAndConversion();
 
     double unitConvert(double val, QString unit_in, QString unit_out);
@@ -42,7 +45,7 @@ public:
     //QList<double (UnitAndConversion::*) (double, QString,QString)> funList;
     QList<QString> getFunctionNameList();
     double evalSimpleEquation(QString eqn, double val = 0, QString valName = "N/A");
-
+    Q_INVOKABLE QStringList getUnitNameList(QString unitType);
 protected:
     UnitAndConversion();
 
