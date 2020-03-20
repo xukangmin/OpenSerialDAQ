@@ -24,12 +24,28 @@ UnitAndConversion& UnitAndConversion::instance() {
     return singleton;
 }
 
+int UnitAndConversion::getUnitIndexByUnitName(QString unitName) {
+    QStringList tmp;
+
+    foreach(auto tp, mUnitTypes)
+    {
+        for(int i = 0; i < tp.mUnits.size(); i++) {
+            if (tp.mUnits.at(i).name.toUpper() == unitName.toUpper()) {
+                return i;
+            }
+        }
+    }
+
+    return 0;
+
+}
+
 QStringList UnitAndConversion::getUnitNameList(QString unitType) {
     QStringList tmp;
 
     foreach(auto tp, mUnitTypes)
     {
-        if (unitType.toUpper() == tp.name) {
+        if (unitType.toUpper() == tp.name.toUpper()) {
             foreach(auto unit, tp.mUnits){
                 tmp << unit.name;
             }
@@ -118,8 +134,8 @@ void UnitAndConversion::loadUnitConfig( QString unitConfigPath)
 
             UnitType unitType;
 
-            unitType.name = singleUnitTypeObj["Type"].toString().toUpper();
-            unitType.conversion_type = singleUnitTypeObj["ConversionType"].toString().toUpper();
+            unitType.name = singleUnitTypeObj["Type"].toString();
+            unitType.conversion_type = singleUnitTypeObj["ConversionType"].toString();
            if (singleUnitTypeObj.contains("UnitList")) {
                QJsonArray dArr = singleUnitTypeObj["UnitList"].toArray();
 
@@ -128,7 +144,7 @@ void UnitAndConversion::loadUnitConfig( QString unitConfigPath)
 
                     Unit unit;
 
-                    unit.name = singleUnitObj["Name"].toString().toUpper();
+                    unit.name = singleUnitObj["Name"].toString();
                     unit.index = j;
                     if (singleUnitTypeObj["ConversionType"].toString() == "Factor") {
                         unit.conversion_factor = singleUnitObj["Conversion"].toDouble();
@@ -180,13 +196,13 @@ double UnitAndConversion::unitConvert(double val, QString unit_in, QString unit_
 
     foreach (auto unitType, mUnitTypes) {
         foreach(auto unit, unitType.mUnits) {
-            if (unit_in.toUpper() == unit.name || unit.alias.contains(unit_in.toUpper())) {
+            if (unit_in.toUpper() == unit.name.toUpper() || unit.alias.contains(unit_in)) {
                 unit_in_type = unitType.name;
                 unit_conv_type = unitType.conversion_type;
                 unit_in_def = unit;
             }
 
-            if (unit_out.toUpper() == unit.name || unit.alias.contains(unit_out.toUpper())) {
+            if (unit_out.toUpper() == unit.name.toUpper() || unit.alias.contains(unit_out)) {
                 unit_out_type = unitType.name;
                 unit_out_def = unit;
             }
@@ -194,10 +210,10 @@ double UnitAndConversion::unitConvert(double val, QString unit_in, QString unit_
     }
 
     if (unit_in_type == unit_out_type) {  // type matched
-        if (unit_conv_type == "FACTOR") {
+        if (unit_conv_type == "Factor") {
             return val * unit_out_def.conversion_factor / unit_in_def.conversion_factor;
         }
-        else if (unit_conv_type == "EQUATION")
+        else if (unit_conv_type == "Equation")
         {
             return evalSimpleEquation(unit_in_def.equation.at(unit_out_def.index), val, "x");
         }

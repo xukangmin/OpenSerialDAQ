@@ -57,9 +57,10 @@ void Variable::addDataToVariable(QHash<QString,QVariant> data, int isInit)
     }
 
     if (!this->requiredBy.empty()) {
-        foreach(auto& rev, requiredBy) {
+//        foreach(auto& rev, requiredBy) {
+            //qDebug() << "emit requiredby signal to var id=" << rev->m_id;
             emit sendDataToRequiredBy(prop);
-        }
+//        }
     }
 }
 
@@ -68,6 +69,8 @@ bool Variable::calculate(QHash<QString,QVariant> data) {
 
     // perform calculation and empty toCalculate
     QString eqn = this->getSingleProperty("Equation").toString();
+
+    qDebug() << "start calculate " << "eqn = " << eqn;
 
     foreach(auto singleID, this->toCalculate.keys()) {
         eqn.replace("{" + QString::number(singleID) + "}",this->toCalculate[singleID].toString());
@@ -218,9 +221,10 @@ bool Variable::calculate(QHash<QString,QVariant> data) {
 
 void Variable::getDataFromRequired(QHash<QString,QVariant> data)
 {
+
     toCalculate[data["VariableID"].toInt()] = data["Value"];
 
-    if (toCalculate.size() == (int)required.size()) {
+    if (toCalculate.size() >= (int)required.size()) {
         ThreadCalculationProcessor *calProc = new ThreadCalculationProcessor(*this,data);
 
         QThreadPool::globalInstance()->start(calProc);

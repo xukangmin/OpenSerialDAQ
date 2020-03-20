@@ -25,9 +25,16 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
     ui->tableView->setModel(mProxyModel);
 
     ui->tableView->horizontalHeader()->show();
+
+    ui->tableView->horizontalHeader()->setModel(mProxyModel);
+
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     ui->tableView->verticalHeader()->hide();
 
     ui->tabWidget->setCurrentWidget(ui->display);
+
+
 
     QQmlContext *ctxt = ui->quickWidget->rootContext();
 
@@ -41,18 +48,7 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
 
     ctxt->setContextProperty("unitAndConversion",&UnitAndConversion::instance());
 
-
-//    qmlRegisterSingletonType<UnitAndConversion>("UnitAndConversion", 1, 0, "UnitApi", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-//        Q_UNUSED(engine)
-//        Q_UNUSED(scriptEngine)
-
-//        return &UnitAndConversion::instance();
-//    });
-
-     ui->quickWidget->setSource(QUrl("qrc:/qml/station.qml"));
-
-
-
+    ui->quickWidget->setSource(QUrl("qrc:/qml/station.qml"));
 
 }
 

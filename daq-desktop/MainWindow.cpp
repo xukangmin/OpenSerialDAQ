@@ -62,27 +62,27 @@ MainWindow::MainWindow(QWidget *parent)
         allModels.mChannelModel->addChannel(properties);
     }
 
-    if (allModels.mDeviceModel->rowCount() == 0) {
-        // populate test data
+//    if (allModels.mDeviceModel->rowCount() == 0) {
+//        // populate test data
 
-        QHash<QString, QVariant> properties;
+//        QHash<QString, QVariant> properties;
 
-        properties["Name"] = "ALICAT";
-        properties["NodeID"] = 0;
-        properties["Protocol"] = "LFE-ALICAT";
-        properties["ChannelID"] = -1;
+//        properties["Name"] = "ALICAT";
+//        properties["NodeID"] = 0;
+//        properties["Protocol"] = "LFE-ALICAT";
+//        properties["ChannelID"] = -1;
 
-        allModels.mDeviceModel->addDevice(properties);
+//        allModels.mDeviceModel->addDevice(properties);
 
 
-        properties["Name"] = "DP";
-        properties["NodeID"] = 1;
-        properties["Protocol"] = "LFE-DP";
-        properties["ChannelID"] = -1;
+//        properties["Name"] = "DP";
+//        properties["NodeID"] = 1;
+//        properties["Protocol"] = "LFE-DP";
+//        properties["ChannelID"] = -1;
 
-        allModels.mDeviceModel->addDevice(properties);
+//        allModels.mDeviceModel->addDevice(properties);
 
-    }
+//    }
 
 //    QTableView *tb = new QTableView(this);
 

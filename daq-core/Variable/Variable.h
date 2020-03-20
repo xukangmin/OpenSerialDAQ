@@ -11,7 +11,7 @@
 #include <vector>
 #include <memory>
 
-static const QString VariableHeaderList[] = {"id","DeviceID","VariableGroupID","Name","Type","Equation","Unit","CurrentValue","CurrentTimeStamp","DataType","Log"};
+static const QString VariableHeaderList[] = {"id","DeviceID","VariableGroupID","Name","Type","Equation","CurrentValue", "Unit","CurrentTimeStamp","DataType","Log"};
 static const QString VariableDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","INTEGER", "INTEGER","TEXT","TEXT","TEXT","TEXT","TEXT","DATETIME","TEXT","INTEGER"};
 static const int VariableColumnSize = 11;
 

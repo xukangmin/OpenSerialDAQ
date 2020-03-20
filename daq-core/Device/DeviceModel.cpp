@@ -92,9 +92,12 @@ QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
     shared_ptr<Device> newDevice(new Device(0, properties));
+    mDb.deviceDao.addDevice(*newDevice);
 
     foreach(auto prop, newDevice->mVariablePropertiesList) {
        // if (!Models::instance().mVariableModel->isVariableExists(prop)) {
+            prop["DeviceID"] = newDevice->m_id;
+
             QModelIndex var_index = Models::instance().mVariableModel->addVariable(prop);
 
             shared_ptr<Variable> var;
@@ -105,7 +108,6 @@ QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
         //}
     }
 
-    mDb.deviceDao.addDevice(*newDevice);
     mDevices->push_back(move(newDevice));
     endInsertRows();
     return index(rowIndex, 0);

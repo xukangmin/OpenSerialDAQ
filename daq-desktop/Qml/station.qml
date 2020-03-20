@@ -110,12 +110,13 @@ Rectangle {
 
                 ComboBox {
                     id: cbFlowUnit
-                    currentIndex: 0
+                    currentIndex: variableProxyModel.getUnitIndexByName("Air Flow Unit")
                     model: unitAndConversion.getUnitNameList("AirFlow")
                     Layout.preferredHeight: 20
                     Layout.preferredWidth: 101
                     onActivated: {
                         variableProxyModel.setDataByName("Air Flow Unit",currentText)
+                        tfStandardFlowrateUnit.text = currentText
                     }
                 }
 
@@ -242,12 +243,12 @@ Rectangle {
             }
 
             TextField {
-                id: textField3
+                id: tfStandardFlowrateUnit
                 x: 272
                 y: 43
                 width: 99
                 height: 42
-                text: qsTr("scfh")
+                text: cbFlowUnit.currentText
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 18
                 readOnly: true

@@ -4,8 +4,8 @@
         {
             "Name": "A",
             "Values": {
-                "RangeMax": 0,
-                "RangeMin": 3000,
+                "RangeMax": 3000,
+                "RangeMin": 0,
                 "Calibration Constant A": 0.00001,
                 "Calibration Constant B": 7.58E-08,
                 "Calibration Constant C": 1.01E-04

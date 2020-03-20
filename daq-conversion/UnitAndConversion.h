@@ -46,6 +46,7 @@ public:
     QList<QString> getFunctionNameList();
     double evalSimpleEquation(QString eqn, double val = 0, QString valName = "N/A");
     Q_INVOKABLE QStringList getUnitNameList(QString unitType);
+    Q_INVOKABLE int getUnitIndexByUnitName(QString unitName);
 protected:
     UnitAndConversion();
 

@@ -382,7 +382,6 @@ bool VariableModel::resolveDependency(int group_id)
                 }
             }
 
-            // update
             var->setSingleProperty("Equation",var->equation);
 
             int const_count = 0;
@@ -398,8 +397,12 @@ bool VariableModel::resolveDependency(int group_id)
                 calculateVariable(var);
             }
 
+            // update
+            if (eqn != var->equation)
+            {
+                mDb.variableDao.updateVariable(*var);
+            }
 
-            mDb.variableDao.updateVariable(*var);
         }
 
 
@@ -428,6 +431,7 @@ void VariableModel::addDataToVariableModel(QHash<QString,QVariant> data, int isI
     {
         if ((*mVariables).at(i)->m_id == data["VariableID"].toInt())
         {
+            qDebug() << "add data to variable model var ID=" << (*mVariables).at(i)->m_id;
             (*mVariables).at(i)->addDataToVariable(data,isInit);
             setData(this->index(i,0),data,Roles::UpdateDataRole);
         }
@@ -539,7 +543,9 @@ bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int
         }
 
         if (inData.contains("TimeStamp")) {
-            inData["CurrentTimeStamp"] = inData["TimeStamp"];
+            QDateTime dt = inData["TimeStamp"].toDateTime();
+
+            inData["CurrentTimeStamp"] = dt.toString(Qt::ISODateWithMs);
         }
 
         for(int i = 1; i < VariableColumnSize; i++) {
@@ -666,6 +672,25 @@ void VariableProxyModel::setDataByName(QString varName, QVariant inData)
 
 }
 
+int VariableProxyModel::getUnitIndexByName(QString varName) {
+
+    for(int i = 0; i < sourceModel()->rowCount(); i++) {
+
+        QString toCompare = sourceModel()->data(sourceModel()->index(i,3)).toString().toUpper();
+        int toCom = sourceModel()->data(sourceModel()->index(i,2)).toInt();
+        if (toCompare == varName.toUpper() &&
+            toCom == mGroupID)
+        {
+             QModelIndex in_data = sourceModel()->index(i,6);
+             QString unitName = sourceModel()->data(in_data).toString();
+
+             return UnitAndConversion::instance().getUnitIndexByUnitName(unitName);
+        }
+    }
+
+    return 0;
+}
+
 QVariant VariableProxyModel::getDataByName(QString varName) {
 
     for(int i = 0; i < sourceModel()->rowCount(); i++) {
@@ -675,7 +700,7 @@ QVariant VariableProxyModel::getDataByName(QString varName) {
         if (toCompare == varName.toUpper() &&
             toCom == mGroupID)
         {
-             QModelIndex in_data = sourceModel()->index(i,7);
+             QModelIndex in_data = sourceModel()->index(i,6);
              return sourceModel()->data(in_data);
         }
     }
