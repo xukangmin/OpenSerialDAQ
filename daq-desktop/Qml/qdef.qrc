@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
         <file>station.qml</file>
+        <file>test.qml</file>
     </qresource>
 </RCC>
