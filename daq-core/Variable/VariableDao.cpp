@@ -6,16 +6,18 @@
 #include "Variable.h"
 #include "Database/DatabaseManager.h"
 #include <QDebug>
+#include <QMutex>
 
 using namespace std;
 
-VariableDao::VariableDao(QSqlDatabase& database):
-    mDatabase(database)
+VariableDao::VariableDao(QSqlDatabase& database, QMutex& dbMutex):
+    mDatabase(database), mMutex(dbMutex)
 {
 }
 
 void VariableDao::init() const
 {
+    QMutexLocker locker(&mMutex);
     if (!mDatabase.tables().contains("Variables")) {
             QSqlQuery query(mDatabase);
 
@@ -39,6 +41,7 @@ void VariableDao::init() const
 
 void VariableDao::addVariable(Variable& ch) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
     QString insertList = "(";
@@ -78,6 +81,7 @@ void VariableDao::addVariable(Variable& ch) const
 
 void VariableDao::updateVariable(const Variable &dev) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
 
@@ -107,6 +111,7 @@ void VariableDao::updateVariable(const Variable &dev) const
 }
 
 void VariableDao::removeVariable(int id) const {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
     query.prepare("DELETE FROM Variables WHERE id = (:id)");
     query.bindValue(":id", id);

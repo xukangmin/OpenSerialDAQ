@@ -4,7 +4,7 @@
 #include <QRegularExpression>
 #include <QSerialPortInfo>
 #include <UnitAndConversion.h>
-
+#include <QtMath>
 
 using namespace std;
 
@@ -691,6 +691,25 @@ int VariableProxyModel::getUnitIndexByName(QString varName) {
     return 0;
 }
 
+int VariableProxyModel::getGasTypeIndexByName(QString varName) {
+
+    for(int i = 0; i < sourceModel()->rowCount(); i++) {
+
+        QString toCompare = sourceModel()->data(sourceModel()->index(i,3)).toString().toUpper();
+        int toCom = sourceModel()->data(sourceModel()->index(i,2)).toInt();
+        if (toCompare == varName.toUpper() &&
+            toCom == mGroupID)
+        {
+             QModelIndex in_data = sourceModel()->index(i,6);
+             QString gasTypeName = sourceModel()->data(in_data).toString();
+
+             return UnitAndConversion::instance().getGasIndexByName(gasTypeName);
+        }
+    }
+
+    return 0;
+}
+
 QVariant VariableProxyModel::getDataByName(QString varName) {
 
     for(int i = 0; i < sourceModel()->rowCount(); i++) {
@@ -701,7 +720,34 @@ QVariant VariableProxyModel::getDataByName(QString varName) {
             toCom == mGroupID)
         {
              QModelIndex in_data = sourceModel()->index(i,6);
-             return sourceModel()->data(in_data);
+
+             QVariant out_data = sourceModel()->data(in_data);
+
+             bool isDouble = false;
+             bool isInteger = false;
+
+             double out_data_double = out_data.toDouble(&isDouble);
+
+             if (out_data_double == qFloor(out_data_double)) {
+                 isInteger = true;
+             }
+
+             if (isDouble) {
+                 if (isInteger) {
+                    return QString::number(out_data_double, 'f', 0);
+                 }
+                 else {
+                     if (out_data_double < 0.000001 || out_data_double > 100000)
+                     {
+                        return QString::number(out_data_double, 'e', 6);
+                     }
+                     else {
+                        return QString::number(out_data_double, 'f', 6);
+                     }
+                 }
+             }
+
+             return out_data;
         }
     }
 

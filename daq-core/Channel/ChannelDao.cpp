@@ -10,13 +10,16 @@
 
 using namespace std;
 
-ChannelDao::ChannelDao(QSqlDatabase& database):
-    mDatabase(database)
+
+
+ChannelDao::ChannelDao(QSqlDatabase& database, QMutex& dbMutex):
+    mDatabase(database), mMutex(dbMutex)
 {
 }
 
 void ChannelDao::init() const
 {
+    QMutexLocker locker(&mMutex);
     if (!mDatabase.tables().contains("Channels")) {
             QSqlQuery query(mDatabase);
 
@@ -40,6 +43,7 @@ void ChannelDao::init() const
 
 void ChannelDao::addChannel(Channel& ch) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
     QString insertList = "(";
@@ -79,10 +83,11 @@ void ChannelDao::addChannel(Channel& ch) const
 
 void ChannelDao::updateChannel(const Channel &ch) const
 {
-
+    QMutexLocker locker(&mMutex);
 }
 
 void ChannelDao::removeChannel(int id) const {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
     query.prepare("DELETE FROM Channels WHERE id = (:id)");
     query.bindValue(":id", id);

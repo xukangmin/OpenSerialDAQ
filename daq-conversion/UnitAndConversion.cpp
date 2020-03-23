@@ -40,6 +40,20 @@ int UnitAndConversion::getUnitIndexByUnitName(QString unitName) {
 
 }
 
+int UnitAndConversion::getGasIndexByName(QString gasTypeName) {
+    QStringList tmp;
+
+
+    for(int i = 0; i < gas_mw.keys().size(); i++) {
+        if (gasTypeName.toUpper() == gas_mw.keys().at(i).toUpper()) {
+            return i;
+        }
+    }
+
+    return 0;
+
+}
+
 QStringList UnitAndConversion::getUnitNameList(QString unitType) {
     QStringList tmp;
 
@@ -50,6 +64,18 @@ QStringList UnitAndConversion::getUnitNameList(QString unitType) {
                 tmp << unit.name;
             }
         }
+    }
+
+    return tmp;
+}
+
+
+QStringList UnitAndConversion::getGasNameList() {
+    QStringList tmp;
+
+    foreach(auto sg, gas_mw.keys())
+    {
+        tmp << sg;
     }
 
     return tmp;

@@ -6,11 +6,12 @@
 
 class QSqlDatabase;
 class VariableGroup;
+class QMutex;
 
 class VariableGroupDao
 {
 public:
-    VariableGroupDao(QSqlDatabase& database);
+    VariableGroupDao(QSqlDatabase& database, QMutex& dbMutex);
     void init() const;
 
     void addVariableGroup(VariableGroup& ch) const;
@@ -19,6 +20,7 @@ public:
     std::unique_ptr<std::vector<std::shared_ptr<VariableGroup>>> variablegroups() const;
 private:
     QSqlDatabase& mDatabase;
+    QMutex& mMutex;
 };
 
 

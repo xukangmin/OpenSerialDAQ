@@ -6,11 +6,12 @@
 
 class QSqlDatabase;
 class Data;
+class QMutex;
 
 class DataDao
 {
 public:
-    DataDao(QSqlDatabase& database);
+    DataDao(QSqlDatabase& database, QMutex& dbMutex);
     void init() const;
 
     void addData(Data& data) const;
@@ -19,6 +20,7 @@ public:
     std::unique_ptr<std::vector<std::shared_ptr<Data>>> datas() const;
 private:
     QSqlDatabase& mDatabase;
+    QMutex& mMutex;
 };
 
 #endif // DATADAO_H

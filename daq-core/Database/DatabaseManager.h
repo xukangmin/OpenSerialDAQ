@@ -7,6 +7,7 @@
 #include "Variable/VariableDao.h"
 #include "Data/DataDao.h"
 #include "VariableGroup/VariableGroupDao.h"
+#include <QMutex>
 
 class QSqlDatabase;
 class QSqlQuery;
@@ -18,8 +19,8 @@ class DatabaseManager
 public:
      static DatabaseManager& instance();
      ~DatabaseManager();
-
-    static void debugQuery(const QSqlQuery& query);
+     QMutex dbMutex;
+     static void debugQuery(const QSqlQuery& query);
 
 //    void initDevice();
 
@@ -58,6 +59,7 @@ protected:
 
 private:
     std::unique_ptr<QSqlDatabase> mDatabase;
+
 
 public:
     const ChannelDao channelDao;

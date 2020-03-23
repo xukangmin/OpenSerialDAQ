@@ -7,11 +7,12 @@
 class QSqlDatabase;
 class Channel;
 class ThreadChannel;
+class QMutex;
 
 class ChannelDao
 {
 public:
-    ChannelDao(QSqlDatabase& database);
+    ChannelDao(QSqlDatabase& database, QMutex &mutex);
     void init() const;
 
     void addChannel(Channel& ch) const;
@@ -20,6 +21,7 @@ public:
     std::unique_ptr<std::vector<std::unique_ptr<Channel>>> channels() const;
 private:
     QSqlDatabase& mDatabase;
+    QMutex& mMutex;
 };
 
 #endif // CHANNELDAO_H

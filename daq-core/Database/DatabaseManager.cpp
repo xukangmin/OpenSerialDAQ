@@ -13,11 +13,11 @@ DatabaseManager&DatabaseManager::instance()
 
 DatabaseManager::DatabaseManager(const QString& path) :
     mDatabase(new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"))),
-    channelDao(*mDatabase),
-    deviceDao(*mDatabase),
-    variableDao(*mDatabase),
-    dataDao(*mDatabase),
-    variableGroupDao(*mDatabase)
+    channelDao(*mDatabase, dbMutex),
+    deviceDao(*mDatabase, dbMutex),
+    variableDao(*mDatabase, dbMutex),
+    dataDao(*mDatabase, dbMutex),
+    variableGroupDao(*mDatabase, dbMutex)
 {
     mDatabase->setDatabaseName(path);
 

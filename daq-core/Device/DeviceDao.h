@@ -6,11 +6,12 @@
 
 class QSqlDatabase;
 class Device;
+class QMutex;
 
 class DeviceDao
 {
 public:
-    DeviceDao(QSqlDatabase& database);
+    DeviceDao(QSqlDatabase& database, QMutex& dbMutex);
     void init() const;
 
     void addDevice(Device& ch) const;
@@ -19,6 +20,7 @@ public:
     std::unique_ptr<std::vector<std::shared_ptr<Device>>> devices() const;
 private:
     QSqlDatabase& mDatabase;
+    QMutex& mMutex;
 };
 
 #endif // DEVICEDAO_H

@@ -220,7 +220,6 @@ Rectangle {
                         Layout.preferredWidth: 120
                         onActivated: {
                             variableProxyModel.setDataByName("Air Flow Unit",currentText)
-                            tfStandardFlowrateUnit.text = currentText
                         }
                     }
                 }
@@ -230,7 +229,7 @@ Rectangle {
                     Layout.preferredWidth: 165
                     spacing: 0
                     Label {
-                        id: lbPressureUnit2
+                        id: lbGasType
                         text: qsTr("Gas Flowed")
                         Layout.preferredHeight: 26
                         Layout.fillWidth: true
@@ -240,10 +239,15 @@ Rectangle {
                     }
 
                     ComboBox {
-                        id: cbPressureUnit2
+                        id: cbGasType
                         Layout.preferredHeight: 26
                         Layout.fillWidth: true
                         Layout.preferredWidth: 120
+                        currentIndex: variableProxyModel.getGasTypeIndexByName("Air")
+                        model: unitAndConversion.getGasNameList()
+                        onActivated: {
+                            variableProxyModel.setDataByName("Flow Gas Type",currentText)
+                        }
                     }
                 }
 
@@ -392,10 +396,6 @@ Rectangle {
                     target: variableProxyModel
                     onDataChanged: tfStandardFlowrate.text = variableProxyModel.getDataByName("Q,sccm")
                 }
-                onFocusChanged:{
-                    if(focus)
-                        selectAll()
-                }
             }
 
             TextField {
@@ -409,10 +409,6 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 18
                 readOnly: true
-                onFocusChanged:{
-                    if(focus)
-                        selectAll()
-                }
             }
 
             TextField {
@@ -599,25 +595,6 @@ Rectangle {
                 height: 29
                 text: qsTr("+")
                 onClicked: {
-                    gbRange.visible = false
-                    gbStandardCondition.visible = false
-                    gbSetting.visible = false
-                    gbData.visible = false
-
-                    gbResult.x = -20
-                    gbResult.y = 60
-
-
-                    var curWidth = gbResult.width
-                    var curHeight = gbResult.height
-
-                    var scaleRatio = 1024 / curWidth
-
-
-                    gbResult.scale = scaleRatio
-
-                    gbResult.width = 1024
-                    gbResult.height = 600
                 }
             }
         }
@@ -646,13 +623,17 @@ Rectangle {
                 }
 
                 Label {
-                    id: label4
-                    text: qsTr("0")
+                    id: lbRangeMin
+                    text: variableProxyModel.getDataByName("RangeMinDisplay")
                     Layout.preferredHeight: 24
                     Layout.preferredWidth: 90
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 15
                     font.bold: true
+                    Connections {
+                        target: variableProxyModel
+                        onDataChanged: lbRangeMin.text = variableProxyModel.getDataByName("RangeMinDisplay")
+                    }
                 }
 
                 Label {
@@ -664,18 +645,22 @@ Rectangle {
                 }
 
                 Label {
-                    id: label5
-                    text: qsTr("3000")
+                    id: lbRangeMax
+                    text: variableProxyModel.getDataByName("RangeMaxDisplay")
                     Layout.preferredHeight: 24
                     Layout.preferredWidth: 90
                     font.pointSize: 15
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
+                    Connections {
+                        target: variableProxyModel
+                        onDataChanged: lbRangeMax.text = variableProxyModel.getDataByName("RangeMaxDisplay")
+                    }
                 }
 
                 Label {
-                    id: label6
-                    text: qsTr("scfh")
+                    id: lbRangeFlowUnit
+                    text: cbFlowUnit.currentText
                     Layout.preferredHeight: 24
                     Layout.preferredWidth: 90
                     font.pointSize: 15
@@ -714,9 +699,13 @@ Rectangle {
 
                     TextField {
                         id: tfTemperature
-                        text: qsTr("Text Field")
+                        text: variableProxyModel.getDataByName("Temperature")
                         horizontalAlignment: Text.AlignHCenter
                         font.pointSize: 16
+                        Connections {
+                            target: variableProxyModel
+                            onDataChanged: tfTemperature.text = variableProxyModel.getDataByName("Temperature")
+                        }
                     }
                 }
 
@@ -730,9 +719,13 @@ Rectangle {
 
                     TextField {
                         id: tfDeltaPressure
-                        text: qsTr("Text Field")
+                        text: variableProxyModel.getDataByName("Delta Pressure")
                         font.pointSize: 16
                         horizontalAlignment: Text.AlignHCenter
+                        Connections {
+                            target: variableProxyModel
+                            onDataChanged: tfDeltaPressure.text = variableProxyModel.getDataByName("Delta Pressure")
+                        }
                     }
                 }
 
@@ -746,9 +739,13 @@ Rectangle {
 
                     TextField {
                         id: tfPressure
-                        text: qsTr("Text Field")
+                        text: variableProxyModel.getDataByName("Pressure")
                         font.pointSize: 16
                         horizontalAlignment: Text.AlignHCenter
+                        Connections {
+                            target: variableProxyModel
+                            onDataChanged: tfPressure.text = variableProxyModel.getDataByName("Pressure")
+                        }
                     }
                 }
 

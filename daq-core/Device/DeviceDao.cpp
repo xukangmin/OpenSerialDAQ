@@ -9,13 +9,15 @@
 
 using namespace std;
 
-DeviceDao::DeviceDao(QSqlDatabase& database):
-    mDatabase(database)
+DeviceDao::DeviceDao(QSqlDatabase& database, QMutex& dbMutex):
+    mDatabase(database), mMutex(dbMutex)
 {
 }
 
 void DeviceDao::init() const
 {
+    QMutexLocker locker(&mMutex);
+
     if (!mDatabase.tables().contains("Devices")) {
             QSqlQuery query(mDatabase);
 
@@ -39,6 +41,8 @@ void DeviceDao::init() const
 
 void DeviceDao::addDevice(Device& ch) const
 {
+    QMutexLocker locker(&mMutex);
+
     QSqlQuery query(mDatabase);
 
     QString insertList = "(";
@@ -78,6 +82,8 @@ void DeviceDao::addDevice(Device& ch) const
 
 void DeviceDao::updateDevice(const Device &dev) const
 {
+    QMutexLocker locker(&mMutex);
+
     QSqlQuery query(mDatabase);
 
 
@@ -104,6 +110,9 @@ void DeviceDao::updateDevice(const Device &dev) const
 }
 
 void DeviceDao::removeDevice(int id) const {
+
+    QMutexLocker locker(&mMutex);
+
     QSqlQuery query(mDatabase);
     query.prepare("DELETE FROM Devices WHERE id = (:id)");
     query.bindValue(":id", id);

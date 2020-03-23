@@ -9,13 +9,14 @@
 
 using namespace std;
 
-VariableGroupDao::VariableGroupDao(QSqlDatabase& database):
-    mDatabase(database)
+VariableGroupDao::VariableGroupDao(QSqlDatabase& database, QMutex& dbMutex):
+    mDatabase(database), mMutex(dbMutex)
 {
 }
 
 void VariableGroupDao::init() const
 {
+    QMutexLocker locker(&mMutex);
     if (!mDatabase.tables().contains("VariableGroups")) {
             QSqlQuery query(mDatabase);
 
@@ -39,6 +40,7 @@ void VariableGroupDao::init() const
 
 void VariableGroupDao::addVariableGroup(VariableGroup& ch) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
     QString insertList = "(";
@@ -78,6 +80,7 @@ void VariableGroupDao::addVariableGroup(VariableGroup& ch) const
 
 void VariableGroupDao::updateVariableGroup(const VariableGroup &dev) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
 
@@ -104,6 +107,7 @@ void VariableGroupDao::updateVariableGroup(const VariableGroup &dev) const
 }
 
 void VariableGroupDao::removeVariableGroup(int id) const {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
     query.prepare("DELETE FROM VariableGroups WHERE id = (:id)");
     query.bindValue(":id", id);

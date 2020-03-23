@@ -1,4 +1,4 @@
-#ifndef VARIABLEMODEL_H
+ #ifndef VARIABLEMODEL_H
 #define VARIABLEMODEL_H
 
 #include <QAbstractListModel>
@@ -72,6 +72,7 @@ public:
     Q_INVOKABLE QVariant getDataByName(QString varName);
     Q_INVOKABLE void setDataByName(QString varName, QVariant inData);
     Q_INVOKABLE int getUnitIndexByName(QString varName);
+    Q_INVOKABLE int getGasTypeIndexByName(QString varName);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;

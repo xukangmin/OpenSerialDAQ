@@ -6,16 +6,18 @@
 #include "DataDao.h"
 #include "Database/DatabaseManager.h"
 #include <QDebug>
+#include <QMutex>
 
 using namespace std;
 
-DataDao::DataDao(QSqlDatabase& database):
-    mDatabase(database)
+DataDao::DataDao(QSqlDatabase& database, QMutex& dbMutex):
+    mDatabase(database), mMutex(dbMutex)
 {
 }
 
 void DataDao::init() const
 {
+    QMutexLocker locker(&mMutex);
     if (!mDatabase.tables().contains("Datas")) {
             QSqlQuery query(mDatabase);
 
@@ -39,6 +41,7 @@ void DataDao::init() const
 
 void DataDao::addData(Data& ch) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
     QString insertList = "(";
@@ -78,6 +81,7 @@ void DataDao::addData(Data& ch) const
 
 void DataDao::updateData(const Data &data) const
 {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
 
 
@@ -104,6 +108,7 @@ void DataDao::updateData(const Data &data) const
 }
 
 void DataDao::removeData(int id) const {
+    QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);
     query.prepare("DELETE FROM Datas WHERE id = (:id)");
     query.bindValue(":id", id);
