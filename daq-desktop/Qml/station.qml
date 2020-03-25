@@ -141,6 +141,11 @@ Rectangle {
                         Layout.preferredHeight: 26
                         Layout.fillWidth: true
                         Layout.preferredWidth: 120
+                        currentIndex: variableProxyModel.getGasTypeIndexByName("Standard Gas Type")
+                        model: unitAndConversion.getGasNameList()
+                        onActivated: {
+                            variableProxyModel.setDataByName("Standard Gas Type",currentText)
+                        }
                     }
                 }
             }
@@ -243,7 +248,7 @@ Rectangle {
                         Layout.preferredHeight: 26
                         Layout.fillWidth: true
                         Layout.preferredWidth: 120
-                        currentIndex: variableProxyModel.getGasTypeIndexByName("Air")
+                        currentIndex: variableProxyModel.getGasTypeIndexByName("Flow Gas Type")
                         model: unitAndConversion.getGasNameList()
                         onActivated: {
                             variableProxyModel.setDataByName("Flow Gas Type",currentText)
@@ -745,6 +750,26 @@ Rectangle {
                         Connections {
                             target: variableProxyModel
                             onDataChanged: tfPressure.text = variableProxyModel.getDataByName("Pressure")
+                        }
+                    }
+                }
+
+                ColumnLayout {
+
+                    Label {
+                        id: lbPressureAvg
+                        text: qsTr("Pressure")
+                        font.pointSize: 15
+                    }
+
+                    TextField {
+                        id: tfPressureAverage
+                        text: variableProxyModel.getAverageDataByName("Pressure",600)
+                        font.pointSize: 16
+                        horizontalAlignment: Text.AlignHCenter
+                        Connections {
+                            target: variableProxyModel
+                            onDataChanged: tfPressureAverage.text = variableProxyModel.getAverageDataByName("Pressure",600)
                         }
                     }
                 }

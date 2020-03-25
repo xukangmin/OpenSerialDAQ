@@ -59,6 +59,7 @@ private:
     QHash<QString,QString> viscosity_equations;
     QHash<QString,QString> viscosity_cf_equations;
     QHash<QString,double> gas_mw;
+    QStringList gasTypeList;
 };
 
 #endif // UNITANDCONVERSION_H

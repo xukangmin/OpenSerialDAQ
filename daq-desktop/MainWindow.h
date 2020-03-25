@@ -30,7 +30,7 @@ public:
 private:
     Ui::MainWindow *ui;
 
-
+    QTimer* mTimer_test;
 
     // Widgets
     QStackedWidget* mStackedWidget;
@@ -56,6 +56,10 @@ public slots:
 
     void showNewChannelDialog();
     void showNewDeviceDialog();
+
+    void startAllChannels(bool isChecked);
+    void stopAllChannels();
+
     void triggerTestButton1();
     void triggerTestButton2();
     void triggerTestButton3();

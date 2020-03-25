@@ -9,9 +9,21 @@
         },
         {
             "Name": "Nitrogen",
-            "Viscosity": "((7.632E-07 * x ^ 0.58823) * 10^7)/(1+(67.75/x)))",
+            "Viscosity": "((7.632E-07* x ^ 0.58823)*10^7)/(1+(67.75/x)+(0/(x*x)))",
             "ViscosityCF": "181.8718 / Viscosity",
-            "MW": 28.96247
+            "MW": 28.0134
+        },
+        {
+            "Name": "Argon",
+            "Viscosity": "((8.386E-07 * x ^ 0.6175)*10^7)/(1+(75.377/x)+(432.5/(x*x)))",
+            "ViscosityCF": "181.8718 / Viscosity",
+            "MW": 39.948
+        },
+        {
+            "Name": "Helium",
+            "Viscosity": "((3.253E-07*x^0.7162)*10^7)/(1+(-9.6/x)+(107/(x*x)))",
+            "ViscosityCF": "181.8718 / Viscosity",
+            "MW": 4.002602
         }
     ]
 }

@@ -31,12 +31,14 @@ public:
     QVariant currentData;
     QDateTime currentTimeStamp;
 
-    std::vector<QVariant> historyData;
+    QVector<QVariant> historyData;
 
     QHash<int,QVariant> toCalculate;
 
     void addDataToVariable(QHash<QString,QVariant> data, int isInit);
     bool calculate(QHash<QString,QVariant> data);
+    double getAverageDataByDataSize(int data_size);
+    double getAverageDataByTimePeriod(int seconds);
 signals:
     void sendDataToRequiredBy(QHash<QString,QVariant> data);
 

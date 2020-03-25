@@ -40,6 +40,24 @@
             "Log": 0
         },
         {
+            "Name": "Temperature Unit",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": "F",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
+            "Name": "Delta Pressure Unit",
+            "Type": "UserInput",
+            "Unit": "N/A",
+            "CurrentValue": "psia",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
             "Name": "Pressure Unit",
             "Type": "UserInput",
             "Unit": "N/A",
@@ -59,19 +77,10 @@
             "Log": 0
         },
         {
-            "Name": "Sample Size",
+            "Name": "Average Sample Size",
             "Type": "UserInput",
-            "Unit": "N/A",
+            "Unit": "seconds",
             "CurrentValue": 5,
-            "Equation": "N/A",
-            "DataType": "double",
-            "Log": 0
-        },
-        {
-            "Name": "Sample Time Interval",
-            "Type": "UserInput",
-            "Unit": "N/A",
-            "CurrentValue": 1,
             "Equation": "N/A",
             "DataType": "double",
             "Log": 0
@@ -126,7 +135,7 @@
             "Type": "DigitalInput",
             "Unit": "F",
             "CurrentValue": 0,
-            "Equation": "Device(ALICAT,0,Temperature)",
+            "Equation": "[Temperature Input]",
             "DataType": "double",
             "Log": 1
         },
@@ -135,7 +144,7 @@
             "Type": "DigitalInput",
             "Unit": "psia",
             "CurrentValue": 0,
-            "Equation": "Device(DP,1,DP)",
+            "Equation": "[Delta Pressure Input]",
             "DataType": "double",
             "Log": 1
         },
@@ -144,10 +153,9 @@
             "Type": "DigitalInput",
             "Unit": "psia",
             "CurrentValue": 0,
-            "Equation": "Device(ALICAT,0,Pressure)",
+            "Equation": "[Pressure Input]",
             "DataType": "double",
             "Log": 1
-
         },
         {
             "Name": "Delta InchH2O",
@@ -248,7 +256,33 @@
             "Equation": "UnitConv([RangeMax],sccm,[Air Flow Unit])",
             "DataType": "double",
             "Log": 1
-
+        },
+        {
+            "Name": "Temperature Display",
+            "Type": "DigitalInput",
+            "Unit": "F",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Temperature],F,[Temperature Unit])",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Delta Pressure Display",
+            "Type": "DigitalInput",
+            "Unit": "[Delta Pressure Unit]",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Delta Pressure],psia,[Delta Pressure Unit])",
+            "DataType": "double",
+            "Log": 1
+        },
+        {
+            "Name": "Pressure Display",
+            "Type": "DigitalInput",
+            "Unit": "[Pressure Unit]",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Pressure],psia,[Pressure Unit])",
+            "DataType": "double",
+            "Log": 1
         }
     ]
 }

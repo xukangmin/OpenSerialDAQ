@@ -432,6 +432,7 @@ void VariableModel::addDataToVariableModel(QHash<QString,QVariant> data, int isI
         if ((*mVariables).at(i)->m_id == data["VariableID"].toInt())
         {
             qDebug() << "add data to variable model var ID=" << (*mVariables).at(i)->m_id;
+            data["VariableType"] = (*mVariables).at(i)->getSingleProperty("Type");
             (*mVariables).at(i)->addDataToVariable(data,isInit);
             setData(this->index(i,0),data,Roles::UpdateDataRole);
         }
@@ -708,6 +709,42 @@ int VariableProxyModel::getGasTypeIndexByName(QString varName) {
     }
 
     return 0;
+}
+
+QVariant VariableProxyModel::getAverageDataByName(QString varName, int time_period) {
+
+    VariableModel* mVarModel = static_cast<VariableModel*>(sourceModel());
+
+    shared_ptr<Variable> var;
+
+    mVarModel->findVariableByNameAndGroupID(varName, mGroupID, var);
+
+
+    QVariant out_data = QVariant();
+
+    bool isInteger = false;
+
+    double out_data_double = var->getAverageDataByTimePeriod(time_period);
+
+    if (out_data_double == qFloor(out_data_double)) {
+        isInteger = true;
+    }
+
+
+    if (isInteger) {
+       return QString::number(out_data_double, 'f', 0);
+    }
+    else {
+        if (out_data_double < 0.000001 || out_data_double > 100000)
+        {
+           return QString::number(out_data_double, 'e', 6);
+        }
+        else {
+           return QString::number(out_data_double, 'f', 6);
+        }
+    }
+
+    return out_data;
 }
 
 QVariant VariableProxyModel::getDataByName(QString varName) {

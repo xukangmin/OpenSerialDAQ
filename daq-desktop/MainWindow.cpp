@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
 
+    connect(ui->actionStartAll, SIGNAL(triggered(bool)), this, SLOT(startAllChannels(bool)));
+    connect(ui->actionStopAll, SIGNAL(triggered(bool)), this, SLOT(stopAllChannels()));
+
     connect(ui->actionTestButton1,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton1()));
     connect(ui->actionTestButton2,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton2()));
     connect(ui->actionTestButton3,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton3()));
@@ -107,12 +110,32 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(mStackedWidget);
 
     showStationPage();
+
+    mTimer_test = new QTimer(this);
+
+    mTimer_test->setInterval(1000);
+
+    connect(mTimer_test,&QTimer::timeout,this,[=]() {
+        triggerTestButton2();
+        triggerTestButton3();
+        triggerTestButton4();
+    });
 }
 
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::startAllChannels(bool isChecked) {
+    if (!isChecked) {
+        mTimer_test->start();
+    }
+}
+
+void MainWindow::stopAllChannels() {
+    mTimer_test->stop();
 }
 
 void MainWindow::setupTestToolBar() {

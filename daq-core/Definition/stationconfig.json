@@ -1,22 +1,145 @@
 {
-    "Station":
+    "Devices": [
+        {
+            "Name": "ALICAT-A",
+            "Node": 0,
+            "Protocol": "LFE-ALICAT",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "DP-A",
+            "Node": 1,
+            "Protocol": "LFE-DP",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "ALICAT-B",
+            "Node": 1,
+            "Protocol": "LFE-ALICAT",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "DP-B",
+            "Node": 2,
+            "Protocol": "LFE-DP",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "ALICAT-C",
+            "Node": 2,
+            "Protocol": "LFE-ALICAT",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "DP-C",
+            "Node": 3,
+            "Protocol": "LFE-DP",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "ALICAT-D",
+            "Node": 3,
+            "Protocol": "LFE-ALICAT",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "DP-D",
+            "Node": 4,
+            "Protocol": "LFE-DP",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "ALICAT-E",
+            "Node": 4,
+            "Protocol": "LFE-ALICAT",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "DP-E",
+            "Node": 5,
+            "Protocol": "LFE-DP",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "SOLENOID-A",
+            "Node": 0,
+            "Protocol": "LFE-SOLENOID",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "SOLENOID-B",
+            "Node": 1,
+            "Protocol": "LFE-SOLENOID",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "SOLENOID-C",
+            "Node": 2,
+            "Protocol": "LFE-SOLENOID",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "SOLENOID-D",
+            "Node": 3,
+            "Protocol": "LFE-SOLENOID",
+            "Channel" : "COM3"
+        },
+        {
+            "Name": "SOLENOID-E",
+            "Node": 4,
+            "Protocol": "LFE-SOLENOID",
+            "Channel" : "COM3"
+        }
+    ],
+    "SubStations":
     [
         {
             "Name": "A",
             "Values": {
-                "RangeMax": 3000,
+                "RangeMax": 30,
                 "RangeMin": 0,
+                "Unit": "sccm",
                 "Calibration Constant A": 0.00001,
                 "Calibration Constant B": 7.58E-08,
                 "Calibration Constant C": 1.01E-04
             },
             "EquationTempelate": "Laminar",
             "AdditionalCommands": [
-                "Device(SOLENOID,0,CLOSE)",
-                "Device(SOLENOID,1,OPEN)",
-                "Device(SOLENOID,2,CLOSE)",
-                "Device(SOLENOID,2,CLOSE)"
-            ]
+                "Device(SOLENOID-B,1,)",
+                "Device(SOLENOID-C,2,OPEN)",
+                "Device(SOLENOID-D,3,CLOSE)",
+                "Device(SOLENOID-E,4,CLOSE)"
+            ],
+            "DeviceBinding":
+            {
+                "[Temperature Input]": "Device(ALICAT-A,0,Temperature)",
+                "[Pressure Input]": "Device(ALICAT-A,0,Pressure)",
+                "[Delta Pressure Input]": "Device(DP-A,1,DP)",
+            }
+        },
+        {
+            "Name": "A",
+            "Values": {
+                "RangeMax": 30,
+                "RangeMin": 0,
+                "Unit": "sccm",
+                "Calibration Constant A": 0.00001,
+                "Calibration Constant B": 7.58E-08,
+                "Calibration Constant C": 1.01E-04
+            },
+            "EquationTempelate": "Laminar",
+            "AdditionalCommands": [
+                "Device(SOLENOID-B,1,)",
+                "Device(SOLENOID-C,2,OPEN)",
+                "Device(SOLENOID-D,3,CLOSE)",
+                "Device(SOLENOID-E,4,CLOSE)"
+            ],
+            "DeviceBinding":
+            {
+                "[Temperature Input]": "Device(ALICAT-A,0,Temperature)",
+                "[Pressure Input]": "Device(ALICAT-A,0,Pressure)",
+                "[Delta Pressure Input]": "Device(DP-A,1,DP)",
+            }
         }
     ]
 }
