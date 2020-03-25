@@ -556,7 +556,7 @@ bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int
             }
         }
 
-        mDb.variableDao.updateVariable(variable);
+        //mDb.variableDao.updateVariable(variable);
         emit dataChanged(index, this->index(index.row(),VariableColumnSize - 1));
 
         return true;

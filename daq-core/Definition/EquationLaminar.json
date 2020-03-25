@@ -137,7 +137,7 @@
             "CurrentValue": 0,
             "Equation": "[Temperature Input]",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Delta Pressure",
@@ -146,7 +146,7 @@
             "CurrentValue": 0,
             "Equation": "[Delta Pressure Input]",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Pressure",
@@ -155,7 +155,7 @@
             "CurrentValue": 0,
             "Equation": "[Pressure Input]",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Delta InchH2O",
@@ -164,7 +164,7 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Delta Pressure],psia,InchH2O)",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Temperature,R",
@@ -173,7 +173,7 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Temperature],F,R)",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Tstd/T",
@@ -182,7 +182,7 @@
             "CurrentValue": 0,
             "Equation": "([Standard Temperature] + 459.67) / [Temperature,R]",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "P/Pstd",
@@ -191,7 +191,7 @@
             "CurrentValue": 0,
             "Equation": "[Pressure] / [Standard Pressure]",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Vstd/V",
@@ -200,7 +200,7 @@
             "CurrentValue": 0,
             "Equation": "ViscocityCF([Temperature,R],[Flow Gas Type])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Q,cfm",
@@ -209,7 +209,7 @@
             "CurrentValue": 0,
             "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[Delta InchH2O])+([Calibration Constant B]*[Delta InchH2O]*[Delta InchH2O]))",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Rstd/Ract",
@@ -218,7 +218,7 @@
             "CurrentValue": 0,
             "Equation": "MW([Standard Gas Type]) / MW([Flow Gas Type])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Qstd,scfm",
@@ -227,7 +227,7 @@
             "CurrentValue": 0,
             "Equation": "[Tstd/T] * [P/Pstd] * [Q,cfm] * [Rstd/Ract]",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
 
         },
         {
@@ -246,7 +246,7 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([RangeMin],sccm,[Air Flow Unit])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "RangeMaxDisplay",
@@ -255,34 +255,34 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([RangeMax],sccm,[Air Flow Unit])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Temperature Display",
-            "Type": "DigitalInput",
+            "Type": "Display",
             "Unit": "F",
             "CurrentValue": 0,
             "Equation": "UnitConv([Temperature],F,[Temperature Unit])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Delta Pressure Display",
-            "Type": "DigitalInput",
+            "Type": "Display",
             "Unit": "[Delta Pressure Unit]",
             "CurrentValue": 0,
             "Equation": "UnitConv([Delta Pressure],psia,[Delta Pressure Unit])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         },
         {
             "Name": "Pressure Display",
-            "Type": "DigitalInput",
+            "Type": "Display",
             "Unit": "[Pressure Unit]",
             "CurrentValue": 0,
             "Equation": "UnitConv([Pressure],psia,[Pressure Unit])",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
         }
     ]
 }
