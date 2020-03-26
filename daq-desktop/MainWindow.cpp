@@ -1,8 +1,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include <QFileDialog>
 #include <QListView>
 #include <QMessageBox>
 #include <QMetaType>
+#include <QSettings>
 #include <QTableView>
 #include "Channel/ChannelModel.h"
 #include <memory>
@@ -23,18 +25,33 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
- //   double test = UnitAndConversion::instance().voscocity(123,"Air");
+    // Settings
+    QSettings settings("Graftel", "OpenSerialDAQ");
 
 
 
-    // Tool bar actions
-    connect(ui->actionOverView,SIGNAL(triggered(bool)),this,SLOT(showOverViewPage()));
-    connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
+    // Tool bar actions connections
+
+    // Station Page
     connect(ui->actionStation,SIGNAL(triggered(bool)),this,SLOT(showStationPage()));
+    connect(ui->actionLoadStationConfig, &QAction::triggered, mWidgetStationPage, &WidgetStationPage::loadStation);
+    connect(ui->actionClearStation, &QAction::triggered, mWidgetStationPage, &WidgetStationPage::clearStation);
+
+
+    // Device Page
+    connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
+     connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
+
+    // Channel Page
+    connect(ui->actionChannel,SIGNAL(triggered(bool)),this,SLOT(showChannelPage()));
+    connect(ui->actionAddNewChannel, SIGNAL(triggered()), this, SLOT(showNewChannelDialog()));
+
+
+    // Setting page
     connect(ui->actionSetting,SIGNAL(triggered(bool)),this,SLOT(showSettingPage()));
 
-    connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
 
+    // Common Tool bar Buttons
     connect(ui->actionStartAll, SIGNAL(triggered(bool)), this, SLOT(startAllChannels(bool)));
     connect(ui->actionStopAll, SIGNAL(triggered(bool)), this, SLOT(stopAllChannels()));
 
@@ -45,25 +62,27 @@ MainWindow::MainWindow(QWidget *parent)
     // UI dialogs
 
     // Add new Channel UI
-    connect(ui->actionAddNewChannel, SIGNAL(triggered()), this, SLOT(showNewChannelDialog()));
 
 
 
-    if (allModels.mChannelModel->rowCount() == 0) {
-        // populate test data
-
-        QHash<QString, QVariant> properties;
 
 
-        properties["id"] = 0;
-        properties["ComPort"] = "COM3";
-        properties["BaudRate"] = 9600;
-        properties["DataBits"] = 8;
-        properties["Parity"] = "None";
-        properties["StopBits"] = 1;
 
-        allModels.mChannelModel->addChannel(properties);
-    }
+//    if (allModels.mChannelModel->rowCount() == 0) {
+//        // populate test data
+
+//        QHash<QString, QVariant> properties;
+
+
+//        properties["id"] = 0;
+//        properties["ComPort"] = "COM3";
+//        properties["BaudRate"] = 9600;
+//        properties["DataBits"] = 8;
+//        properties["Parity"] = "None";
+//        properties["StopBits"] = 1;
+
+//        allModels.mChannelModel->addChannel(properties);
+//    }
 
 //    if (allModels.mDeviceModel->rowCount() == 0) {
 //        // populate test data
@@ -152,7 +171,7 @@ void MainWindow::setupCommonToolBar() {
     // setup toolbar
     ui->toolBar->addAction(ui->actionStation);
     ui->toolBar->addAction(ui->actionDevices);
-    ui->toolBar->addAction(ui->actionOverView);
+    ui->toolBar->addAction(ui->actionChannel);
 
     ui->toolBar->addSeparator();
 
@@ -172,7 +191,7 @@ void MainWindow::showDevicePage() {
 
     ui->toolBar->addAction(ui->actionAddNewDevice);
 
-    ui->toolBar->addAction(ui->actionLoad_Device_Config);
+    ui->toolBar->addAction(ui->actionLoadDeviceConfig);
 
     setupTestToolBar();
 
@@ -180,7 +199,7 @@ void MainWindow::showDevicePage() {
 }
 
 
-void MainWindow::showOverViewPage() {
+void MainWindow::showChannelPage() {
 
     ui->toolBar->clear();
 
@@ -199,7 +218,9 @@ void MainWindow::showStationPage() {
 
     setupCommonToolBar();
 
-    ui->toolBar->addAction(ui->actionLoad_Station_Config);
+    ui->toolBar->addAction(ui->actionLoadStationConfig);
+
+    ui->toolBar->addAction(ui->actionClearStation);
 
     setupTestToolBar();
 
@@ -216,6 +237,7 @@ void MainWindow::showSettingPage() {
 
     mStackedWidget->setCurrentWidget(mWidgetSettingPage);
 }
+
 
 void MainWindow::triggerTestButton1() {
     // add new Device

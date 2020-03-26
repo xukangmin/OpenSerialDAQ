@@ -3,6 +3,7 @@
 #include "Models.h"
 #include "WidgetMiniVariable.h"
 
+#include <QFileDialog>
 #include <QQmlContext>
 
 using namespace std;
@@ -13,46 +14,66 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
     ui->setupUi(this);
 
 
-    // display first Variable group
-//    int var_group_id = 1;
+    int subStationSize = Models::instance().mVariableGroupModel->rowCount();
 
-    mProxyModel = new VariableProxyModel(this);
+    if (subStationSize == 0) {
+        ui->stackedWidget->setCurrentWidget(ui->emptyPage);
+        connect(ui->btnSetupStation, &QPushButton::clicked, this, &WidgetStationPage::loadStation);
+    }
+    else {
+        ui->stackedWidget->setCurrentWidget(ui->stationPage);
 
-    mProxyModel->setSourceModel(Models::instance().mVariableModel);
+        mProxyModel = new VariableProxyModel(this);
 
-    mProxyModel->setGroupIndex(0);
+        mProxyModel->setSourceModel(Models::instance().mVariableModel);
 
-    ui->tableView->setModel(mProxyModel);
+        mProxyModel->setGroupIndex(0);
 
-    ui->tableView->horizontalHeader()->show();
+        ui->tableView->setModel(mProxyModel);
 
-    ui->tableView->horizontalHeader()->setModel(mProxyModel);
+        ui->tableView->horizontalHeader()->show();
 
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setModel(mProxyModel);
 
-    ui->tableView->verticalHeader()->hide();
+        ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    ui->tabWidget->setCurrentWidget(ui->display);
+        ui->tableView->verticalHeader()->hide();
 
+        ui->tabWidget->setCurrentWidget(ui->display);
 
+        QQmlContext *ctxt = ui->quickWidget->rootContext();
 
-    QQmlContext *ctxt = ui->quickWidget->rootContext();
+        ctxt->setContextProperty("vairableModel",Models::instance().mVariableModel);
 
-    ctxt->setContextProperty("vairableModel",Models::instance().mVariableModel);
+        ctxt->setContextProperty("vairableModel",Models::instance().mVariableModel);
 
-    ctxt->setContextProperty("vairableModel",Models::instance().mVariableModel);
+        ctxt->setContextProperty("variableGroupModel",Models::instance().mVariableGroupModel);
 
-    ctxt->setContextProperty("variableGroupModel",Models::instance().mVariableGroupModel);
+        ctxt->setContextProperty("variableProxyModel",mProxyModel);
 
-    ctxt->setContextProperty("variableProxyModel",mProxyModel);
+        ctxt->setContextProperty("unitAndConversion",&UnitAndConversion::instance());
 
-    ctxt->setContextProperty("unitAndConversion",&UnitAndConversion::instance());
+        ui->quickWidget->setSource(QUrl("qrc:/qml/LaminarStation.qml"));
+    }
 
-    ui->quickWidget->setSource(QUrl("qrc:/qml/station.qml"));
 
 }
 
 WidgetStationPage::~WidgetStationPage()
 {
     delete ui;
+}
+
+void WidgetStationPage::clearStation() {
+    //Models::instance().mVariableGroupModel->removeRows(0,Models::instance().mVariableGroupModel->rowCount());
+    ui->stackedWidget->setCurrentWidget(ui->emptyPage);
+}
+
+void WidgetStationPage::loadStation() {
+    // pop up file loading dialog
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open Station Config File"), "",
+        tr("Station Config File (*.json);;All Files (*)"));
+
+    qDebug() << fileName;
 }

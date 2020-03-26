@@ -50,8 +50,8 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionLoad_Device_Config"/>
-    <addaction name="actionLoad_Station_Config"/>
+    <addaction name="actionLoadDeviceConfig"/>
+    <addaction name="actionLoadStationConfig"/>
     <addaction name="separator"/>
     <addaction name="actionSetting_2"/>
     <addaction name="separator"/>
@@ -86,13 +86,13 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOverView">
+  <action name="actionChannel">
    <property name="icon">
     <iconset resource="Icons/IconSet.qrc">
      <normaloff>:/Images/cable.png</normaloff>:/Images/cable.png</iconset>
    </property>
    <property name="text">
-    <string>OverView</string>
+    <string>Channel</string>
    </property>
    <property name="toolTip">
     <string>View Channels</string>
@@ -205,7 +205,7 @@
     <string>Station</string>
    </property>
   </action>
-  <action name="actionLoad_Device_Config">
+  <action name="actionLoadDeviceConfig">
    <property name="icon">
     <iconset resource="Icons/IconSet.qrc">
      <normaloff>:/Images/folder-10.png</normaloff>:/Images/folder-10.png</iconset>
@@ -214,7 +214,7 @@
     <string>Load Device Config</string>
    </property>
   </action>
-  <action name="actionLoad_Station_Config">
+  <action name="actionLoadStationConfig">
    <property name="icon">
     <iconset resource="Icons/IconSet.qrc">
      <normaloff>:/Images/folder-14.png</normaloff>:/Images/folder-14.png</iconset>
@@ -275,6 +275,18 @@
    </property>
    <property name="text">
     <string>TestButton1</string>
+   </property>
+  </action>
+  <action name="actionClearStation">
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/garbage-1.png</normaloff>:/Images/garbage-1.png</iconset>
+   </property>
+   <property name="text">
+    <string>ClearStation</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear Station Configuration</string>
    </property>
   </action>
  </widget>

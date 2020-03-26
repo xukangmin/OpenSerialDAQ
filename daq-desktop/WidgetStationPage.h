@@ -16,6 +16,10 @@ class WidgetStationPage : public QWidget
 public:
     explicit WidgetStationPage(QWidget *parent = nullptr);
     ~WidgetStationPage();
+    void clearStation();
+
+public slots:
+    void loadStation();
 
 private:
     Ui::WidgetStationPage *ui;

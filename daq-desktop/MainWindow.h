@@ -49,7 +49,7 @@ private:
     void setupCommonToolBar();
     void setupTestToolBar();
 public slots:
-    void showOverViewPage();
+    void showChannelPage();
     void showDevicePage();
     void showStationPage();
     void showSettingPage();
