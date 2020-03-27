@@ -391,8 +391,8 @@ void Device::loadFromConfig(QString protocol_name) {
         }
     }
 
-    buildQueryCmd("ReadData");
+    //buildQueryCmd("ReadData");
 
-    qDebug() << mCommands.size();
+    //qDebug() << mCommands.size();
 
 }

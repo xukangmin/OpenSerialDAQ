@@ -23,8 +23,6 @@ void DeviceDao::init() const
 
            QString createQuery = "CREATE TABLE Devices (";
 
-           qDebug() << "length=" << DeviceColumnSize;
-
            for(int i = 0; i < DeviceColumnSize; i++) {
                createQuery += (DeviceHeaderList[i] + " " + DeviceDataType[i] + ",");
            }

@@ -22,8 +22,6 @@ void VariableGroupDao::init() const
 
            QString createQuery = "CREATE TABLE VariableGroups (";
 
-           qDebug() << "length=" << VariableGroupColumnSize;
-
            for(int i = 0; i < VariableGroupColumnSize; i++) {
                createQuery += (VariableGroupHeaderList[i] + " " + VariableGroupDataType[i] + ",");
            }

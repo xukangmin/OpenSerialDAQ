@@ -18,6 +18,9 @@ public:
     ~WidgetStationPage();
     void clearStation();
 
+signals:
+    void sendMessage(const QString msg, int timeout = 0);
+
 public slots:
     void loadStation();
 

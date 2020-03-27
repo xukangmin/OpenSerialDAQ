@@ -23,7 +23,7 @@ public:
 
     DeviceModel* m_dev_model;
     //bool isVariableExists(QString portName);
-    QModelIndex addVariable(QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties = QHash<QString,QVariant>());
+    QModelIndex addVariable(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> group_properties = QVector<QHash<QString,QVariant>>());
     void addDataToVariableModel(QHash<QString,QVariant> data, int isInit = 1);
     bool findVariableByNameAndDeviceID(QString name, int device_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByNameAndGroupID(QString name, int group_id, std::shared_ptr<Variable>& var_ret);

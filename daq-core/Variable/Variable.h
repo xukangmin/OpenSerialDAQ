@@ -21,7 +21,7 @@ class DAQCORESHARED_EXPORT Variable : public QObject, public GenericDefinition
 {
     Q_OBJECT
 public:
-    Variable(int id, QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties = QHash<QString,QVariant>());
+    Variable(int id, QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> group_properties = QVector<QHash<QString,QVariant>>());
 
     std::vector<std::shared_ptr<Variable>> required;
     std::vector<std::shared_ptr<Variable>> requiredBy;

@@ -5,6 +5,7 @@
 
 #include <QFileDialog>
 #include <QQmlContext>
+#include <QSettings>
 
 using namespace std;
 WidgetStationPage::WidgetStationPage(QWidget *parent) :
@@ -21,6 +22,10 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
         connect(ui->btnSetupStation, &QPushButton::clicked, this, &WidgetStationPage::loadStation);
     }
     else {
+        QSettings settings("Graftel", "OpenSerialDAQ");
+
+        ui->tabWidget->setTabText(0, settings.value("StationName").toString());
+
         ui->stackedWidget->setCurrentWidget(ui->stationPage);
 
         mProxyModel = new VariableProxyModel(this);
@@ -75,5 +80,19 @@ void WidgetStationPage::loadStation() {
         tr("Open Station Config File"), "",
         tr("Station Config File (*.json);;All Files (*)"));
 
-    qDebug() << fileName;
+    if (!fileName.isEmpty())
+    {
+        if (Models::instance().mVariableGroupModel->loadGroupsFromConfigFile(fileName)) {
+            emit sendMessage("Station Loaded.");
+            ui->tabWidget->setTabText(0, Models::instance().mVariableGroupModel->mStationName);
+            QSettings settings("Graftel", "OpenSerialDAQ");
+            settings.setValue("StationName",Models::instance().mVariableGroupModel->mStationName);
+            settings.setValue("StationVersion",Models::instance().mVariableGroupModel->mStationVersion);
+            ui->quickWidget->setSource(QUrl("qrc:/qml/LaminarStation.qml"));
+            ui->stackedWidget->setCurrentWidget(ui->stationPage);
+        }
+        else {
+            emit sendMessage("Load Station Config Failed!!");
+        }
+    }
 }

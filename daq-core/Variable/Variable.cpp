@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Variable::Variable(int id, QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties):
+Variable::Variable(int id, QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> group_properties):
             GenericDefinition(id,properties)
 {
     this->setProperty("ObjType","variable");
@@ -23,9 +23,14 @@ Variable::Variable(int id, QHash<QString,QVariant> properties, QHash<QString,QVa
     foreach(auto& key, m_properties.keys()) {
         if (key == "Name")
         {
-            foreach(auto& keyg, group_properties.keys()){
-                if (m_properties[key] == keyg) {
-                    m_properties["CurrentValue"] = group_properties[keyg];
+            foreach(auto& prop, group_properties) {
+                if (prop["Name"].toString() == m_properties[key].toString()) {
+                    foreach(auto &key, prop.keys()) {
+                        if (m_properties.keys().contains(key)) {
+                            m_properties[key] = prop[key];
+                        }
+                        m_properties.insert(key, prop[key]);
+                    }
                 }
             }
         }

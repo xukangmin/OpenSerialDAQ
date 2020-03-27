@@ -12,17 +12,17 @@
 #include <memory>
 #include "Variable/Variable.h"
 
-static const QString VariableGroupHeaderList[] = {"id","Name"};
-static const QString VariableGroupDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT"};
-static const int VariableGroupColumnSize = 2;
+static const QString VariableGroupHeaderList[] = {"id","Name","InitializationCommands"};
+static const QString VariableGroupDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","TEXT"};
+static const int VariableGroupColumnSize = 3;
 
 class DAQCORESHARED_EXPORT VariableGroup : public QObject, public GenericDefinition
 {
     Q_OBJECT
 public:
-    VariableGroup(int id, QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties = QHash<QString,QVariant>());
+    VariableGroup(int id, QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> group_properties = QVector<QHash<QString,QVariant>>());
 
-    QHash<QString,QVariant> m_group_properties;
+    QVector<QHash<QString,QVariant>> m_group_properties;
 
     std::vector<std::shared_ptr<Variable>> m_variables;
 };

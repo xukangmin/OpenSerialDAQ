@@ -43,12 +43,13 @@ bool VariableGroupModel::isVariableGroupExists(QHash<QString,QVariant> property)
 
 }
 
-void VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
+bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
 {
     QFile loadFile(configFilePath);
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
            qWarning("Couldn't open save file.");
+           return false;
     }
 
    QByteArray dataRead = loadFile.readAll();
@@ -60,39 +61,80 @@ void VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
 
    QJsonObject json = loadDoc.object();
 
-   if (json.contains("Station")) {
-        QJsonArray pArr = json["Station"].toArray();
+   if (json.contains("StationName")) {
+       mStationName = json["StationName"].toString();
+   }
+   else {
+       return false;
+   }
+
+   if (json.contains("Version")) {
+       mStationVersion = json["Version"].toDouble();
+   }
+
+   if (json.contains("Devices")) {
+       QJsonArray deviceArr = json["Devices"].toArray();
+
+       for (int i = 0; i < deviceArr.size(); i++) {
+            QJsonObject singleDevice = deviceArr[i].toObject();
+
+            QHash<QString, QVariant> properties;
+
+            properties["Name"] = singleDevice["Name"].toString();
+            properties["NodeID"] = singleDevice["Node"].toInt();
+            properties["Protocol"] = singleDevice["Protocol"].toString();
+            properties["ChannelID"] = -1;
+
+            Models::instance().mDeviceModel->addDevice(properties);
+       }
+   }
+
+
+   if (json.contains("SubStations")) {
+        QJsonArray pArr = json["SubStations"].toArray();
 
         for (int i = 0; i < pArr.size(); i++) {
             QJsonObject singleGroup = pArr[i].toObject();
 
             QHash<QString,QVariant> properties;
 
-            QHash<QString,QVariant> specific_properties;
 
             foreach(const QString& key, singleGroup.keys()) {
                 QJsonValue value = singleGroup.value(key);
 
-                if (key != "Values")
+                if (key != "SupplementsToEqautions")
                 properties.insert(key,value.toVariant());
             }
 
-            if (singleGroup.contains("Values")) {
-                QJsonObject valueObj = singleGroup["Values"].toObject();
+            if (singleGroup.contains("SupplementsToEqautions")) {
+                QJsonArray suppArr = singleGroup["SupplementsToEqautions"].toArray();
 
-                foreach(const QString&key, valueObj.keys()) {
-                    specific_properties.insert(key, valueObj[key].toVariant());
-                }
+                QVector<QHash<QString,QVariant>> equation_supplements_list;
 
+                 for (int j = 0; j < suppArr.size(); j++) {
+                        QJsonObject singleEqnObj = suppArr[j].toObject();
+
+                        QHash<QString,QVariant> singleEqnSup;
+
+                        foreach(const QString&key, singleEqnObj.keys()) {
+                            singleEqnSup.insert(key, singleEqnObj[key].toVariant());
+                        }
+
+                        equation_supplements_list.append(singleEqnSup);
+                 }
+
+                addVariableGroup(properties, equation_supplements_list);
             }
 
 
-            addVariableGroup(properties, specific_properties);
+
         }
    }
+
+   return true;
 }
 
-void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QHash<QString,QVariant> specific_properties) {
+void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties) {
     QString equation_to_load;
 
     if (properties.contains("EquationTempelate")) {
@@ -125,7 +167,6 @@ void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QHash<
                 }
                 var_properties["VariableGroupID"] = properties["VariableGroupID"];
                 mVariableModel->addVariable(var_properties, specific_properties);
-
             }
 
             mVariableModel->resolveDependency(properties["VariableGroupID"].toInt());
@@ -133,7 +174,7 @@ void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QHash<
     }
 }
 
-QModelIndex VariableGroupModel::addVariableGroup(QHash<QString,QVariant> properties, QHash<QString,QVariant> specific_properties)
+QModelIndex VariableGroupModel::addVariableGroup(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);

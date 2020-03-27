@@ -25,8 +25,6 @@ void ChannelDao::init() const
 
            QString createQuery = "CREATE TABLE Channels (";
 
-           qDebug() << "length=" << ChannelColumnSize;
-
            for(int i = 0; i < ChannelColumnSize; i++) {
                createQuery += (ChannelHeaderList[i] + " " + ChannelDataType[i] + ",");
            }

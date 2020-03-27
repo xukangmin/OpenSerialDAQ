@@ -23,11 +23,13 @@ public:
     };
     VariableGroupModel(VariableModel *variableModel, QObject* parent = nullptr);
 
+    QString mStationName;
+    double mStationVersion;
 
     //bool isVariableGroupExists(QString portName);
-    void loadGroupsFromConfigFile(QString configFilePath = ":/stationconfig.json");
-    QModelIndex addVariableGroup(QHash<QString,QVariant> properties, QHash<QString,QVariant> specific_properties = QHash<QString,QVariant>());
-    void addVariables(QHash<QString,QVariant> properties, QHash<QString,QVariant> specific_properties);
+    bool loadGroupsFromConfigFile(QString configFilePath = ":/stationconfig.json");
+    QModelIndex addVariableGroup(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties = QVector<QHash<QString,QVariant>>());
+    void addVariables(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties);
     bool isVariableGroupExists(QHash<QString,QVariant> property);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

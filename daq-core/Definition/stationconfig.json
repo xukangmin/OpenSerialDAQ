@@ -97,125 +97,253 @@
     [
         {
             "Name": "A",
-            "Constants": {
-                "RangeMin": 0,
-                "RangeMax": 30,    
-                "Unit": "sccm",
-                "Calibration Constant A": 0.00001,
-                "Calibration Constant B": 7.58E-08,
-                "Calibration Constant C": 1.01E-04
-            },
             "EquationTempelate": "Laminar",
-            "IninitalizationCommands": [
-                "Device(SOLENOID-B,1,CLOSE)",
-                "Device(SOLENOID-C,2,CLOSE)",
-                "Device(SOLENOID-D,3,CLOSE)",
-                "Device(SOLENOID-E,4,CLOSE)",
-                "Device(SOLENOID-A,0,OPEN)"
-            ],
-            "Equations": {
-                "[Temperature Input]": "Device(ALICAT-A,0,Temperature)",
-                "[Pressure Input]": "Device(ALICAT-A,0,Pressure)",
-                "[Delta Pressure Input]": "Device(DP-A,1,DP)",
-            }
+            "InitializationCommands": "Device(SOLENOID-B,1,CLOSE)|Device(SOLENOID-C,2,CLOSE)|Device(SOLENOID-D,3,CLOSE)|Device(SOLENOID-E,4,CLOSE)|Device(SOLENOID-A,0,OPEN)",
+            "SupplementsToEqautions":
+            [
+                {
+                    "Name": "RangeMin",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 0
+                },
+                {
+                    "Name": "RangeMax",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 30
+                },
+                {
+                    "Name": "Calibration Constant A",
+                    "Type": "Constant",
+                    "CurrentValue": 0.00001
+                },
+                {
+                    "Name": "Calibration Constant B",
+                    "Type": "Constant",
+                    "CurrentValue": 7.58E-08
+                },
+                {
+                    "Name": "Calibration Constant C",
+                    "Type": "Constant",
+                    "CurrentValue": 1.01E-04
+                },
+                {
+                    "Name": "Temperature",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-A,0,Temperature)"
+                },
+                {
+                    "Name": "Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-A,0,Pressure)"
+                },
+                {
+                    "Name": "Delta Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(DP-A,1,DP)"
+                }
+            ]
         },
         {
             "Name": "B",
-            "Values": {
-                "RangeMin": 30,
-                "RangeMax": 300,
-                "Unit": "sccm",
-                "Calibration Constant A": -0.00001,
-                "Calibration Constant B": 1.37E-06,
-                "Calibration Constant C": 0.001031644
-            },
             "EquationTempelate": "Laminar",
-            "AdditionalCommands": [
-                "Device(SOLENOID-A,0,CLOSE)",
-                "Device(SOLENOID-C,2,CLOSE)",
-                "Device(SOLENOID-D,3,CLOSE)",
-                "Device(SOLENOID-E,4,CLOSE)",
-                "Device(SOLENOID-B,1,OPEN)"
-            ],
-            "DeviceBinding": {
-                "[Temperature Input]": "Device(ALICAT-A,1,Temperature)",
-                "[Pressure Input]": "Device(ALICAT-A,1,Pressure)",
-                "[Delta Pressure Input]": "Device(DP-A,2,DP)",
-            }
+            "InitializationCommands": "Device(SOLENOID-A,0,CLOSE)|Device(SOLENOID-C,2,CLOSE)|Device(SOLENOID-D,3,CLOSE)|Device(SOLENOID-E,4,CLOSE)|Device(SOLENOID-B,1,OPEN)",
+            "SupplementsToEqautions":
+            [
+                {
+                    "Name": "RangeMin",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 30
+                },
+                {
+                    "Name": "RangeMax",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 300
+                },
+                {
+                    "Name": "Calibration Constant A",
+                    "Type": "Constant",
+                    "CurrentValue": -0.00001
+                },
+                {
+                    "Name": "Calibration Constant B",
+                    "Type": "Constant",
+                    "CurrentValue": 1.37E-06
+                },
+                {
+                    "Name": "Calibration Constant C",
+                    "Type": "Constant",
+                    "CurrentValue": 0.001031644
+                },
+                {
+                    "Name": "Temperature",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-B,1,Temperature)"
+                },
+                {
+                    "Name": "Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-B,1,Pressure)"
+                },
+                {
+                    "Name": "Delta Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(DP-B,2,DP)"
+                }
+            ]
         },
         {
             "Name": "C",
-            "Values": {
-                "RangeMin": 300,
-                "RangeMax": 3000,
-                "Unit": "sccm",
-                "Calibration Constant A": -0.00010,
-                "Calibration Constant B": -3.63877E-05,
-                "Calibration Constant C": 1.08E-02
-            },
             "EquationTempelate": "Laminar",
-            "AdditionalCommands": [
-                "Device(SOLENOID-A,0,CLOSE)",
-                "Device(SOLENOID-B,1,CLOSE)",
-                "Device(SOLENOID-D,3,CLOSE)",
-                "Device(SOLENOID-E,4,CLOSE)",
-                "Device(SOLENOID-C,2,OPEN)"
-            ],
-            "DeviceBinding": {
-                "[Temperature Input]": "Device(ALICAT-A,2,Temperature)",
-                "[Pressure Input]": "Device(ALICAT-A,2,Pressure)",
-                "[Delta Pressure Input]": "Device(DP-A,3,DP)",
-            }
+            "InitializationCommands": "Device(SOLENOID-A,0,CLOSE)|Device(SOLENOID-B,1,CLOSE)|Device(SOLENOID-D,3,CLOSE)|Device(SOLENOID-E,4,CLOSE)|Device(SOLENOID-C,2,OPEN)",
+            "SupplementsToEqautions":
+            [
+                {
+                    "Name": "RangeMin",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 300
+                },
+                {
+                    "Name": "RangeMax",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 3000
+                },
+                {
+                    "Name": "Calibration Constant A",
+                    "Type": "Constant",
+                    "CurrentValue": -0.00010
+                },
+                {
+                    "Name": "Calibration Constant B",
+                    "Type": "Constant",
+                    "CurrentValue": -3.63877E-05
+                },
+                {
+                    "Name": "Calibration Constant C",
+                    "Type": "Constant",
+                    "CurrentValue": 1.08E-02
+                },
+                {
+                    "Name": "Temperature",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-C,2,Temperature)"
+                },
+                {
+                    "Name": "Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-C,2,Pressure)"
+                },
+                {
+                    "Name": "Delta Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(DP-C,3,DP)"
+                }
+            ]
         },
         {
             "Name": "D",
-            "Values": {
-                "RangeMin": 3000,
-                "RangeMax": 30000,
-                "Unit": "sccm",
-                "Calibration Constant A": -0.00176,
-                "Calibration Constant B": -0.000121096,
-                "Calibration Constant C": 0.111741311
-                "Temperature": "",
-
-            },
             "EquationTempelate": "Laminar",
-            "AdditionalCommands": [
-                "Device(SOLENOID-A,0,CLOSE)",
-                "Device(SOLENOID-B,1,CLOSE)",
-                "Device(SOLENOID-C,2,CLOSE)",
-                "Device(SOLENOID-E,4,CLOSE)",
-                "Device(SOLENOID-D,3,OPEN)"
-            ],
-            "DeviceBinding": {
-                "[Temperature Input]": "Device(ALICAT-A,3,Temperature)",
-                "[Pressure Input]": "Device(ALICAT-A,3,Pressure)",
-                "[Delta Pressure Input]": "Device(DP-A,4,DP)",
-            }
+            "InitializationCommands": "Device(SOLENOID-A,0,CLOSE)|Device(SOLENOID-B,1,CLOSE)|Device(SOLENOID-C,2,CLOSE)|Device(SOLENOID-E,4,CLOSE)|Device(SOLENOID-D,3,OPEN)",
+            "SupplementsToEqautions":
+            [
+                {
+                    "Name": "RangeMin",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 3000
+                },
+                {
+                    "Name": "RangeMax",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 30000
+                },
+                {
+                    "Name": "Calibration Constant A",
+                    "Type": "Constant",
+                    "CurrentValue": -0.00176
+                },
+                {
+                    "Name": "Calibration Constant B",
+                    "Type": "Constant",
+                    "CurrentValue": -0.000121096
+                },
+                {
+                    "Name": "Calibration Constant C",
+                    "Type": "Constant",
+                    "CurrentValue": 0.111741311
+                },
+                {
+                    "Name": "Temperature",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-D,3,Temperature)"
+                },
+                {
+                    "Name": "Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-D,3,Pressure)"
+                },
+                {
+                    "Name": "Delta Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(DP-D,4,DP)"
+                }
+            ]
         },
         {
             "Name": "E",
-            "Values": {
-                "RangeMin": 30000,
-                "RangeMax": 300000,
-                "RangeUnit": "sccm",
-                "Calibration Constant A": -0.00710,
-                "Calibration Constant B": -0.0018431148,
-                "Calibration Constant C": 1.039780443
-            },
             "EquationTempelate": "Laminar",
-            "AdditionalCommands": [
-                "Device(SOLENOID-A,0,CLOSE)",
-                "Device(SOLENOID-B,1,CLOSE)",
-                "Device(SOLENOID-C,2,CLOSE)",
-                "Device(SOLENOID-D,3,CLOSE)",
-                "Device(SOLENOID-E,4,OPEN)"
-            ],
-            "DeviceBinding": {
-                "[Temperature Input]": "Device(ALICAT-A,4,Temperature)",
-                "[Pressure Input]": "Device(ALICAT-A,4,Pressure)",
-                "[Delta Pressure Input]": "Device(DP-A,5,DP)",
-            }
+            "InitializationCommands": "Device(SOLENOID-A,0,CLOSE)|Device(SOLENOID-B,1,CLOSE)|Device(SOLENOID-C,2,CLOSE)|Device(SOLENOID-D,3,CLOSE)|Device(SOLENOID-E,4,OPEN)",
+            "SupplementsToEqautions":
+            [
+                {
+                    "Name": "RangeMin",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 30000
+                },
+                {
+                    "Name": "RangeMax",
+                    "Type": "Constant",
+                    "Unit": "sccm",
+                    "CurrentValue": 300000
+                },
+                {
+                    "Name": "Calibration Constant A",
+                    "Type": "Constant",
+                    "CurrentValue": -0.00710
+                },
+                {
+                    "Name": "Calibration Constant B",
+                    "Type": "Constant",
+                    "CurrentValue": -0.0018431148
+                },
+                {
+                    "Name": "Calibration Constant C",
+                    "Type": "Constant",
+                    "CurrentValue": 1.039780443
+                },
+                {
+                    "Name": "Temperature",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-E,4,Temperature)"
+                },
+                {
+                    "Name": "Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(ALICAT-E,4,Pressure)"
+                },
+                {
+                    "Name": "Delta Pressure",
+                    "Type": "DigitalInput",
+                    "Equation": "Device(DP-E,5,DP)"
+                }
+            ]
         }
      ]
 }

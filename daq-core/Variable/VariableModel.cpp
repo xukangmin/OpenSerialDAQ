@@ -493,7 +493,7 @@ bool VariableModel::findVariableByNameAndGroupID(QString name, int group_id, sha
     return false;
 }
 
-QModelIndex VariableModel::addVariable(QHash<QString,QVariant> properties, QHash<QString,QVariant> group_properties)
+QModelIndex VariableModel::addVariable(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> group_properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);

@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionStation,SIGNAL(triggered(bool)),this,SLOT(showStationPage()));
     connect(ui->actionLoadStationConfig, &QAction::triggered, mWidgetStationPage, &WidgetStationPage::loadStation);
     connect(ui->actionClearStation, &QAction::triggered, mWidgetStationPage, &WidgetStationPage::clearStation);
-
+    connect(mWidgetStationPage, &WidgetStationPage::sendMessage, ui->statusBar, &QStatusBar::showMessage);
 
     // Device Page
     connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
@@ -139,6 +139,9 @@ MainWindow::MainWindow(QWidget *parent)
         triggerTestButton3();
         triggerTestButton4();
     });
+
+
+    ui->statusBar->showMessage("Ready");
 }
 
 

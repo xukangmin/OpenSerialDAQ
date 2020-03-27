@@ -23,7 +23,6 @@ void DataDao::init() const
 
            QString createQuery = "CREATE TABLE Datas (";
 
-           qDebug() << "length=" << DataColumnSize;
 
            for(int i = 0; i < DataColumnSize; i++) {
                createQuery += (DataHeaderList[i] + " " + DataDataType[i] + ",");
@@ -68,6 +67,7 @@ void DataDao::addData(Data& ch) const
 
     for(int i = 1; i < DataColumnSize; i++) {
         query.bindValue(":" + DataHeaderList[i], ch.getSingleProperty(DataHeaderList[i]));
+        qDebug() << ch.getSingleProperty(DataHeaderList[i]);
     }
 
     query.exec();

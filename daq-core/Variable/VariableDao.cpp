@@ -23,7 +23,6 @@ void VariableDao::init() const
 
            QString createQuery = "CREATE TABLE Variables (";
 
-           qDebug() << "length=" << VariableColumnSize;
 
            for(int i = 0; i < VariableColumnSize; i++) {
                createQuery += (VariableHeaderList[i] + " " + VariableDataType[i] + ",");
