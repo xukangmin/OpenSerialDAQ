@@ -17,6 +17,7 @@ public:
     void addVariable(Variable& ch) const;
     void updateVariable(const Variable& ch) const;
     void removeVariable(int id) const;
+    void removeAll() const;
     std::unique_ptr<std::vector<std::shared_ptr<Variable>>> variables() const;
 private:
     QSqlDatabase& mDatabase;

@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
-        <file>LaminarStation.qml</file>
+        <file>Laminar.qml</file>
         <file>test.qml</file>
     </qresource>
 </RCC>

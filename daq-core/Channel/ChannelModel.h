@@ -47,7 +47,7 @@ public:
     void stopChannel(const QModelIndex& index);
     void addDeviceToChannel(const std::shared_ptr<Device>& dev, const QModelIndex& ch_index);
     void removeDeviceFromChannel(const std::shared_ptr<Device>& dev, const QModelIndex& ch_index);
-
+    void removeAllRows(const QModelIndex& parent = QModelIndex());
 private:
     bool isIndexValid(const QModelIndex& index) const;
 

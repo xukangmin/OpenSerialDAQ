@@ -38,6 +38,7 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     QVariant headerData(int section, Qt::Orientation orientation,int role = Qt::DisplayRole) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    void removeAllRows(const QModelIndex& parent = QModelIndex());
     QHash<int, QByteArray> roleNames() const override;
     bool findVariablesByGroupID(int group_id, std::vector<std::shared_ptr<Variable>>& var_ret);
     QModelIndex getIndexByVariable(Variable &var);

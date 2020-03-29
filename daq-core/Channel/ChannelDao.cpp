@@ -93,6 +93,14 @@ void ChannelDao::removeChannel(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
+void ChannelDao::removeAll() const {
+    QMutexLocker locker(&mMutex);
+    QSqlQuery query(mDatabase);
+    query.prepare("DELETE FROM Channels;");
+    query.exec();
+    DatabaseManager::debugQuery(query);
+}
+
 unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
 {
     QSqlQuery query("SELECT * FROM Channels", mDatabase);

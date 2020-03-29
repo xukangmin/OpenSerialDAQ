@@ -35,7 +35,7 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     QHash<int, QByteArray> roleNames() const override;
-
+    void removeAllRows(const QModelIndex& parent = QModelIndex());
 private:
     bool isIndexValid(const QModelIndex& index) const;
 

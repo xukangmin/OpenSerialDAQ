@@ -17,13 +17,13 @@ public:
     explicit WidgetStationPage(QWidget *parent = nullptr);
     ~WidgetStationPage();
     void clearStation();
-
+    void setupStationQML(QString stationType = "Laminar");
 signals:
     void sendMessage(const QString msg, int timeout = 0);
 
 public slots:
     void loadStation();
-
+    void getProgress(QString progressName, int index, int total);
 private:
     Ui::WidgetStationPage *ui;
     VariableProxyModel* mProxyModel;

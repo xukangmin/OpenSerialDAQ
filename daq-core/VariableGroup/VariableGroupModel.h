@@ -25,6 +25,7 @@ public:
 
     QString mStationName;
     double mStationVersion;
+    QString mStationType;
 
     //bool isVariableGroupExists(QString portName);
     bool loadGroupsFromConfigFile(QString configFilePath = ":/stationconfig.json");
@@ -36,7 +37,11 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    void removeAllRows(const QModelIndex& parent = QModelIndex());
     QHash<int, QByteArray> roleNames() const override;
+
+signals:
+    void updateProgress(QString progress, int index, int total);
 
 private:
     bool isIndexValid(const QModelIndex& index) const;

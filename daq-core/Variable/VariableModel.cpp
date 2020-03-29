@@ -577,6 +577,13 @@ QVariant VariableModel::headerData(int section, Qt::Orientation orientation, int
     return QVariant();
 }
 
+void VariableModel::removeAllRows(const QModelIndex& parent) {
+    beginRemoveRows(parent, 0, rowCount() - 1);
+    mDb.variableDao.removeAll();
+    mVariables->clear();
+    endRemoveRows();
+}
+
 bool VariableModel::removeRows(int row, int count, const QModelIndex& parent) {
     if (row < 0
             || row >= rowCount()

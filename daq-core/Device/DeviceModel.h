@@ -43,6 +43,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
                                    int role) const override;
     QHash<int, QByteArray> roleNames() const override;
+    void removeAllRows(const QModelIndex& parent = QModelIndex());
     QList<QString> getAvailableProtocols();
 
 private:

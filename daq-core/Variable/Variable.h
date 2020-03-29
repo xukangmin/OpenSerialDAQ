@@ -11,9 +11,9 @@
 #include <vector>
 #include <memory>
 
-static const QString VariableHeaderList[] = {"id","DeviceID","VariableGroupID","Name","Type","Equation","CurrentValue", "Unit","CurrentTimeStamp","DataType","Log"};
-static const QString VariableDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","INTEGER", "INTEGER","TEXT","TEXT","TEXT","TEXT","TEXT","DATETIME","TEXT","INTEGER"};
-static const int VariableColumnSize = 11;
+static const QString VariableHeaderList[] = {"id","DeviceID","VariableGroupID","Name","Type","Equation","CurrentValue", "Unit","CurrentTimeStamp","DataType","Log","OriginalEquation"};
+static const QString VariableDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","INTEGER", "INTEGER","TEXT","TEXT","TEXT","TEXT","TEXT","DATETIME","TEXT","INTEGER","Text"};
+static const int VariableColumnSize = 12;
 
 static const int MAXMEMORYDATASIZE = 1000;
 

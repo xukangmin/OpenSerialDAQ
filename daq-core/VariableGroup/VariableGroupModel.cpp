@@ -68,9 +68,17 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
        return false;
    }
 
+   if (json.contains("Type")){
+       mStationType = json["Type"].toString();
+   }
+   else {
+       return false;
+   }
+
    if (json.contains("Version")) {
        mStationVersion = json["Version"].toDouble();
    }
+
 
    if (json.contains("Devices")) {
        QJsonArray deviceArr = json["Devices"].toArray();
@@ -86,6 +94,8 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
             properties["ChannelID"] = -1;
 
             Models::instance().mDeviceModel->addDevice(properties);
+
+            emit updateProgress("Create Device",i,deviceArr.size());
        }
    }
 
@@ -94,6 +104,9 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
         QJsonArray pArr = json["SubStations"].toArray();
 
         for (int i = 0; i < pArr.size(); i++) {
+
+            emit updateProgress("Create Sub Station",i,pArr.size());
+
             QJsonObject singleGroup = pArr[i].toObject();
 
             QHash<QString,QVariant> properties;
@@ -230,6 +243,13 @@ bool VariableGroupModel::setData(const QModelIndex& index, const QVariant& value
     mDb.variableGroupDao.updateVariableGroup(VariableGroup);
     emit dataChanged(index, index);
     return true;
+}
+
+void VariableGroupModel::removeAllRows(const QModelIndex& parent) {
+    beginRemoveRows(parent, 0, rowCount() - 1);
+    mDb.variableGroupDao.removeAll();
+    mVariableGroups->clear();
+    endRemoveRows();
 }
 
 bool VariableGroupModel::removeRows(int row, int count, const QModelIndex& parent) {

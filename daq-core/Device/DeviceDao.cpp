@@ -118,6 +118,15 @@ void DeviceDao::removeDevice(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
+void DeviceDao::removeAll() const {
+    QMutexLocker locker(&mMutex);
+    QSqlQuery query(mDatabase);
+    query.prepare("DELETE FROM Devices;");
+    query.exec();
+    DatabaseManager::debugQuery(query);
+}
+
+
 unique_ptr<vector<shared_ptr<Device>>> DeviceDao::devices() const
 {
     QSqlQuery query("SELECT * FROM Devices", mDatabase);

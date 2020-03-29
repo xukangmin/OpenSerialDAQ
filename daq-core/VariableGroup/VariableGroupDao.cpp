@@ -113,6 +113,14 @@ void VariableGroupDao::removeVariableGroup(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
+void VariableGroupDao::removeAll() const {
+    QMutexLocker locker(&mMutex);
+    QSqlQuery query(mDatabase);
+    query.prepare("DELETE FROM VariableGroups;");
+    query.exec();
+    DatabaseManager::debugQuery(query);
+}
+
 unique_ptr<vector<shared_ptr<VariableGroup>>> VariableGroupDao::variablegroups() const
 {
     QSqlQuery query("SELECT * FROM VariableGroups", mDatabase);

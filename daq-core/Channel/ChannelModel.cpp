@@ -153,6 +153,13 @@ bool ChannelModel::removeRows(int row, int count, const QModelIndex& parent) {
 
 }
 
+void ChannelModel::removeAllRows(const QModelIndex& parent) {
+    beginRemoveRows(parent, 0, rowCount() - 1);
+    mDb.channelDao.removeAll();
+    mChannels->clear();
+    endRemoveRows();
+}
+
 QHash<int, QByteArray> ChannelModel::roleNames() const {
 
     QHash<int, QByteArray> roles;

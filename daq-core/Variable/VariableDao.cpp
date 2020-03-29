@@ -118,6 +118,15 @@ void VariableDao::removeVariable(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
+void VariableDao::removeAll() const {
+    QMutexLocker locker(&mMutex);
+    QSqlQuery query(mDatabase);
+    query.prepare("DELETE FROM Variables;");
+    query.exec();
+    DatabaseManager::debugQuery(query);
+}
+
+
 unique_ptr<vector<shared_ptr<Variable>>> VariableDao::variables() const
 {
     QSqlQuery query("SELECT * FROM Variables", mDatabase);

@@ -17,6 +17,7 @@ public:
     void addVariableGroup(VariableGroup& ch) const;
     void updateVariableGroup(const VariableGroup& ch) const;
     void removeVariableGroup(int id) const;
+    void removeAll() const;
     std::unique_ptr<std::vector<std::shared_ptr<VariableGroup>>> variablegroups() const;
 private:
     QSqlDatabase& mDatabase;

@@ -85,6 +85,14 @@ bool DataModel::removeRows(int row, int count, const QModelIndex& parent) {
 
 }
 
+void DataModel::removeAllRows(const QModelIndex& parent) {
+    beginRemoveRows(parent, 0, rowCount() - 1);
+    mDb.dataDao.removeAll();
+    mDatas->clear();
+    endRemoveRows();
+}
+
+
 QHash<int, QByteArray> DataModel::roleNames() const {
 
     QHash<int, QByteArray> roles;

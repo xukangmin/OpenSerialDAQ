@@ -116,6 +116,15 @@ void DataDao::removeData(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
+void DataDao::removeAll() const {
+    QMutexLocker locker(&mMutex);
+    QSqlQuery query(mDatabase);
+    query.prepare("DELETE FROM Datas;");
+    query.exec();
+    DatabaseManager::debugQuery(query);
+}
+
+
 unique_ptr<vector<shared_ptr<Data>>> DataDao::datas() const
 {
     QSqlQuery query("SELECT * FROM Datas", mDatabase);

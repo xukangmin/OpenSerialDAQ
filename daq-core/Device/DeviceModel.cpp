@@ -324,6 +324,12 @@ bool DeviceModel::removeRows(int row, int count, const QModelIndex& parent) {
 
 }
 
+void DeviceModel::removeAllRows(const QModelIndex& parent) {
+    beginRemoveRows(parent, 0, rowCount() - 1);
+    mDb.deviceDao.removeAll();
+    mDevices->clear();
+    endRemoveRows();
+}
 
 QHash<int, QByteArray> DeviceModel::roleNames() const {
 

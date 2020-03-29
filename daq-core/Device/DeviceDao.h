@@ -17,6 +17,7 @@ public:
     void addDevice(Device& ch) const;
     void updateDevice(const Device& ch) const;
     void removeDevice(int id) const;
+    void removeAll() const;
     std::unique_ptr<std::vector<std::shared_ptr<Device>>> devices() const;
 private:
     QSqlDatabase& mDatabase;
