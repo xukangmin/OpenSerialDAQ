@@ -10,6 +10,7 @@
 #include <vector>
 
 class Variable;
+class Channel;
 
 struct Parameter {
     QString name;
@@ -64,6 +65,8 @@ public:
 
     std::vector<std::shared_ptr<Variable>> mVariableList;
 
+    std::shared_ptr<Channel> mChannel;
+
     QVector<QTimer*> mTimerPool;
 
     QVector<Command> mCommands;
@@ -74,10 +77,18 @@ public:
 
     QByteArray buildQueryCmd(Command cmd);
     QByteArray buildQueryCmd(QString cmdName);
+    void setChannel(const std::shared_ptr<Channel>& channel);
+    void clearChannel();
+
+    void startDAQ(int simulation = 0);
+    void endDAQ(int simulation = 0);
+
 
     std::vector<QHash<QString,QVariant>> parseRxData(QByteArray rx_data, int cmd_id);
 
     DeviceData m_deviceData;
+
+    QTimer* mSimulationTimer;
 
 };
 

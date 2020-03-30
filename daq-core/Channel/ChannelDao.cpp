@@ -101,11 +101,11 @@ void ChannelDao::removeAll() const {
     DatabaseManager::debugQuery(query);
 }
 
-unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
+unique_ptr<vector<shared_ptr<Channel>>> ChannelDao::channels() const
 {
     QSqlQuery query("SELECT * FROM Channels", mDatabase);
     query.exec();
-    unique_ptr<vector<unique_ptr<Channel>>> list(new vector<unique_ptr<Channel>>());
+    unique_ptr<vector<shared_ptr<Channel>>> list(new vector<shared_ptr<Channel>>());
     while(query.next()) {
 
         QHash<QString, QVariant> properties;
@@ -115,7 +115,7 @@ unique_ptr<vector<unique_ptr<Channel>>> ChannelDao::channels() const
         }
 
 
-        unique_ptr<Channel> ch(new Channel(query.value("id").toInt(),properties));
+        shared_ptr<Channel> ch(new Channel(query.value("id").toInt(),properties));
 
         list->push_back(move(ch));
     }

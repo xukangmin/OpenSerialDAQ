@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    allModels.mVariableGroupModel->resolveDependency();
     // Settings
     QSettings settings("Graftel", "OpenSerialDAQ");
 
@@ -40,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Device Page
     connect(ui->actionDevices,SIGNAL(triggered(bool)),this,SLOT(showDevicePage()));
-     connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
+    connect(ui->actionAddNewDevice,SIGNAL(triggered(bool)),this,SLOT(showNewDeviceDialog()));
 
     // Channel Page
     connect(ui->actionChannel,SIGNAL(triggered(bool)),this,SLOT(showChannelPage()));
@@ -138,6 +139,7 @@ MainWindow::MainWindow(QWidget *parent)
         triggerTestButton2();
         triggerTestButton3();
         triggerTestButton4();
+        qDebug() << "triggered";
     });
 
 
@@ -151,13 +153,31 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::startAllChannels(bool isChecked) {
-    if (!isChecked) {
-        mTimer_test->start();
+    int groupIndex = Models::instance().mVariableProxyModel->getGroupIndex();
+
+    QModelIndex ind = Models::instance().mVariableGroupModel->index(groupIndex,0);
+
+    if (isChecked) {
+        // get current Variable Group Model Index
+        Models::instance().mVariableGroupModel->startDAQ(ind,1);
+        //mTimer_test->start();
+    } else {
+        Models::instance().mVariableGroupModel->endDAQ(ind,1);
+        //mTimer_test->stop();
     }
 }
 
 void MainWindow::stopAllChannels() {
-    mTimer_test->stop();
+
+    int groupIndex = Models::instance().mVariableProxyModel->getGroupIndex();
+
+    QModelIndex ind = Models::instance().mVariableGroupModel->index(groupIndex,0);
+
+
+    if (ui->actionStartAll->isChecked()){
+        ui->actionStartAll->setChecked(false);
+    }
+    Models::instance().mVariableGroupModel->endDAQ(ind,1);
 }
 
 void MainWindow::setupTestToolBar() {

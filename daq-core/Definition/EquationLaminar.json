@@ -87,7 +87,7 @@
         },
         {
             "Name": "RangeMin",
-            "Type": "RangeSpecific",
+            "Type": "Constant",
             "Unit": "sccm",
             "CurrentValue": 0,
             "Equation": "N/A",
@@ -96,7 +96,7 @@
         },
         {
             "Name": "RangeMax",
-            "Type": "RangeSpecific",
+            "Type": "Constant",
             "Unit": "sccm",
             "CurrentValue": 0,
             "Equation": "N/A",
@@ -104,8 +104,17 @@
             "Log": 0
         },
         {
+            "Name": "RangeUnit",
+            "Type": "Constant",
+            "Unit": "sccm",
+            "CurrentValue": "sccm",
+            "Equation": "N/A",
+            "DataType": "string",
+            "Log": 0
+        },
+        {
             "Name": "Calibration Constant A",
-            "Type": "RangeSpecific",
+            "Type": "Constant",
             "Unit": "N/A",
             "CurrentValue": 0,
             "Equation": "N/A",
@@ -114,7 +123,7 @@
         },
         {
             "Name": "Calibration Constant B",
-            "Type": "RangeSpecific",
+            "Type": "Constant",
             "Unit": "N/A",
             "CurrentValue": 0,
             "Equation": "N/A",
@@ -123,7 +132,7 @@
         },
         {
             "Name": "Calibration Constant C",
-            "Type": "RangeSpecific",
+            "Type": "Constant",
             "Unit": "N/A",
             "CurrentValue": 0,
             "Equation": "N/A",
@@ -244,7 +253,7 @@
             "Type": "Display",
             "Unit": "[Air Flow Unit]",
             "CurrentValue": 0,
-            "Equation": "UnitConv([RangeMin],sccm,[Air Flow Unit])",
+            "Equation": "UnitConv([RangeMin],[RangeUnit],[Air Flow Unit])",
             "DataType": "double",
             "Log": 0
         },
@@ -253,7 +262,7 @@
             "Type": "Display",
             "Unit": "[Air Flow Unit]",
             "CurrentValue": 0,
-            "Equation": "UnitConv([RangeMax],sccm,[Air Flow Unit])",
+            "Equation": "UnitConv([RangeMax],[RangeUnit],[Air Flow Unit])",
             "DataType": "double",
             "Log": 0
         },

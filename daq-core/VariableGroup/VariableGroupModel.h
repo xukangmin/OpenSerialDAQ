@@ -39,7 +39,10 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     void removeAllRows(const QModelIndex& parent = QModelIndex());
     QHash<int, QByteArray> roleNames() const override;
-
+    void resolveDependency();
+    bool findVariableGroupByID(int varGroupID, std::shared_ptr<VariableGroup>& varGroup);
+    void startDAQ(const QModelIndex& index, int simulation = 0);
+    void endDAQ(const QModelIndex& index, int simulation = 0);
 signals:
     void updateProgress(QString progress, int index, int total);
 

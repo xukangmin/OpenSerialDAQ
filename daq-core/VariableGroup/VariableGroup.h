@@ -11,6 +11,7 @@
 #include <vector>
 #include <memory>
 #include "Variable/Variable.h"
+#include "Device/Device.h"
 
 static const QString VariableGroupHeaderList[] = {"id","Name","InitializationCommands"};
 static const QString VariableGroupDataType[] = {"INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","TEXT"};
@@ -25,6 +26,11 @@ public:
     QVector<QHash<QString,QVariant>> m_group_properties;
 
     std::vector<std::shared_ptr<Variable>> m_variables;
+
+    std::vector<std::shared_ptr<Device>> mDevices;
+
+    void startDAQ(int simulation = 0);
+    void endDAQ(int simulation = 0);
 };
 
 #endif // VARIABLEGROUP_H

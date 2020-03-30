@@ -7,12 +7,55 @@
 #include <QRegularExpression>
 #include "Variable/Variable.h"
 #include "Data/Data.h"
+#include "Channel/Channel.h"
+#include <QRandomGenerator>
+#include "Models.h"
 
 using namespace std;
 
 Device::Device(int id, QHash<QString, QVariant> properties) :
             GenericDefinition(id, properties)
 {
+    mSimulationTimer = new QTimer(this);
+    mSimulationTimer->setTimerType(Qt::PreciseTimer);
+    mSimulationTimer->setInterval(1000);
+    connect(mSimulationTimer,&QTimer::timeout,this,[=]() {
+        foreach(auto& var, mVariableList){
+
+            double base_value = 1;
+            int valid_var = 0;
+            if (var->getSingleProperty("Name").toString().contains("Pressure",Qt::CaseInsensitive)) {
+                base_value = 14;
+                valid_var = 1;
+            }
+            else if (var->getSingleProperty("Name").toString().contains("Temperature",Qt::CaseInsensitive)) {
+                base_value = 70;
+                valid_var = 1;
+            }
+            else if (var->getSingleProperty("Name").toString().contains("VolumetricFlowrate",Qt::CaseInsensitive)) {
+                base_value = 100;
+                valid_var = 1;
+            }
+            else if (var->getSingleProperty("Name").toString().contains("MassFlowrate",Qt::CaseInsensitive)) {
+                base_value = 120;
+                valid_var = 1;
+            }
+            else if (var->getSingleProperty("Name").toString().contains("DP",Qt::CaseInsensitive)) {
+                base_value = 10;
+                valid_var = 1;
+            }
+
+            if (valid_var) {
+                QHash<QString,QVariant> da;
+
+                da["VariableID"] = var->m_id;
+                da["Value"] = base_value + QRandomGenerator::global()->generateDouble() * base_value * 0.1 - base_value * 0.1 / 2;
+                da["TimeStamp"] = QDateTime::currentDateTime();
+                Models::instance().mVariableModel->addDataToVariableModel(da);
+            }
+
+        }
+    });
     loadFromConfig(properties["Protocol"].toString());
     this->setProperty("ObjType","device");
 }
@@ -44,6 +87,39 @@ Device::Device(int id, QHash<QString, QVariant> properties) :
 //    loadFromConfig(protocol_name);
 //}
 
+void Device::setChannel(const std::shared_ptr<Channel>& channel)
+{
+    mChannel = channel;
+}
+
+void Device::clearChannel()
+{
+    mChannel = nullptr;
+}
+
+
+void Device::startDAQ(int simulation)
+{
+    if (simulation) {
+        mSimulationTimer->start();
+    } else {
+        if (mChannel != nullptr) {
+            mChannel->startChannel();
+        }
+    }
+
+}
+
+void Device::endDAQ(int simulation)
+{
+    if (simulation) {
+        mSimulationTimer->stop();
+    } else {
+        if (mChannel != nullptr) {
+            mChannel->stopChannel();
+        }
+    }
+}
 
 QByteArray Device::buildQueryCmd(Command cmd) {
 

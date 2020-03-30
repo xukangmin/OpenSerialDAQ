@@ -19,8 +19,6 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
 
     ui->progressBar->setVisible(false);
 
-    mProxyModel = new VariableProxyModel(this);
-
     connect(Models::instance().mVariableGroupModel, &VariableGroupModel::updateProgress, this, &WidgetStationPage::getProgress);
     connect(ui->btnSetupStation, &QPushButton::clicked, this, &WidgetStationPage::loadStation);
 
@@ -49,15 +47,15 @@ WidgetStationPage::~WidgetStationPage()
 
 void WidgetStationPage::setupStationQML(QString stationType) {
 
-    mProxyModel->setSourceModel(Models::instance().mVariableModel);
+    Models::instance().mVariableProxyModel->setSourceModel(Models::instance().mVariableModel);
 
-    mProxyModel->setGroupIndex(0);
+    Models::instance().mVariableProxyModel->setGroupIndex(0);
 
-    ui->tableView->setModel(mProxyModel);
+    ui->tableView->setModel(Models::instance().mVariableProxyModel);
 
     ui->tableView->horizontalHeader()->show();
 
-    ui->tableView->horizontalHeader()->setModel(mProxyModel);
+    ui->tableView->horizontalHeader()->setModel(Models::instance().mVariableProxyModel);
 
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -73,7 +71,7 @@ void WidgetStationPage::setupStationQML(QString stationType) {
 
     ctxt->setContextProperty("variableGroupModel",Models::instance().mVariableGroupModel);
 
-    ctxt->setContextProperty("variableProxyModel",mProxyModel);
+    ctxt->setContextProperty("variableProxyModel",Models::instance().mVariableProxyModel);
 
     ctxt->setContextProperty("unitAndConversion",&UnitAndConversion::instance());
 
@@ -149,5 +147,8 @@ void WidgetStationPage::loadStation() {
         else {
             emit sendMessage("Load Station Config Failed!!");
         }
+
+        ui->lbProgress->setVisible(false);
+        ui->progressBar->setVisible(false);
     }
 }

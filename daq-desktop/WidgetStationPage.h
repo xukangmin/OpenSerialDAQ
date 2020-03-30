@@ -26,7 +26,6 @@ public slots:
     void getProgress(QString progressName, int index, int total);
 private:
     Ui::WidgetStationPage *ui;
-    VariableProxyModel* mProxyModel;
 };
 
 #endif // WIDGETSTATIONPAGE_H

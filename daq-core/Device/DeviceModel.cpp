@@ -74,6 +74,18 @@ int DeviceModel::getDeviceIDByNameAndNode(QString name, int node) {
     return -1;
 }
 
+
+bool DeviceModel::getDeviceByID(int devid, shared_ptr<Device>& devRef) {
+    foreach(auto& dev, (*mDevices)) {
+        if ((*dev).m_id == devid) {
+            devRef = dev;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void DeviceModel::addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index)
 {
     shared_ptr<Device>& device = mDevices->at(dev_index.row());

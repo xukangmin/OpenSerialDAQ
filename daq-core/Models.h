@@ -30,7 +30,7 @@ public:
     VariableModel *mVariableModel;
     DataModel *mDataModel;
     VariableGroupModel *mVariableGroupModel;
-
+    VariableProxyModel *mVariableProxyModel;
     QModelIndex mChannelIndex;
     QModelIndex mDeviceIndex;
 protected:

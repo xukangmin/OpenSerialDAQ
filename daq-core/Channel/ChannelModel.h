@@ -55,7 +55,7 @@ private:
 
 private:
     DatabaseManager& mDb;
-    std::unique_ptr<std::vector<std::unique_ptr<Channel>>> mChannels;
+    std::unique_ptr<std::vector<std::shared_ptr<Channel>>> mChannels;
 };
 
 #endif // CHANNELMODEL_H

@@ -28,10 +28,11 @@ public:
     bool findVariableByNameAndDeviceID(QString name, int device_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByNameAndGroupID(QString name, int group_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByID(int var_id, std::shared_ptr<Variable>& var_ret);
-    bool calculateVariable(const std::shared_ptr<Variable>& var);
+    bool calculate(Variable* var, QHash<QString,QVariant> data);
     bool isVariableExistsInVector(const std::shared_ptr<Variable>& t, std::vector<std::shared_ptr<Variable>>& v);
     bool isVariableExists(QHash<QString,QVariant> property);
-    bool resolveDependency(int group_id);
+    bool resolveDependency();
+    bool resolveFirstTime(int group_id);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
@@ -45,7 +46,8 @@ public:
 private:
     bool isIndexValid(const QModelIndex& index) const;
 
-
+private slots:
+    void calculateVariable(QHash<QString,QVariant> data);
 
 private:
     DatabaseManager& mDb;
@@ -65,9 +67,9 @@ public:
     VariableProxyModel(QObject *parent = nullptr);
 
     Q_INVOKABLE void setGroupIndex(int groupIndex);
-
+    Q_INVOKABLE int getGroupIndex();
     int mGroupID;
-
+    int mGroupIndex;
     QVariant data(const QModelIndex &index, int role) const noexcept override;
 
     Q_INVOKABLE QVariant getDataByName(QString varName);

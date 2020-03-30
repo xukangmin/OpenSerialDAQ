@@ -1,8 +1,8 @@
 #include "ThreadCalculationProcessor.h"
 #include <QMutex>
-#include "Models.h"
 
-ThreadCalculationProcessor::ThreadCalculationProcessor(Variable& var, QHash<QString,QVariant> data) : m_var(var), m_data(data)
+
+ThreadCalculationProcessor::ThreadCalculationProcessor(VariableModel& varModel, Variable& var, QHash<QString,QVariant> data) : m_varModel(varModel), m_var(var), m_data(data)
 {
 }
 
@@ -15,7 +15,7 @@ void ThreadCalculationProcessor::run() {
 
     Models::instance().mutex_global.lock();
 
-    m_var.calculate(m_data);
+    m_varModel.calculate(&m_var,m_data);
 
     Models::instance().mutex_global.unlock();
 }

@@ -16,12 +16,46 @@ VariableGroupModel::VariableGroupModel(VariableModel *variableModel, QObject* pa
     mVariableGroups(mDb.variableGroupDao.variablegroups()),
     mVariableModel(variableModel)
 {
-    foreach(auto& vgrp, *mVariableGroups) {
-        mVariableModel->resolveDependency(vgrp->m_id);
-    }
+
 
 }
 
+
+void VariableGroupModel::startDAQ(const QModelIndex& index, int simulation) {
+    if (!isIndexValid(index)) {
+        return;
+    }
+    VariableGroup& VariableGroup = *mVariableGroups->at(index.row());
+
+    VariableGroup.startDAQ(simulation);
+
+}
+
+void VariableGroupModel::endDAQ(const QModelIndex& index, int simulation) {
+    if (!isIndexValid(index)) {
+        return;
+    }
+    VariableGroup& VariableGroup = *mVariableGroups->at(index.row());
+
+    VariableGroup.endDAQ(simulation);
+
+}
+
+bool VariableGroupModel::findVariableGroupByID(int varGroupID, shared_ptr<VariableGroup>& varGroup)
+{
+    foreach(const shared_ptr<VariableGroup>& varG, (*mVariableGroups)) {
+        if ((*varG).m_id == varGroupID) {
+            varGroup = varG;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void VariableGroupModel::resolveDependency(){
+    mVariableModel->resolveDependency();
+}
 
 bool VariableGroupModel::isVariableGroupExists(QHash<QString,QVariant> property)
 {
@@ -182,7 +216,7 @@ void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QVecto
                 mVariableModel->addVariable(var_properties, specific_properties);
             }
 
-            mVariableModel->resolveDependency(properties["VariableGroupID"].toInt());
+            mVariableModel->resolveFirstTime(properties["VariableGroupID"].toInt());
        }
     }
 }

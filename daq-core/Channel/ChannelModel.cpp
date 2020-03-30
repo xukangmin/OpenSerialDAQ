@@ -47,7 +47,7 @@ QList<QString> ChannelModel::getAvailablePorts() {
 
 bool ChannelModel::isPortExists(QString portName) {
 
-    auto it = find_if(mChannels->begin(), mChannels->end(), [&portName](unique_ptr<Channel>& obj) {return obj->getSingleProperty("ComPort") == portName;});
+    auto it = find_if(mChannels->begin(), mChannels->end(), [&portName](shared_ptr<Channel>& obj) {return obj->getSingleProperty("ComPort") == portName;});
 
     if (it != mChannels->end()) {
         return true;
@@ -60,11 +60,13 @@ bool ChannelModel::isPortExists(QString portName) {
 void ChannelModel::addDeviceToChannel(const shared_ptr<Device>& dev, const QModelIndex& ch_index) {
     Channel& channel = *mChannels->at(ch_index.row());
     channel.addDeviceToThread(dev);
+    dev->setChannel(mChannels->at(ch_index.row()));
 }
 
 void ChannelModel::removeDeviceFromChannel(const shared_ptr<Device>& dev, const QModelIndex& ch_index) {
     Channel& channel = *mChannels->at(ch_index.row());
     channel.removeDeviceFromThread(dev);
+    dev->clearChannel();
 }
 
 
@@ -72,7 +74,7 @@ QModelIndex ChannelModel::addChannel(QHash<QString,QVariant> properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
-    unique_ptr<Channel> newChannel(new Channel(0, properties));
+    shared_ptr<Channel> newChannel(new Channel(0, properties));
     mDb.channelDao.addChannel(*newChannel);
 
     mChannels->push_back(move(newChannel));

@@ -39,7 +39,7 @@ void ThreadChannel::addDevice(const shared_ptr<Device>& dev) {
     foreach(Command cmd, dev->mCommands) {
         if (cmd.isDAQ) {
             QTimer *m_timer = new QTimer(dev.get());
-
+            m_timer->setTimerType(Qt::PreciseTimer);
             m_timer->setInterval(cmd.interval);
             connect(m_timer, &QTimer::timeout,this,[=]() {
                 Packet *pac = new Packet(dev);

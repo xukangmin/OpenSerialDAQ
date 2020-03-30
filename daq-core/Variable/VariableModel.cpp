@@ -5,6 +5,8 @@
 #include <QSerialPortInfo>
 #include <UnitAndConversion.h>
 #include <QtMath>
+#include <QThreadPool>
+#include <Thread/ThreadCalculationProcessor.h>
 
 using namespace std;
 
@@ -76,8 +78,9 @@ bool VariableModel::isVariableExists(QHash<QString,QVariant> property)
 
 }
 
+bool VariableModel::calculate(Variable* var, QHash<QString,QVariant> data)
+{
 
-bool VariableModel::calculateVariable(const shared_ptr<Variable>& var) {
     QString eqn = var->getSingleProperty("Equation").toString();
 
     foreach(auto singleID, var->toCalculate.keys()) {
@@ -196,15 +199,7 @@ bool VariableModel::calculateVariable(const shared_ptr<Variable>& var) {
 
     var->currentData = ret;
 
-    QDateTime dt = QDateTime::currentDateTime();
-
-    foreach(auto key, var->toCalculate.keys()){
-        if (var->toCalculate[key].toDateTime() > dt) {
-            dt = var->toCalculate[key].toDateTime();
-        }
-    }
-
-    var->currentTimeStamp = dt;
+    var->currentTimeStamp = data["TimeStamp"].toDateTime();
 
     QHash<QString,QVariant> prop;
 
@@ -225,7 +220,7 @@ bool VariableModel::calculateVariable(const shared_ptr<Variable>& var) {
 
     //updateVariable(*var);
 
-    addDataToVariableModel(prop, 0);
+    addDataToVariableModel(prop);
     //var->addDataToVariable(prop);
 
     var->toCalculate.clear();
@@ -233,67 +228,26 @@ bool VariableModel::calculateVariable(const shared_ptr<Variable>& var) {
     return true;
 }
 
-bool VariableModel::resolveDependency(int group_id)
-{
+void VariableModel::calculateVariable(QHash<QString,QVariant> data) {
 
+    Variable* var = qobject_cast<Variable*>(QObject::sender());
+
+    ThreadCalculationProcessor *calProc = new ThreadCalculationProcessor(*this,*var,data);
+
+    QThreadPool::globalInstance()->start(calProc);
+}
+
+bool VariableModel::resolveFirstTime(int group_id)
+{
     foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+
+        connect(var.get(),&Variable::calculateVariable,this,&VariableModel::calculateVariable);
 
         QString eqn = var->getSingleProperty("Equation").toString();
 
         var->equation = eqn;
 
         if (eqn != "N/A") {
-
-            // first search {id} and bind
-            QList<QString> id_matches;
-
-            QRegularExpression id_reA("\\{.*?\\}", QRegularExpression::CaseInsensitiveOption);
-
-            QRegularExpressionMatchIterator i_id = id_reA.globalMatch(eqn);
-            while (i_id.hasNext()) {
-                QRegularExpressionMatch id_match = i_id.next();
-                if (id_match.hasMatch()) {
-                     id_matches.append(id_match.captured(0));
-                }
-            }
-
-            foreach(QString m, id_matches)
-            {
-                QString id_tmp;
-                id_tmp = m;
-                id_tmp.remove("{");
-                id_tmp.remove("}");
-
-                shared_ptr<Variable> t;
-
-                if (findVariableByID(id_tmp.toInt(),t))
-                {
-                    if (t->getSingleProperty("Type").toString() == "UserInput" ||
-                        t->getSingleProperty("Type").toString() == "RangeSpecific")
-                    {
-                        if (!isVariableExistsInVector(var,t->requiredBy)) {
-                            t->requiredBy.push_back(var);
-                            connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-                        }
-
-                    }
-                    else
-                    {
-                        if (!isVariableExistsInVector(var,t->requiredBy)) {
-                            t->requiredBy.push_back(var);
-                            connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-                        }
-
-                        if (!isVariableExistsInVector(t,var->required)) {
-                            var->required.push_back(t);
-                        }
-
-
-                    }
-                }
-            }
-
-
             // second search Device(), [ ]  and convert and bind
             QList<QString> matches;
 
@@ -356,7 +310,7 @@ bool VariableModel::resolveDependency(int group_id)
                             }
 
                         }
-                        else if (t->getSingleProperty("Type").toString() == "RangeSpecific")  // constant
+                        else if (t->getSingleProperty("Type").toString() == "Constant")  // constant
                         {
                             var->equation = var->equation.replace(match, t->getSingleProperty("CurrentValue").toString());
                             if (!isVariableExistsInVector(var,t->requiredBy)) {
@@ -384,19 +338,6 @@ bool VariableModel::resolveDependency(int group_id)
 
             var->setSingleProperty("Equation",var->equation);
 
-            int const_count = 0;
-
-            foreach(auto& v, var->required){
-                if (v->getSingleProperty("Type").toString() == "RangeSpecific" &&
-                    v->getSingleProperty("Type").toString() == "UserInput") {
-                    const_count++;
-                }
-            }
-
-            if (const_count == (int)var->required.size()) { // all constant, do calculation
-                calculateVariable(var);
-            }
-
             // update
             if (eqn != var->equation)
             {
@@ -405,13 +346,106 @@ bool VariableModel::resolveDependency(int group_id)
 
         }
 
-
-
-
-
     }
 
 
+    // trigger all constant and userinput for initilization
+
+    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+        if (var->getSingleProperty("Type").toString() == "Constant" ||
+                var->getSingleProperty("Type").toString() == "UserInput")
+        {
+            QHash<QString,QVariant> data;
+
+            data["VariableID"] = var->m_id;
+            data["Value"] = var->getSingleProperty("CurrentValue");
+            data["TimeStamp"] =  QDateTime::currentDateTime();
+            var->addDataToVariable(data,1);
+        }
+    }
+
+    return true;
+}
+
+bool VariableModel::resolveDependency()
+{
+
+    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+
+        connect(var.get(),&Variable::calculateVariable,this,&VariableModel::calculateVariable);
+
+        QString eqn = var->getSingleProperty("Equation").toString();
+
+        var->equation = eqn;
+
+        if (eqn != "N/A") {
+
+            // first search {id} and bind
+            QList<QString> id_matches;
+
+            QRegularExpression id_reA("\\{.*?\\}", QRegularExpression::CaseInsensitiveOption);
+
+            QRegularExpressionMatchIterator i_id = id_reA.globalMatch(eqn);
+            while (i_id.hasNext()) {
+                QRegularExpressionMatch id_match = i_id.next();
+                if (id_match.hasMatch()) {
+                     id_matches.append(id_match.captured(0));
+                }
+            }
+
+            foreach(QString m, id_matches)
+            {
+                QString id_tmp;
+                id_tmp = m;
+                id_tmp.remove("{");
+                id_tmp.remove("}");
+
+                shared_ptr<Variable> t;
+
+                if (findVariableByID(id_tmp.toInt(),t))
+                {
+                    bool isDevice = false;
+                    int devid = t->getSingleProperty("DeviceID").toInt(&isDevice);
+
+                    if (isDevice) {
+                        shared_ptr<VariableGroup> varG;
+                        if (Models::instance().mVariableGroupModel->findVariableGroupByID(var->getSingleProperty("VariableGroupID").toInt(),varG)) {
+                           shared_ptr<Device> dev;
+                           if (Models::instance().mDeviceModel->getDeviceByID(devid, dev)){
+                               varG->mDevices.push_back(dev);
+                           }
+
+                        }
+                    }
+
+                    if (t->getSingleProperty("Type").toString() == "UserInput" ||
+                        t->getSingleProperty("Type").toString() == "Constant")
+                    {
+                        if (!isVariableExistsInVector(var,t->requiredBy)) {
+                            t->requiredBy.push_back(var);
+                            connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+                        }
+
+                    }
+                    else
+                    {
+                        if (!isVariableExistsInVector(var,t->requiredBy)) {
+                            t->requiredBy.push_back(var);
+                            connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+                        }
+
+                        if (!isVariableExistsInVector(t,var->required)) {
+                            var->required.push_back(t);
+                        }
+
+
+                    }
+                }
+            }
+
+        }
+
+    }
 
     return true;
 }
@@ -556,7 +590,12 @@ bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int
             }
         }
 
-        //mDb.variableDao.updateVariable(variable);
+        // only update when variable is constant or userInput
+        if (variable.getSingleProperty("Type").toString() == "Constant" ||
+            variable.getSingleProperty("Type").toString() == "UserInput")
+        {
+            mDb.variableDao.updateVariable(variable);
+        }
         emit dataChanged(index, this->index(index.row(),VariableColumnSize - 1));
 
         return true;
@@ -648,11 +687,18 @@ void VariableProxyModel::setGroupIndex(int groupIndex) {
 
     beginResetModel();
 
+    mGroupIndex = groupIndex;
+
     QModelIndex in = Models::instance().mVariableGroupModel->index(groupIndex,0);
 
     mGroupID = Models::instance().mVariableGroupModel->data(in, VariableGroupModel::Roles::IdRole).toInt();
 
     endResetModel();
+}
+
+int VariableProxyModel::getGroupIndex()
+{
+    return mGroupIndex;
 }
 
 

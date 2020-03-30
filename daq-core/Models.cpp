@@ -15,10 +15,11 @@ Models::~Models() {
 }
 
 Models::Models(QObject *parent) :
-    mChannelModel(new ChannelModel(this)),
-    mDeviceModel(new DeviceModel(this)),
-    mVariableModel(new VariableModel(mDeviceModel,this)),
-    mDataModel(new DataModel(this)),
-    mVariableGroupModel(new VariableGroupModel(mVariableModel,this))
+    mChannelModel(new ChannelModel(parent)),
+    mDeviceModel(new DeviceModel(parent)),
+    mVariableModel(new VariableModel(mDeviceModel,parent)),
+    mDataModel(new DataModel(parent)),
+    mVariableGroupModel(new VariableGroupModel(mVariableModel,parent)),
+    mVariableProxyModel(new VariableProxyModel(parent))
 {
 }

@@ -19,7 +19,7 @@ public:
     void updateChannel(const Channel& ch) const;
     void removeChannel(int id) const;
     void removeAll() const;
-    std::unique_ptr<std::vector<std::unique_ptr<Channel>>> channels() const;
+    std::unique_ptr<std::vector<std::shared_ptr<Channel>>> channels() const;
 private:
     QSqlDatabase& mDatabase;
     QMutex& mMutex;

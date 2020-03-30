@@ -11,3 +11,18 @@ VariableGroup::VariableGroup(int id, QHash<QString,QVariant> properties, QVector
 {
 }
 
+
+void VariableGroup::startDAQ(int simulation)
+{
+    foreach (auto& dev, mDevices) {
+       dev->startDAQ(simulation);
+    }
+}
+
+void VariableGroup::endDAQ(int simulation)
+{
+    foreach (auto& dev, mDevices) {
+       dev->endDAQ(simulation);
+    }
+}
+
