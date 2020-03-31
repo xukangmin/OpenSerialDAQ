@@ -77,7 +77,7 @@
             "Log": 0
         },
         {
-            "Name": "Average Sample Size",
+            "Name": "Sample Size",
             "Type": "UserInput",
             "Unit": "seconds",
             "CurrentValue": 5,
@@ -241,12 +241,39 @@
         },
         {
             "Name": "Q,sccm",
-            "Type": "Display",
+            "Type": "Intermediate",
             "Unit": "sccm",
             "CurrentValue": 0,
-            "Equation": "UnitConv([Qstd,scfm],scfm,[Air Flow Unit])",
+            "Equation": "[Qstd,scfm]/(3.53147*10^-5)",
             "DataType": "double",
-            "Log": 1
+            "Log": 0
+        },
+        {
+            "Name": "ActualFlowRate_Intermediate",
+            "Type": "Intermediate",
+            "Unit": "sccm",
+            "CurrentValue": 0,
+            "Equation": "[Q,cfm] * 28316.846592",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "StandardFlowRate",
+            "Type": "Display",
+            "Unit": "[Air Flow Unit]",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Q,sccm],sccm,[Air Flow Unit])",
+            "DataType": "double",
+            "Log": 0
+        },
+        {
+            "Name": "ActualFlowRate",
+            "Type": "Display",
+            "Unit": "[Air Flow Unit]",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([ActualFlowRate_Intermediate],sccm,[Air Flow Unit])",
+            "DataType": "double",
+            "Log": 0
         },
         {
             "Name": "RangeMinDisplay",

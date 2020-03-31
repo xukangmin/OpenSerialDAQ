@@ -7,6 +7,7 @@
 #include <QThreadPool>
 #include "UnitAndConversion.h"
 #include <Thread/ThreadCalculationProcessor.h>
+#include <cmath>
 
 using namespace std;
 
@@ -57,6 +58,74 @@ double Variable::getAverageDataByDataSize(int data_size) {
     double avg = sum / (double)count;
 
     return avg;
+
+}
+
+double calculateSD(QVector<double> data)
+{
+    if (data.size() == 0) {
+        return 0;
+    }
+
+    double sum = 0.0, mean, standardDeviation = 0.0;
+
+
+    int i;
+
+    for(i = 0; i < data.size(); ++i)
+    {
+        sum += data.at(i);
+    }
+
+    mean = sum / (double) data.size();
+
+    for(i = 0; i < data.size(); ++i)
+        standardDeviation += pow(data[i] - mean, 2);
+
+    return sqrt(standardDeviation / (double) data.size());
+}
+
+double Variable::getSTDEVByTimePeriod(int seconds) {
+
+    if (seconds == 0) {
+        return 0;
+    }
+
+    if (this->getSingleProperty("DataType").toString() == "string") {
+        return 0;
+    }
+
+
+    if (historyData.size() == 1 || historyData.size() == 0) {
+        return this->getSingleProperty("CurrentValue").toDouble();
+    }
+
+    int time_diff = 0;
+
+    auto end_it = historyData.end() - 1;
+
+    auto it = historyData.end();
+
+    QHash<QString,QVariant> end_da = qvariant_cast<QHash<QString,QVariant>>(*end_it);
+
+    QDateTime end_time = end_da["TimeStamp"].toDateTime();
+
+    QVector<double> tmp_data;
+
+
+    while(time_diff < seconds && it != historyData.begin()) // search for data size
+    {
+       it--;
+
+       QHash<QString,QVariant> da = qvariant_cast<QHash<QString,QVariant>>(*it);
+
+       time_diff = da["TimeStamp"].toDateTime().secsTo(end_time);
+
+       tmp_data.append(da["Value"].toDouble());
+
+    }
+
+    return calculateSD(tmp_data);
 
 }
 

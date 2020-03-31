@@ -21,15 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
       mWidgetDevicePage(new WidgetDevicePage(this)),
       mWidgetStationPage(new WidgetStationPage(this)),
       mWidgetSettingPage(new WidgetSettingPage(this)),
-      allModels(Models::instance())
+      allModels(Models::instance()),
+      mSettings("Graftel", "OpenSerialDAQ")
 {
     ui->setupUi(this);
 
     allModels.mVariableGroupModel->resolveDependency();
-    // Settings
-    QSettings settings("Graftel", "OpenSerialDAQ");
-
-
 
     // Tool bar actions connections
 
@@ -161,9 +158,11 @@ void MainWindow::startAllChannels(bool isChecked) {
         // get current Variable Group Model Index
         Models::instance().mVariableGroupModel->startDAQ(ind,1);
         //mTimer_test->start();
+        mSettings.setValue("DAQRunning",1);
     } else {
         Models::instance().mVariableGroupModel->endDAQ(ind,1);
         //mTimer_test->stop();
+        mSettings.setValue("DAQRunning",0);
     }
 }
 
@@ -178,6 +177,7 @@ void MainWindow::stopAllChannels() {
         ui->actionStartAll->setChecked(false);
     }
     Models::instance().mVariableGroupModel->endDAQ(ind,1);
+    mSettings.setValue("DAQRunning",0);
 }
 
 void MainWindow::setupTestToolBar() {

@@ -2,8 +2,10 @@
 #define WIDGETVARIABLE_H
 
 #include <QWidget>
-
+#include <QtCharts/QChartView>
 #include <Variable/Variable.h>
+
+QT_CHARTS_USE_NAMESPACE
 
 namespace Ui {
 class WidgetVariable;
@@ -22,6 +24,7 @@ public:
 private:
     Variable* mVariable;
     Ui::WidgetVariable *ui;
+    QChartView *mChartView;
 };
 
 #endif // WIDGETVARIABLE_H

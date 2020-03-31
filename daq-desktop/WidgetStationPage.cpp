@@ -6,12 +6,13 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QQmlContext>
-#include <QSettings>
+
 
 using namespace std;
 WidgetStationPage::WidgetStationPage(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetStationPage)
+    ui(new Ui::WidgetStationPage),
+    mSettings("Graftel", "OpenSerialDAQ")
 {
     ui->setupUi(this);
 
@@ -45,6 +46,21 @@ WidgetStationPage::~WidgetStationPage()
     delete ui;
 }
 
+void WidgetStationPage::setVariableGroupIndex(int index)
+{
+    Models::instance().mVariableProxyModel->setGroupIndex(index);
+
+
+    if (mSettings.value("DAQRunning").toInt() == 1) {
+        Models::instance().mVariableGroupModel->endAllDAQ(1);
+
+        QModelIndex ind = Models::instance().mVariableGroupModel->index(index,0);
+
+        Models::instance().mVariableGroupModel->startDAQ(ind, 1);
+    }
+
+}
+
 void WidgetStationPage::setupStationQML(QString stationType) {
 
     Models::instance().mVariableProxyModel->setSourceModel(Models::instance().mVariableModel);
@@ -74,6 +90,8 @@ void WidgetStationPage::setupStationQML(QString stationType) {
     ctxt->setContextProperty("variableProxyModel",Models::instance().mVariableProxyModel);
 
     ctxt->setContextProperty("unitAndConversion",&UnitAndConversion::instance());
+
+    ctxt->setContextProperty("widgetStationPapge", this);
 
     ui->quickWidget->setSource(QUrl("qrc:/qml/" + stationType + ".qml"));
 }
@@ -130,15 +148,18 @@ void WidgetStationPage::loadStation() {
         ui->progressBar->setVisible(true);
 
         if (Models::instance().mVariableGroupModel->loadGroupsFromConfigFile(fileName)) {
+
+            Models::instance().mVariableGroupModel->resolveDependency();
+
             emit sendMessage("Station Loaded.");
             ui->lbProgress->setVisible(false);
             ui->progressBar->setVisible(false);
             ui->tabWidget->setTabText(0, Models::instance().mVariableGroupModel->mStationName);
 
-            QSettings settings("Graftel", "OpenSerialDAQ");
-            settings.setValue("StationName",Models::instance().mVariableGroupModel->mStationName);
-            settings.setValue("StationVersion",Models::instance().mVariableGroupModel->mStationVersion);
-            settings.setValue("StationType",Models::instance().mVariableGroupModel->mStationType);
+
+            mSettings.setValue("StationName",Models::instance().mVariableGroupModel->mStationName);
+            mSettings.setValue("StationVersion",Models::instance().mVariableGroupModel->mStationVersion);
+            mSettings.setValue("StationType",Models::instance().mVariableGroupModel->mStationType);
 
             setupStationQML(Models::instance().mVariableGroupModel->mStationType);
 

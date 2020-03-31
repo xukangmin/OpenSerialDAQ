@@ -241,7 +241,7 @@ bool VariableModel::resolveFirstTime(int group_id)
 {
     foreach(const shared_ptr<Variable>& var, (*mVariables)) {
 
-        connect(var.get(),&Variable::calculateVariable,this,&VariableModel::calculateVariable);
+        //connect(var.get(),&Variable::calculateVariable,this,&VariableModel::calculateVariable);
 
         QString eqn = var->getSingleProperty("Equation").toString();
 
@@ -282,14 +282,14 @@ bool VariableModel::resolveFirstTime(int group_id)
                             var->equation = var->equation.replace(match, "{" + QString::number(t->m_id) + "}");
                             var->setSingleProperty("Equation", var->equation);
 
-                            if (!isVariableExistsInVector(var,t->requiredBy)) {
-                                t->requiredBy.push_back(var);
-                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-                            }
+//                            if (!isVariableExistsInVector(var,t->requiredBy)) {
+//                                t->requiredBy.push_back(var);
+//                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+//                            }
 
-                            if (!isVariableExistsInVector(t,var->required)) {
-                                var->required.push_back(t);
-                            }
+//                            if (!isVariableExistsInVector(t,var->required)) {
+//                                var->required.push_back(t);
+//                            }
                         }
                     }
                 } else { // find
@@ -304,32 +304,32 @@ bool VariableModel::resolveFirstTime(int group_id)
                         if (t->getSingleProperty("Type").toString() == "UserInput")
                         {
                             var->equation = var->equation.replace(match, "{" + QString::number(t->m_id) + "}");
-                            if (!isVariableExistsInVector(var,t->requiredBy)) {
-                                t->requiredBy.push_back(var);
-                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-                            }
+//                            if (!isVariableExistsInVector(var,t->requiredBy)) {
+//                                t->requiredBy.push_back(var);
+//                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+//                            }
 
                         }
                         else if (t->getSingleProperty("Type").toString() == "Constant")  // constant
                         {
                             var->equation = var->equation.replace(match, t->getSingleProperty("CurrentValue").toString());
-                            if (!isVariableExistsInVector(var,t->requiredBy)) {
-                                t->requiredBy.push_back(var);
-                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-                            }
+//                            if (!isVariableExistsInVector(var,t->requiredBy)) {
+//                                t->requiredBy.push_back(var);
+//                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+//                            }
 
                         }
                         else
                         {
                             var->equation = var->equation.replace(match, "{" + QString::number(t->m_id) + "}");
-                            if (!isVariableExistsInVector(var,t->requiredBy)) {
-                                t->requiredBy.push_back(var);
-                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
-                            }
+//                            if (!isVariableExistsInVector(var,t->requiredBy)) {
+//                                t->requiredBy.push_back(var);
+//                                connect(t.get(),&Variable::sendDataToRequiredBy,var.get(),&Variable::getDataFromRequired);
+//                            }
 
-                            if (!isVariableExistsInVector(t,var->required)) {
-                                var->required.push_back(t);
-                            }
+//                            if (!isVariableExistsInVector(t,var->required)) {
+//                                var->required.push_back(t);
+//                            }
                         }
 
                     }
@@ -351,18 +351,18 @@ bool VariableModel::resolveFirstTime(int group_id)
 
     // trigger all constant and userinput for initilization
 
-    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
-        if (var->getSingleProperty("Type").toString() == "Constant" ||
-                var->getSingleProperty("Type").toString() == "UserInput")
-        {
-            QHash<QString,QVariant> data;
+//    foreach(const shared_ptr<Variable>& var, (*mVariables)) {
+//        if (var->getSingleProperty("Type").toString() == "Constant" ||
+//                var->getSingleProperty("Type").toString() == "UserInput")
+//        {
+//            QHash<QString,QVariant> data;
 
-            data["VariableID"] = var->m_id;
-            data["Value"] = var->getSingleProperty("CurrentValue");
-            data["TimeStamp"] =  QDateTime::currentDateTime();
-            var->addDataToVariable(data,1);
-        }
-    }
+//            data["VariableID"] = var->m_id;
+//            data["Value"] = var->getSingleProperty("CurrentValue");
+//            data["TimeStamp"] =  QDateTime::currentDateTime();
+//            var->addDataToVariable(data,1);
+//        }
+//    }
 
     return true;
 }
@@ -441,6 +441,22 @@ bool VariableModel::resolveDependency()
 
                     }
                 }
+            }
+
+
+            int const_count = 0;
+
+            foreach(auto& v, var->required){
+                if (v->getSingleProperty("Type").toString() == "RangeSpecific" &&
+                    v->getSingleProperty("Type").toString() == "UserInput") {
+                    const_count++;
+                }
+            }
+
+            if (const_count == (int)var->required.size()) { // all constant, do calculation
+                QHash<QString,QVariant> data;
+                data["TimeStamp"] = QDateTime::currentDateTime();
+                calculate(var.get(),data);
             }
 
         }
@@ -566,7 +582,6 @@ QVariant VariableModel::data(const QModelIndex& index, int role) const {
 
 }
 
-
 bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int role) {
     if (isIndexValid(index) && role == Roles::UpdateDataRole) {
         Variable& variable = *mVariables->at(index.row());
@@ -590,9 +605,10 @@ bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int
             }
         }
 
-        // only update when variable is constant or userInput
+//         only update when variable is constant or userInput
         if (variable.getSingleProperty("Type").toString() == "Constant" ||
-            variable.getSingleProperty("Type").toString() == "UserInput")
+            variable.getSingleProperty("Type").toString() == "UserInput" ||
+            variable.getSingleProperty("Type").toString() == "Display")
         {
             mDb.variableDao.updateVariable(variable);
         }
@@ -694,6 +710,7 @@ void VariableProxyModel::setGroupIndex(int groupIndex) {
     mGroupID = Models::instance().mVariableGroupModel->data(in, VariableGroupModel::Roles::IdRole).toInt();
 
     endResetModel();
+
 }
 
 int VariableProxyModel::getGroupIndex()
@@ -762,6 +779,42 @@ int VariableProxyModel::getGasTypeIndexByName(QString varName) {
     }
 
     return 0;
+}
+
+QVariant VariableProxyModel::getSTDEVDataByName(QString varName, int time_period) {
+
+    VariableModel* mVarModel = static_cast<VariableModel*>(sourceModel());
+
+    shared_ptr<Variable> var;
+
+    mVarModel->findVariableByNameAndGroupID(varName, mGroupID, var);
+
+
+    QVariant out_data = QVariant();
+
+    bool isInteger = false;
+
+    double out_data_double = var->getSTDEVByTimePeriod(time_period);
+
+    if (out_data_double == qFloor(out_data_double)) {
+        isInteger = true;
+    }
+
+
+    if (isInteger) {
+       return QString::number(out_data_double, 'f', 0);
+    }
+    else {
+        if (out_data_double < 0.000001 || out_data_double > 100000)
+        {
+           return QString::number(out_data_double, 'e', 6);
+        }
+        else {
+           return QString::number(out_data_double, 'f', 6);
+        }
+    }
+
+    return out_data;
 }
 
 QVariant VariableProxyModel::getAverageDataByName(QString varName, int time_period) {

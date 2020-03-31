@@ -41,6 +41,13 @@ void VariableGroupModel::endDAQ(const QModelIndex& index, int simulation) {
 
 }
 
+void VariableGroupModel::endAllDAQ(int simulation) {
+    foreach(const shared_ptr<VariableGroup>& varG, (*mVariableGroups)) {
+        varG->endDAQ(simulation);
+    }
+}
+
+
 bool VariableGroupModel::findVariableGroupByID(int varGroupID, shared_ptr<VariableGroup>& varGroup)
 {
     foreach(const shared_ptr<VariableGroup>& varG, (*mVariableGroups)) {
@@ -230,6 +237,7 @@ QModelIndex VariableGroupModel::addVariableGroup(QHash<QString,QVariant> propert
     (*newVariableGroup).setSingleProperty("VariableGroupID",(*newVariableGroup).m_id);
     addVariables((*newVariableGroup).m_properties, (*newVariableGroup).m_group_properties);
     mVariableGroups->push_back(move(newVariableGroup));
+
     endInsertRows();
     return index(rowIndex, 0);
 }

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QStackedWidget>
+#include <QSettings>
 #include "DialogNewChannel.h"
 #include "WidgetChannel.h"
 #include "WidgetChannelListPage.h"
@@ -48,6 +49,10 @@ private:
 
     void setupCommonToolBar();
     void setupTestToolBar();
+
+
+    QSettings mSettings;
+
 public slots:
     void showChannelPage();
     void showDevicePage();

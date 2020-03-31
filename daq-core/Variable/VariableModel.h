@@ -77,6 +77,7 @@ public:
     Q_INVOKABLE int getUnitIndexByName(QString varName);
     Q_INVOKABLE int getGasTypeIndexByName(QString varName);
     Q_INVOKABLE QVariant getAverageDataByName(QString varName, int time_period);
+    Q_INVOKABLE QVariant getSTDEVDataByName(QString varName, int time_period);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;

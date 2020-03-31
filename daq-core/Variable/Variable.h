@@ -40,6 +40,7 @@ public:
 
     double getAverageDataByDataSize(int data_size);
     double getAverageDataByTimePeriod(int seconds);
+    double getSTDEVByTimePeriod(int seconds);
 signals:
     void sendDataToRequiredBy(QHash<QString,QVariant> data);
     void calculateVariable(QHash<QString,QVariant> data);

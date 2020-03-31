@@ -43,6 +43,7 @@ public:
     bool findVariableGroupByID(int varGroupID, std::shared_ptr<VariableGroup>& varGroup);
     void startDAQ(const QModelIndex& index, int simulation = 0);
     void endDAQ(const QModelIndex& index, int simulation = 0);
+    void endAllDAQ(int simulation = 0);
 signals:
     void updateProgress(QString progress, int index, int total);
 
