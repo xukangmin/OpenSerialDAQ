@@ -63,6 +63,18 @@ bool DeviceModel::isDeviceExists(QString name, int node) {
     }
 }
 
+bool DeviceModel::getDeviceByNameAndNode(QString name, int node, std::shared_ptr<Device>& devRef)
+{
+    foreach(const std::shared_ptr<Device>& dev, (*mDevices)) {
+        if ((*dev).getSingleProperty("Name").toString() == name &&
+            (*dev).getSingleProperty("NodeID").toInt() == node) {
+            devRef = dev;
+            return true;
+        }
+    }
+    return false;
+}
+
 int DeviceModel::getDeviceIDByNameAndNode(QString name, int node) {
     foreach(auto& dev, (*mDevices)) {
         if ((*dev).getSingleProperty("Name").toString() == name &&
@@ -123,6 +135,25 @@ QModelIndex DeviceModel::addDevice(QHash<QString,QVariant> properties)
     mDevices->push_back(move(newDevice));
     endInsertRows();
     return index(rowIndex, 0);
+}
+
+void DeviceModel::addDeviceToChannel(QString deviceName, int deviceNode, QString channelName)
+{
+    shared_ptr<Device> dev;
+    if (getDeviceByNameAndNode(deviceName, deviceNode, dev))
+    {
+        shared_ptr<Channel> ch;
+        if (Models::instance().mChannelModel->findChannelByName(channelName,ch)) {
+            beginResetModel();
+            int chid = ch->getSingleProperty("id").toInt();
+            dev->setSingleProperty("ChannelID", chid);
+            mDb.deviceDao.updateDevice(*dev);
+            Models::instance().mChannelModel->addDeviceToChannel(dev,ch);
+            emit dataChanged(index(0,0),index(rowCount() - 1, columnCount() - 1));
+            endResetModel();
+        }
+    }
+
 }
 
 void DeviceModel::addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index)

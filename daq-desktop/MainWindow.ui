@@ -53,6 +53,7 @@
     <addaction name="actionLoadDeviceConfig"/>
     <addaction name="actionLoadStationConfig"/>
     <addaction name="separator"/>
+    <addaction name="actionSimulationMode"/>
     <addaction name="actionSetting_2"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -287,6 +288,18 @@
    </property>
    <property name="toolTip">
     <string>Clear Station Configuration</string>
+   </property>
+  </action>
+  <action name="actionSimulationMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Icons/IconSet.qrc">
+     <normaloff>:/Images/flag.png</normaloff>:/Images/flag.png</iconset>
+   </property>
+   <property name="text">
+    <string>Simulation Mode</string>
    </property>
   </action>
  </widget>

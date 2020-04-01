@@ -2,6 +2,7 @@
 #include "WidgetMiniDevice.h"
 #include "ui_WidgetChannel.h"
 #include <QDebug>
+#include <Device/DeviceModel.h>
 
 ChannelWidget::ChannelWidget(Models* models, QWidget *parent) :
     QWidget(parent), m_ch_model(models->mChannelModel), m_row_index(models->mChannelIndex.row()), m_dev_model(models->mDeviceModel),
@@ -15,7 +16,7 @@ ChannelWidget::ChannelWidget(Models* models, QWidget *parent) :
     for(int i = 0; i < m_dev_model->rowCount(); i++) {
         QModelIndex in = m_dev_model->index(i,4);
         QModelIndex inch = models->mChannelModel->index(m_row_index,0);
-        if (m_dev_model->data(in).toInt() == m_ch_model->data(inch).toInt()) {  // channel id = id
+        if (m_dev_model->data(in,DeviceModel::Roles::RawDataRole).toInt() == m_ch_model->data(inch).toInt()) {  // channel id = id
             addDeviceToChannel(in);
         }
     }

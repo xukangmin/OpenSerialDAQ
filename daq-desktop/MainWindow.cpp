@@ -16,17 +16,25 @@ using namespace std;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
+      mSettings("Graftel", "OpenSerialDAQ"),
+      allModels(Models::instance()),
       mStackedWidget(new QStackedWidget(this)),
       mWidgetChannelListPage(new WidgetChannelListPage(this)),
       mWidgetDevicePage(new WidgetDevicePage(this)),
       mWidgetStationPage(new WidgetStationPage(this)),
-      mWidgetSettingPage(new WidgetSettingPage(this)),
-      allModels(Models::instance()),
-      mSettings("Graftel", "OpenSerialDAQ")
+      mWidgetSettingPage(new WidgetSettingPage(this))
 {
     ui->setupUi(this);
 
     allModels.mVariableGroupModel->resolveDependency();
+
+    if (mSettings.value("Simulation").toInt() == 1) {
+        ui->actionSimulationMode->setChecked(true);
+    }
+    else {
+        mSettings.setValue("Simulation",0);
+        ui->actionSimulationMode->setChecked(false);
+    }
 
     // Tool bar actions connections
 
@@ -58,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionTestButton3,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton3()));
     connect(ui->actionTestButton4,SIGNAL(triggered(bool)),this,SLOT(triggerTestButton4()));
     // UI dialogs
+
+    connect(ui->actionSimulationMode,SIGNAL(triggered(bool)), this, SLOT(toggleSimulation(bool)));
 
     // Add new Channel UI
 
@@ -113,8 +123,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     mWidgetChannelListPage->setModel(&allModels);
 
-    connect(allModels.mChannelModel, &ChannelModel::rowsInserted, mWidgetChannelListPage, &WidgetChannelListPage::updateWidgets);
-    connect(allModels.mChannelModel, &ChannelModel::rowsRemoved, mWidgetChannelListPage, &WidgetChannelListPage::updateWidgets);
+
 
     mStackedWidget->addWidget(mWidgetChannelListPage);
 
@@ -149,6 +158,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::toggleSimulation(bool isChecked) {
+    if (isChecked) {
+        mSettings.setValue("Simulation",1);
+    }
+    else {
+        mSettings.setValue("Simulation",0);
+    }
+}
+
 void MainWindow::startAllChannels(bool isChecked) {
     int groupIndex = Models::instance().mVariableProxyModel->getGroupIndex();
 
@@ -156,11 +174,11 @@ void MainWindow::startAllChannels(bool isChecked) {
 
     if (isChecked) {
         // get current Variable Group Model Index
-        Models::instance().mVariableGroupModel->startDAQ(ind,1);
+        Models::instance().mVariableGroupModel->startDAQ(ind,mSettings.value("Simulation").toInt());
         //mTimer_test->start();
         mSettings.setValue("DAQRunning",1);
     } else {
-        Models::instance().mVariableGroupModel->endDAQ(ind,1);
+        Models::instance().mVariableGroupModel->endDAQ(ind,mSettings.value("Simulation").toInt());
         //mTimer_test->stop();
         mSettings.setValue("DAQRunning",0);
     }
@@ -176,7 +194,7 @@ void MainWindow::stopAllChannels() {
     if (ui->actionStartAll->isChecked()){
         ui->actionStartAll->setChecked(false);
     }
-    Models::instance().mVariableGroupModel->endDAQ(ind,1);
+    Models::instance().mVariableGroupModel->endDAQ(ind,mSettings.value("Simulation").toInt());
     mSettings.setValue("DAQRunning",0);
 }
 

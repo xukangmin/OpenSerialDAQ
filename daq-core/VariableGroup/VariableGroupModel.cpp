@@ -120,6 +120,29 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
        mStationVersion = json["Version"].toDouble();
    }
 
+   if (json.contains("Channels"))
+   {
+        QList<QString> ports_list = ChannelModel::getAvailablePorts();
+
+         QJsonArray channelArr = json["Channels"].toArray();
+         for (int i = 0; i < channelArr.size(); i++) {
+            QJsonObject singleChannel = channelArr[i].toObject();
+
+
+
+            if (ports_list.contains(singleChannel["ComPort"].toString()))
+            {
+                QHash<QString, QVariant> properties;
+
+                foreach(auto key, singleChannel.keys()) {
+                    properties[key] = singleChannel[key].toVariant();
+                }
+
+                Models::instance().mChannelModel->addChannel(properties);
+            }
+         }
+   }
+
 
    if (json.contains("Devices")) {
        QJsonArray deviceArr = json["Devices"].toArray();
@@ -129,12 +152,26 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
 
             QHash<QString, QVariant> properties;
 
+
+            QString dev_com_port = singleDevice["Channel"].toString();
+
+
+
             properties["Name"] = singleDevice["Name"].toString();
             properties["NodeID"] = singleDevice["Node"].toInt();
             properties["Protocol"] = singleDevice["Protocol"].toString();
             properties["ChannelID"] = -1;
 
             Models::instance().mDeviceModel->addDevice(properties);
+
+            if (!dev_com_port.isEmpty() && dev_com_port != "N/A")
+            {
+                 if (Models::instance().mChannelModel->isPortExists(dev_com_port))
+                 {
+                     Models::instance().mDeviceModel->addDeviceToChannel(properties["Name"].toString(),properties["NodeID"].toInt(),dev_com_port);
+                 }
+            }
+
 
             emit updateProgress("Create Device",i,deviceArr.size());
        }

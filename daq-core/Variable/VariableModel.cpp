@@ -232,6 +232,13 @@ void VariableModel::calculateVariable(QHash<QString,QVariant> data) {
 
     Variable* var = qobject_cast<Variable*>(QObject::sender());
 
+//    try {
+//        calculate(var,data);
+//    } catch(const std::exception& e) {
+//       qDebug() << " a standard exception was caught, with message '"
+//                          << e.what() << "'\n";
+//    }
+
     ThreadCalculationProcessor *calProc = new ThreadCalculationProcessor(*this,*var,data);
 
     QThreadPool::globalInstance()->start(calProc);

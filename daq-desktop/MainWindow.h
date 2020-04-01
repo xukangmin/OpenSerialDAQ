@@ -31,6 +31,10 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    QSettings mSettings;
+
+    Models& allModels;
+
     QTimer* mTimer_test;
 
     // Widgets
@@ -45,13 +49,13 @@ private:
     DialogNewDevice* mDialogNewDevice;
 
 
-    Models& allModels;
+
 
     void setupCommonToolBar();
     void setupTestToolBar();
 
 
-    QSettings mSettings;
+
 
 public slots:
     void showChannelPage();
@@ -64,6 +68,8 @@ public slots:
 
     void startAllChannels(bool isChecked);
     void stopAllChannels();
+
+    void toggleSimulation(bool isChecked);
 
     void triggerTestButton1();
     void triggerTestButton2();

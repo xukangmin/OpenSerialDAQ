@@ -13,6 +13,7 @@
 #include <memory>
 #include <vector>
 
+
 class ThreadChannel : public QThread
 {
     Q_OBJECT

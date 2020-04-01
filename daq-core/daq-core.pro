@@ -22,6 +22,7 @@ SOURCES += \
     Generic/GenericDefinition.cpp \
     Generic/GenericDefinitionDao.cpp \
     Models.cpp \
+    SerialEmulator/SerialEmulator.cpp \
     Thread/ThreadChannel.cpp \
     Thread/ThreadDataProcessor.cpp \
     Thread/ThreadCalculationProcessor.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     Generic/GenericDefinition.h \
     Generic/GenericDefinitionDao.h \
     Models.h \
+    SerialEmulator/SerialEmulator.h \
     Thread/ThreadChannel.h \
     Thread/ThreadDataProcessor.h \
     Thread/ThreadCalculationProcessor.h \

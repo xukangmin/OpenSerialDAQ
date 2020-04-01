@@ -46,6 +46,7 @@ void ThreadChannel::addDevice(const shared_ptr<Device>& dev) {
                 pac->m_packet_id = rand();
                 pac->m_query_bytes = dev->buildQueryCmd(cmd);
                 pac->m_cmd_id = cmd.cmd_id;
+                pac->mTimeStamp = QDateTime::currentDateTime();
                 qDebug() << "enqueu";
                 m_packet_queue.enqueue(pac);
             });
@@ -81,6 +82,8 @@ void ThreadChannel::startChannel() {
 
 
 void ThreadChannel::stopChannel() {
+
+
     if (isRunning()) {
         qDebug() << "channel stoped";
         m_stop = true;
@@ -107,15 +110,16 @@ void ThreadChannel::stopDAQ() {
 
 void ThreadChannel::run()
 {
-    QSerialPort serial;
 
-    serial.setPortName(m_ch.getSingleProperty("ComPort").toString());
+    QSerialPort mSerial;
 
-    serial.setBaudRate(m_ch.getSingleProperty("BaudRate").toInt());
+    mSerial.setPortName(m_ch.getSingleProperty("ComPort").toString());
+
+    mSerial.setBaudRate(m_ch.getSingleProperty("BaudRate").toInt());
 
     // To do
 
-    connect(&serial,&QSerialPort::errorOccurred,this,&ThreadChannel::stopChannel);
+    //connect(&mSerial,&QSerialPort::errorOccurred,this,&ThreadChannel::stopChannel);
 
 //    serial.setParity(m_ch.getProperty("Parity").toString());
 
@@ -123,10 +127,13 @@ void ThreadChannel::run()
 
 //    serial.setStopBits(m_ch.getProperty("StopBits").toString());
 
-    if (!serial.open(QIODevice::ReadWrite)) {
+    if (!mSerial.open(QIODevice::ReadWrite)) {
         //Todo: emit a signal here
-        qDebug() << serial.errorString();
+        qDebug() << mSerial.errorString();
+        stopChannel();
     }
+
+    qDebug() << mSerial.errorString();
 
     while(!m_stop) {
         if (!m_packet_queue.isEmpty()) {
@@ -134,16 +141,16 @@ void ThreadChannel::run()
 
             qDebug() << pac->m_query_bytes;
 
-            serial.write(pac->m_query_bytes);
-            if (serial.waitForBytesWritten(500)) {
+            mSerial.write(pac->m_query_bytes);
+            if (mSerial.waitForBytesWritten(500)) {
                 qDebug() << "data sent";
             }
 
 
-            if (serial.waitForReadyRead(500)) {
-                QByteArray responseData = serial.readAll();
-                while (serial.waitForReadyRead(50))
-                    responseData += serial.readAll();
+            if (mSerial.waitForReadyRead(500)) {
+                QByteArray responseData = mSerial.readAll();
+                while (mSerial.waitForReadyRead(50)) // value depends on baud rate 50 is good for 9600+
+                    responseData += mSerial.readAll();
 
                 qDebug() << "received";
                 qDebug() << responseData;
@@ -168,7 +175,7 @@ void ThreadChannel::run()
         msleep(1);
     }
 
-    serial.close();
+    mSerial.close();
 }
 
 void ThreadChannel::getData(QVector<DeviceData> data) {

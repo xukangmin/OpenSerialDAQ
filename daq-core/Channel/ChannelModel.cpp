@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QSerialPortInfo>
 #include <Device/DeviceModel.h>
+#include "Models.h"
 
 using namespace std;
 
@@ -56,6 +57,21 @@ bool ChannelModel::isPortExists(QString portName) {
     }
 }
 
+bool ChannelModel::findChannelByName(QString name, shared_ptr<Channel>& ch)
+{
+    foreach(const shared_ptr<Channel>& cha, (*mChannels)) {
+        if ((*cha).getSingleProperty("ComPort").toString() == name){
+            ch = cha;
+            return true;
+        }
+    }
+    return false;
+}
+
+void ChannelModel::addDeviceToChannel(const shared_ptr<Device>& dev, const shared_ptr<Channel>& ch) {
+    ch->addDeviceToThread(dev);
+    dev->setChannel(ch);
+}
 
 void ChannelModel::addDeviceToChannel(const shared_ptr<Device>& dev, const QModelIndex& ch_index) {
     Channel& channel = *mChannels->at(ch_index.row());

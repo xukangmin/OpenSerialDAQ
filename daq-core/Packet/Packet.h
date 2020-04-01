@@ -17,6 +17,7 @@ public:
     QString m_query_str;
     QByteArray m_query_bytes;
     QByteArray m_response_bytes;
+    QDateTime mTimeStamp;
     unsigned long time_stamp;
     QString device_id;
     QString m_parse_regex;

@@ -27,8 +27,10 @@ public:
     QModelIndex addDevice(QHash<QString,QVariant> properties);
     bool isDeviceExists(QString name, int node);
     void addDeviceToChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
+    void addDeviceToChannel(QString deviceName, int deviceNode, QString channelName);
     void removeDeviceFromChannel(const QModelIndex& dev_index, ChannelModel* ch_model,  const QModelIndex& ch_index);
     int getDeviceIDByNameAndNode(QString name, int node);
+    bool getDeviceByNameAndNode(QString name, int node, std::shared_ptr<Device>& devRef);
     bool getDeviceByID(int devid, std::shared_ptr<Device>& devRef);
     void addVariableToDevice(const std::shared_ptr<Variable>& var, const QModelIndex& dev_index);
     std::vector<QHash<QString, QVariant>> getVariableDefinitionFromDevice(const QModelIndex& dev_index);

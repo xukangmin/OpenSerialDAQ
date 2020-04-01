@@ -39,6 +39,15 @@ void WidgetChannelListPage::setModel(Models *models)
     m_ch_model = models->mChannelModel;
     m_dev_model = models->mDeviceModel;
     mModels = models;
+
+    connect(models->mChannelModel, &ChannelModel::rowsInserted, this, &WidgetChannelListPage::updateWidgets);
+    connect(models->mChannelModel, &ChannelModel::rowsRemoved, this, &WidgetChannelListPage::updateWidgets);
+    connect(models->mChannelModel, &ChannelModel::dataChanged, this, &WidgetChannelListPage::updateWidgets);
+
+    connect(models->mDeviceModel, &DeviceModel::rowsInserted, this, &WidgetChannelListPage::updateWidgets);
+    connect(models->mDeviceModel, &DeviceModel::rowsRemoved, this, &WidgetChannelListPage::updateWidgets);
+    connect(models->mDeviceModel, &DeviceModel::dataChanged, this, &WidgetChannelListPage::updateWidgets);
+
     updateWidgets();
 }
 
