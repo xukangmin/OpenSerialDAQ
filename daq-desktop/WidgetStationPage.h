@@ -6,6 +6,7 @@
 #include <QQuickWidget>
 #include "UnitAndConversion.h"
 #include <QSettings>
+#include "WidgetVariableChart.h"
 
 namespace Ui {
 class WidgetStationPage;
@@ -29,9 +30,14 @@ signals:
 public slots:
     void loadStation();
     void getProgress(QString progressName, int index, int total);
+    void enableDetailView(const QModelIndex &index);
+
 private:
     Ui::WidgetStationPage *ui;
     QSettings mSettings;
+    WidgetVariableChart *mWidgetVariableChart;
+    QModelIndex prev_index;
+    QModelIndex curr_index;
 };
 
 #endif // WIDGETSTATIONPAGE_H

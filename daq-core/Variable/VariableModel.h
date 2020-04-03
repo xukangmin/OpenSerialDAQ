@@ -27,6 +27,7 @@ public:
     void addDataToVariableModel(QHash<QString,QVariant> data, int isInit = 1);
     bool findVariableByNameAndDeviceID(QString name, int device_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByNameAndGroupID(QString name, int group_id, std::shared_ptr<Variable>& var_ret);
+
     bool findVariableByID(int var_id, std::shared_ptr<Variable>& var_ret);
     bool calculate(Variable* var, QHash<QString,QVariant> data);
     bool isVariableExistsInVector(const std::shared_ptr<Variable>& t, std::vector<std::shared_ptr<Variable>>& v);
@@ -43,6 +44,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     bool findVariablesByGroupID(int group_id, std::vector<std::shared_ptr<Variable>>& var_ret);
     QModelIndex getIndexByVariable(Variable &var);
+    bool getVariableByIndex(const QModelIndex& index, std::shared_ptr<Variable>& var_ret);
 private:
     bool isIndexValid(const QModelIndex& index) const;
 

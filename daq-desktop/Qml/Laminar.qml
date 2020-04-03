@@ -10,6 +10,7 @@ Rectangle {
     width: 1024; height: 800
     color: "#ffffff"
 
+
     ScrollView {
         id: mainScrollView
         x: 0
@@ -136,10 +137,13 @@ Rectangle {
 
                     ComboBox {
                         id: cbStandardGas
+                        font.strikeout: false
+                        hoverEnabled: false
+                        currentIndex: 0
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.preferredHeight: 26
                         Layout.fillWidth: true
                         Layout.preferredWidth: 120
-                        currentIndex: variableProxyModel.getGasTypeIndexByName("Standard Gas Type")
                         model: unitAndConversion.getGasNameList()
                         onActivated: {
                             variableProxyModel.setDataByName("Standard Gas Type",currentText)
@@ -189,6 +193,9 @@ Rectangle {
 
                     ComboBox {
                         id: cbSubStation
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        wheelEnabled: true
+                        hoverEnabled: false
                         Layout.fillWidth: true
                         Layout.preferredHeight: 26
                         currentIndex: 0
@@ -220,6 +227,8 @@ Rectangle {
 
                     ComboBox {
                         id: cbFlowUnit
+                        textRole: qsTr("")
+                        wheelEnabled: true
                         Layout.fillWidth: true
                         currentIndex: variableProxyModel.getUnitIndexByName("Air Flow Unit")
                         model: unitAndConversion.getUnitNameList("AirFlow")
@@ -702,24 +711,26 @@ Rectangle {
             id: gbData
             x: 200
             y: 441
-            width: 809
+            width: 359
             height: 352
             title: qsTr("Data")
 
             Label {
                 id: label12
-                x: 11
+                x: 0
                 y: 75
                 text: qsTr("Delta Pressure")
-                font.pointSize: 15
+                font.pointSize: 12
             }
 
             TextField {
                 id: tfDeltaPressure
-                x: 162
-                y: 70
+                x: 0
+                y: 98
+                width: 171
+                height: 32
                 text: variableProxyModel.getDataByName("Delta Pressure Display")
-                font.pointSize: 16
+                font.pointSize: 13
                 horizontalAlignment: Text.AlignHCenter
                 Connections {
                     target: variableProxyModel
@@ -729,18 +740,20 @@ Rectangle {
 
             Label {
                 id: label8
-                x: 11
-                y: 134
+                x: 0
+                y: 143
                 text: qsTr("Pressure")
-                font.pointSize: 15
+                font.pointSize: 12
             }
 
             TextField {
                 id: tfPressure
-                x: 162
-                y: 126
+                x: 0
+                y: 168
+                width: 171
+                height: 32
                 text: variableProxyModel.getDataByName("Pressure Display")
-                font.pointSize: 16
+                font.pointSize: 13
                 horizontalAlignment: Text.AlignHCenter
                 Connections {
                     target: variableProxyModel
@@ -753,10 +766,10 @@ Rectangle {
 
             TextField {
                 id: tfDeltaPressureUnit
-                x: 368
-                y: 70
+                x: 177
+                y: 98
                 width: 105
-                height: 40
+                height: 32
                 text: cbDeltaPressureUnit.currentText
                 font.pointSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -767,21 +780,23 @@ Rectangle {
 
             Label {
                 id: label7
-                x: 11
-                y: 22
+                x: 0
+                y: 14
                 text: qsTr("Temperatue")
-                font.pointSize: 15
+                font.pointSize: 12
             }
 
             TextField {
                 id: tfTemperature
-                x: 162
-                y: 14
+                x: 0
+                y: 37
+                width: 171
+                height: 32
                 text: variableProxyModel.getDataByName("Temperature Display")
                 Layout.preferredHeight: 40
                 Layout.preferredWidth: 200
                 horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 16
+                font.pointSize: 13
                 Connections {
                     target: variableProxyModel
                     onDataChanged: tfTemperature.text = variableProxyModel.getDataByName("Temperature Display")
@@ -790,8 +805,10 @@ Rectangle {
 
             TextField {
                 id: tfTemperatureUnit
-                x: 368
-                y: 14
+                x: 177
+                y: 37
+                width: 105
+                height: 32
                 text: cbTemperatureUnit.currentText
                 Layout.preferredHeight: 40
                 Layout.preferredWidth: 105
@@ -804,16 +821,288 @@ Rectangle {
 
             TextField {
                 id: tfPressureUnit
-                x: 368
-                y: 126
+                x: 177
+                y: 168
                 width: 105
-                height: 40
+                height: 32
                 text: cbPressureUnit.currentText
                 font.pointSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 Connections {
                     target: variableProxyModel
                 }
+            }
+        }
+
+        GroupBox {
+            id: gbCalibration
+            x: 565
+            y: 441
+            width: 444
+            height: 352
+            title: qsTr("Calibration")
+
+            Label {
+                id: label17
+                x: 97
+                y: 53
+                text: qsTr("TARGET")
+                font.pointSize: 12
+            }
+
+            Label {
+                id: label18
+                x: 232
+                y: 53
+                text: qsTr("STD")
+                font.pointSize: 12
+            }
+
+            Label {
+                id: label19
+                x: 348
+                y: 54
+                text: qsTr("DUT")
+                font.pointSize: 12
+            }
+
+            RowLayout {
+                x: 8
+                y: 78
+
+                Label {
+                    id: label10
+                    text: qsTr("Point 1")
+                    font.pointSize: 12
+                }
+
+                TextField {
+                    id: tfTemperature1
+                    text: "10"
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 119
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature3
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature4
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+            }
+
+            RowLayout {
+                x: 8
+                y: 124
+                Label {
+                    id: label16
+                    text: qsTr("Point 2")
+                    font.pointSize: 12
+                }
+
+                TextField {
+                    id: tfTemperature2
+                    text: "20"
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 119
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature5
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature6
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+            }
+
+            RowLayout {
+                x: 8
+                y: 168
+                Label {
+                    id: label20
+                    text: qsTr("Point 3")
+                    font.pointSize: 12
+                }
+
+                TextField {
+                    id: tfTemperature7
+                    text: "30"
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 119
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature8
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature9
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+            }
+
+            RowLayout {
+                x: 8
+                y: 213
+                Label {
+                    id: label21
+                    text: qsTr("Point 4")
+                    font.pointSize: 12
+                }
+
+                TextField {
+                    id: tfTemperature10
+                    text: "40"
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 119
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature11
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature12
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+            }
+
+            RowLayout {
+                x: 8
+                y: 261
+                Label {
+                    id: label22
+                    text: qsTr("Point 5")
+                    font.pointSize: 12
+                }
+
+                TextField {
+                    id: tfTemperature13
+                    text: "50"
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 119
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature14
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+
+                TextField {
+                    id: tfTemperature15
+                    text: variableProxyModel.getDataByName("Temperature Display")
+                    font.pointSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 32
+                    Layout.preferredWidth: 108
+                    Connections {
+                        target: variableProxyModel
+                    }
+                }
+            }
+
+            Label {
+                id: label23
+                x: 147
+                y: -5
+                text: qsTr("Cal ID: 80000")
+                font.pointSize: 12
             }
         }
     }
@@ -826,6 +1115,6 @@ Rectangle {
 /*##^##
 Designer {
     D{i:2;anchors_x:8;anchors_y:6}D{i:15;anchors_x:8;anchors_y:132}D{i:41;anchors_x:200;anchors_y:5}
-D{i:38;anchors_x:200;anchors_y:5}D{i:62;anchors_x:200;anchors_y:5}D{i:59;anchors_x:200;anchors_y:5}
+D{i:59;anchors_x:200;anchors_y:5}D{i:62;anchors_x:200;anchors_y:5}D{i:38;anchors_x:200;anchors_y:5}
 }
 ##^##*/

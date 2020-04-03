@@ -44,6 +44,7 @@ public:
 signals:
     void sendDataToRequiredBy(QHash<QString,QVariant> data);
     void calculateVariable(QHash<QString,QVariant> data);
+    void sendDataToChart(QHash<QString,QVariant> data);
 
 public slots:
     void getDataFromRequired(QHash<QString,QVariant> data);

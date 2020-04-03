@@ -217,6 +217,8 @@ void Variable::addDataToVariable(QHash<QString,QVariant> data, int isInit)
             emit sendDataToRequiredBy(prop);
 //        }
     }
+
+    emit sendDataToChart(prop);
 }
 
 

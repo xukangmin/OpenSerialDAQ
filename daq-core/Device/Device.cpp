@@ -17,7 +17,7 @@ Device::Device(int id, QHash<QString, QVariant> properties) :
             GenericDefinition(id, properties)
 {
     mSimulationTimer = new QTimer(this);
-    mSimulationTimer->setTimerType(Qt::PreciseTimer);
+    //mSimulationTimer->setTimerType(Qt::PreciseTimer);
     mSimulationTimer->setInterval(1000);
     connect(mSimulationTimer,&QTimer::timeout,this,[=]() {
         foreach(auto& var, mVariableList){

@@ -6,15 +6,18 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QQmlContext>
-
+#include <QQuickStyle>
 
 using namespace std;
 WidgetStationPage::WidgetStationPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetStationPage),
-    mSettings("Graftel", "OpenSerialDAQ")
+    mSettings("Graftel", "OpenSerialDAQ"),
+    mWidgetVariableChart(nullptr)
 {
     ui->setupUi(this);
+
+    QQuickStyle::setStyle("Fusion");
 
     ui->lbProgress->setVisible(false);
 
@@ -22,6 +25,8 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
 
     connect(Models::instance().mVariableGroupModel, &VariableGroupModel::updateProgress, this, &WidgetStationPage::getProgress);
     connect(ui->btnSetupStation, &QPushButton::clicked, this, &WidgetStationPage::loadStation);
+
+    connect(ui->tableView, &QTableView::doubleClicked, this, &WidgetStationPage::enableDetailView);
 
     int subStationSize = Models::instance().mVariableGroupModel->rowCount();
 
@@ -59,6 +64,47 @@ void WidgetStationPage::setVariableGroupIndex(int index)
         Models::instance().mVariableGroupModel->startDAQ(ind, 1);
     }
 
+}
+
+void WidgetStationPage::enableDetailView(const QModelIndex &index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+
+    // find related variable, if variable is not user input or constant, open a detailed chart
+
+    prev_index = curr_index;
+    curr_index = Models::instance().mVariableProxyModel->mapToSource(index);
+
+
+    shared_ptr<Variable> var;
+
+    if (Models::instance().mVariableModel->getVariableByIndex(curr_index, var)) {
+
+        if (var->getSingleProperty("Type").toString() != "UserInput" &&
+            var->getSingleProperty("Type").toString() != "Constant" &&
+            var->getSingleProperty("DataType").toString() == "double" &&
+            var->historyData.size() > 0)
+        {
+            if (prev_index != curr_index)
+            {
+                if (mWidgetVariableChart == nullptr) {
+                    mWidgetVariableChart = new WidgetVariableChart(var, this);
+                    ui->verticalLayout_4->addWidget(mWidgetVariableChart);
+                }
+                else {
+                    mWidgetVariableChart->setVariable(var);
+                }
+            }
+        }
+
+
+    }
+
+
+    qDebug() << index.row();
+    qDebug() << index.column();
 }
 
 void WidgetStationPage::setupStationQML(QString stationType) {

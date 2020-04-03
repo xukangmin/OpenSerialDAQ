@@ -482,6 +482,24 @@ QModelIndex VariableModel::getIndexByVariable(Variable &var)
     }
 }
 
+bool VariableModel::getVariableByIndex(const QModelIndex& index, shared_ptr<Variable>& var_ret)
+{
+    if (!index.isValid()) {
+        return false;
+    }
+
+    for(int i = 0; i < (*mVariables).size(); i++) {
+        if (i == index.row()) {
+            var_ret = (*mVariables).at(i);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
 void VariableModel::addDataToVariableModel(QHash<QString,QVariant> data, int isInit)
 {
     for(auto i = 0; i < (*mVariables).size(); i++)

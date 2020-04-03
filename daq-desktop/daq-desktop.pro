@@ -1,4 +1,4 @@
-QT       += core gui quick quickwidgets charts
+QT       += core gui quick quickwidgets charts quickcontrols2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,6 +30,7 @@ SOURCES += \
     WidgetSettingPage.cpp \
     WidgetStationPage.cpp \
     WidgetVariable.cpp \
+    WidgetVariableChart.cpp \
     main.cpp
 
 HEADERS += \
@@ -46,7 +47,8 @@ HEADERS += \
     WidgetMiniVariable.h \
     WidgetSettingPage.h \
     WidgetStationPage.h \
-    WidgetVariable.h
+    WidgetVariable.h \
+    WidgetVariableChart.h
 
 FORMS += \
     DialogAddDeviceToChannel.ui \
@@ -62,7 +64,8 @@ FORMS += \
     WidgetMiniVariable.ui \
     WidgetSettingPage.ui \
     WidgetStationPage.ui \
-    WidgetVariable.ui
+    WidgetVariable.ui \
+    WidgetVariableChart.ui
 
 RESOURCES += \
     Icons/IconSet.qrc \

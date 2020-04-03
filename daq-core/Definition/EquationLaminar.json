@@ -9,7 +9,8 @@
             "CurrentValue": 68,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [68, 61]
         },
         {
             "Name": "Standard Pressure",
@@ -18,7 +19,8 @@
             "CurrentValue": 14.7,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [14.7, 15]
         },
         {
             "Name": "Flow Gas Type",
@@ -27,7 +29,8 @@
             "CurrentValue": "Air",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["Air", "Nitrogen"]
         },
         {
             "Name": "Standard Gas Type",
@@ -37,7 +40,8 @@
             "DataType": "double",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["Air", "Air"]
         },
         {
             "Name": "Temperature Unit",
@@ -46,7 +50,8 @@
             "CurrentValue": "F",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["F", "F"]
         },
         {
             "Name": "Delta Pressure Unit",
@@ -55,7 +60,8 @@
             "CurrentValue": "psia",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["psia", "psia"]
         },
         {
             "Name": "Pressure Unit",
@@ -65,7 +71,8 @@
             "DataType": "double",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["psia", "psia"]
         },
         {
             "Name": "Air Flow Unit",
@@ -74,7 +81,8 @@
             "CurrentValue": "scfh",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["scfh", "sccm"]
         },
         {
             "Name": "Sample Size",
@@ -83,7 +91,8 @@
             "CurrentValue": 5,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [5, 3]
         },
         {
             "Name": "RangeMin",
@@ -92,7 +101,8 @@
             "CurrentValue": 0,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0, 0]
         },
         {
             "Name": "RangeMax",
@@ -101,7 +111,8 @@
             "CurrentValue": 0,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0, 0]
         },
         {
             "Name": "RangeUnit",
