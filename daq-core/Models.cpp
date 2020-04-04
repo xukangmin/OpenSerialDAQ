@@ -20,6 +20,7 @@ Models::Models(QObject *parent) :
     mVariableModel(new VariableModel(mDeviceModel,parent)),
     mDataModel(new DataModel(parent)),
     mVariableGroupModel(new VariableGroupModel(mVariableModel,parent)),
-    mVariableProxyModel(new VariableProxyModel(parent))
+    mVariableProxyModel(new VariableProxyModel(parent)),
+    mVariableValidationModel(new VariableProxyModel(parent))
 {
 }

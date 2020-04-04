@@ -5,6 +5,7 @@
 #include <QHash>
 #include <vector>
 #include <memory>
+#include <QIdentityProxyModel>
 #include <Device/DeviceModel.h>
 #include "Variable.h"
 #include "Database/DatabaseManager.h"
@@ -27,12 +28,12 @@ public:
     void addDataToVariableModel(QHash<QString,QVariant> data, int isInit = 1);
     bool findVariableByNameAndDeviceID(QString name, int device_id, std::shared_ptr<Variable>& var_ret);
     bool findVariableByNameAndGroupID(QString name, int group_id, std::shared_ptr<Variable>& var_ret);
-
+    void addValidationData();
     bool findVariableByID(int var_id, std::shared_ptr<Variable>& var_ret);
     bool calculate(Variable* var, QHash<QString,QVariant> data);
     bool isVariableExistsInVector(const std::shared_ptr<Variable>& t, std::vector<std::shared_ptr<Variable>>& v);
     bool isVariableExists(QHash<QString,QVariant> property);
-    bool resolveDependency();
+    bool resolveDependency(int variableGroupID);
     bool resolveFirstTime(int group_id);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -84,6 +85,25 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     //bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+
+};
+
+class DAQCORESHARED_EXPORT VariableValidationModel: public QIdentityProxyModel
+{
+    Q_OBJECT
+
+public:
+
+    enum Roles {
+           IdRole = Qt::UserRole + 1,
+    };
+
+    VariableValidationModel(QObject *parent = nullptr);
+
+    Q_INVOKABLE void setGroupIndex(int groupIndex);
+    Q_INVOKABLE int getGroupIndex();
+    int mGroupID;
+    int mGroupIndex;
 
 };
 

@@ -29,8 +29,9 @@ public:
 
     //bool isVariableGroupExists(QString portName);
     bool loadGroupsFromConfigFile(QString configFilePath = ":/stationconfig.json");
-    QModelIndex addVariableGroup(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties = QVector<QHash<QString,QVariant>>());
-    void addVariables(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties);
+    QModelIndex addVariableGroup(QHash<QString,QVariant> properties, int validation_index = -1, QVector<QHash<QString,QVariant>> specific_properties = QVector<QHash<QString,QVariant>>());
+    bool loadValidationGroups(QString equationTemplate, int validation_index);
+    void addVariables(QHash<QString,QVariant> properties, int validation_index = -1, QVector<QHash<QString,QVariant>> specific_properties = QVector<QHash<QString,QVariant>>());
     bool isVariableGroupExists(QHash<QString,QVariant> property);
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -39,8 +40,9 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     void removeAllRows(const QModelIndex& parent = QModelIndex());
     QHash<int, QByteArray> roleNames() const override;
-    void resolveDependency();
+    void resolveAllDependency();
     bool findVariableGroupByID(int varGroupID, std::shared_ptr<VariableGroup>& varGroup);
+    bool findVariableGroupByName(QString name, std::shared_ptr<VariableGroup>& varGroup);
     void startDAQ(const QModelIndex& index, int simulation = 0);
     void endDAQ(const QModelIndex& index, int simulation = 0);
     void endAllDAQ(int simulation = 0);

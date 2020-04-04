@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    allModels.mVariableGroupModel->resolveDependency();
+    allModels.mVariableGroupModel->resolveAllDependency();
 
     if (mSettings.value("Simulation").toInt() == 1) {
         ui->actionSimulationMode->setChecked(true);

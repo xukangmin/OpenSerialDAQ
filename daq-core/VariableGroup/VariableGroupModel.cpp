@@ -47,6 +47,17 @@ void VariableGroupModel::endAllDAQ(int simulation) {
     }
 }
 
+bool VariableGroupModel::findVariableGroupByName(QString name, shared_ptr<VariableGroup>& varGroup)
+{
+    foreach(const shared_ptr<VariableGroup>& varG, (*mVariableGroups)) {
+        if ((*varG).getSingleProperty("Name").toString() == name) {
+            varGroup = varG;
+            return true;
+        }
+    }
+
+    return false;
+}
 
 bool VariableGroupModel::findVariableGroupByID(int varGroupID, shared_ptr<VariableGroup>& varGroup)
 {
@@ -60,9 +71,15 @@ bool VariableGroupModel::findVariableGroupByID(int varGroupID, shared_ptr<Variab
     return false;
 }
 
-void VariableGroupModel::resolveDependency(){
-    mVariableModel->resolveDependency();
+void VariableGroupModel::resolveAllDependency(){
+
+    foreach(const shared_ptr<VariableGroup>& varG, (*mVariableGroups)) {
+        mVariableModel->resolveDependency(varG->m_id);
+    }
+
+
 }
+
 
 bool VariableGroupModel::isVariableGroupExists(QHash<QString,QVariant> property)
 {
@@ -82,6 +99,18 @@ bool VariableGroupModel::isVariableGroupExists(QHash<QString,QVariant> property)
         return false;
     }
 
+}
+
+bool VariableGroupModel::loadValidationGroups(QString equationTemplate, int validation_index)
+{
+
+    QHash<QString,QVariant> properties;
+    properties.insert("Name","Validation");
+    properties.insert("EquationTempelate",equationTemplate);
+
+    addVariableGroup(properties, validation_index);
+
+    return true;
 }
 
 bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
@@ -214,7 +243,7 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
                         equation_supplements_list.append(singleEqnSup);
                  }
 
-                addVariableGroup(properties, equation_supplements_list);
+                addVariableGroup(properties, -1, equation_supplements_list);
             }
 
 
@@ -225,7 +254,7 @@ bool VariableGroupModel::loadGroupsFromConfigFile(QString configFilePath)
    return true;
 }
 
-void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties) {
+void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, int validation_index, QVector<QHash<QString,QVariant>> specific_properties) {
     QString equation_to_load;
 
     if (properties.contains("EquationTempelate")) {
@@ -254,27 +283,55 @@ void VariableGroupModel::addVariables(QHash<QString,QVariant> properties, QVecto
 
                 foreach(const QString& key, singleEquation.keys()) {
                     QJsonValue value = singleEquation[key];
-                    var_properties.insert(key, value.toVariant());
+                    if (key != "ValidationValue")
+                    {
+                        var_properties.insert(key, value.toVariant());
+                    }
                 }
+
+                if (validation_index >= 0) {
+
+                    QJsonArray validationArr = singleEquation["ValidationValue"].toArray();
+
+                    QList<QVariant> valArr;
+                    for(int j = 0; j < validationArr.size(); j++) {
+                        valArr.append(validationArr[j].toVariant());
+                    }
+
+                    if (validation_index < valArr.size())
+                    {
+                        var_properties["ValidationValue"] = valArr[validation_index];
+
+                        if (var_properties["Type"].toString() == "UserInput" || var_properties["Type"].toString() == "Constant")
+                        {
+                            var_properties["CurrentValue"] = valArr[validation_index];
+                        }
+                    }
+                }
+
                 var_properties["VariableGroupID"] = properties["VariableGroupID"];
+
                 mVariableModel->addVariable(var_properties, specific_properties);
             }
 
             mVariableModel->resolveFirstTime(properties["VariableGroupID"].toInt());
+
+
        }
     }
 }
 
-QModelIndex VariableGroupModel::addVariableGroup(QHash<QString,QVariant> properties, QVector<QHash<QString,QVariant>> specific_properties)
+QModelIndex VariableGroupModel::addVariableGroup(QHash<QString,QVariant> properties, int validation_index, QVector<QHash<QString,QVariant>> specific_properties)
 {
     int rowIndex = rowCount();
     beginInsertRows(QModelIndex(), rowIndex, rowIndex);
     unique_ptr<VariableGroup> newVariableGroup(new VariableGroup(0, properties, specific_properties));
     mDb.variableGroupDao.addVariableGroup(*newVariableGroup);
-    (*newVariableGroup).setSingleProperty("VariableGroupID",(*newVariableGroup).m_id);
-    addVariables((*newVariableGroup).m_properties, (*newVariableGroup).m_group_properties);
+    int newVariableGroupID = (*newVariableGroup).m_id;
+    (*newVariableGroup).setSingleProperty("VariableGroupID",newVariableGroupID);
+    addVariables((*newVariableGroup).m_properties,validation_index,(*newVariableGroup).m_group_properties);
     mVariableGroups->push_back(move(newVariableGroup));
-
+    mVariableModel->resolveDependency(newVariableGroupID);
     endInsertRows();
     return index(rowIndex, 0);
 }

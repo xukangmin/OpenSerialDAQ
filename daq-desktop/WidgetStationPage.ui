@@ -79,6 +79,47 @@
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="validationTab">
+          <attribute name="title">
+           <string>Validation</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QPushButton" name="btnValidate">
+               <property name="text">
+                <string>Validate</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnValidateClear">
+               <property name="text">
+                <string>Clear</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableView" name="tableViewValidate"/>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="varList">
           <property name="enabled">
            <bool>true</bool>

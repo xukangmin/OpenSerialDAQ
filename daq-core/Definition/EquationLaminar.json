@@ -112,7 +112,7 @@
             "Equation": "N/A",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [0, 0]
+            "ValidationValue": [30, 30]
         },
         {
             "Name": "RangeUnit",
@@ -121,7 +121,8 @@
             "CurrentValue": "sccm",
             "Equation": "N/A",
             "DataType": "string",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": ["sccm", "sccm"]
         },
         {
             "Name": "Calibration Constant A",
@@ -130,7 +131,8 @@
             "CurrentValue": 0,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.00001, 0.00001]
         },
         {
             "Name": "Calibration Constant B",
@@ -139,7 +141,8 @@
             "CurrentValue": 0,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [7.58E-08, 7.58E-08]
         },
         {
             "Name": "Calibration Constant C",
@@ -148,7 +151,8 @@
             "CurrentValue": 0,
             "Equation": "N/A",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [1.01E-04, 1.01E-04]
         },
         {
             "Name": "Temperature",
@@ -157,7 +161,8 @@
             "CurrentValue": 0,
             "Equation": "[Temperature Input]",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [70, 80]
         },
         {
             "Name": "Delta Pressure",
@@ -166,7 +171,8 @@
             "CurrentValue": 0,
             "Equation": "[Delta Pressure Input]",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [5, 6]
         },
         {
             "Name": "Pressure",
@@ -175,7 +181,8 @@
             "CurrentValue": 0,
             "Equation": "[Pressure Input]",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [14.2, 15]
         },
         {
             "Name": "Delta InchH2O",
@@ -184,7 +191,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Delta Pressure],psia,InchH2O)",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [138.4, 14.3]
         },
         {
             "Name": "Temperature,R",
@@ -193,7 +201,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Temperature],F,R)",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [529.67, 14.3]
         },
         {
             "Name": "Tstd/T",
@@ -202,7 +211,8 @@
             "CurrentValue": 0,
             "Equation": "([Standard Temperature] + 459.67) / [Temperature,R]",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.99622, 14.3]
         },
         {
             "Name": "P/Pstd",
@@ -211,7 +221,8 @@
             "CurrentValue": 0,
             "Equation": "[Pressure] / [Standard Pressure]",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.996, 14.3]
         },
         {
             "Name": "Vstd/V",
@@ -220,7 +231,8 @@
             "CurrentValue": 0,
             "Equation": "ViscocityCF([Temperature,R],[Flow Gas Type])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [1, 14.3]
         },
         {
             "Name": "Q,cfm",
@@ -229,7 +241,8 @@
             "CurrentValue": 0,
             "Equation": "[Vstd/V]*([Calibration Constant A]+([Calibration Constant C]*[Delta InchH2O])+([Calibration Constant B]*[Delta InchH2O]*[Delta InchH2O]))",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.01539, 14.3]
         },
         {
             "Name": "Rstd/Ract",
@@ -238,7 +251,8 @@
             "CurrentValue": 0,
             "Equation": "MW([Standard Gas Type]) / MW([Flow Gas Type])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [1, 14.3]
         },
         {
             "Name": "Qstd,scfm",
@@ -247,7 +261,8 @@
             "CurrentValue": 0,
             "Equation": "[Tstd/T] * [P/Pstd] * [Q,cfm] * [Rstd/Ract]",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.0148092, 14.3]
 
         },
         {
@@ -257,7 +272,8 @@
             "CurrentValue": 0,
             "Equation": "[Qstd,scfm]/(3.53147*10^-5)",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [419.349, 14.3]
         },
         {
             "Name": "ActualFlowRate_Intermediate",
@@ -266,7 +282,8 @@
             "CurrentValue": 0,
             "Equation": "[Q,cfm] * 28316.846592",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [1, 14.3]
         },
         {
             "Name": "StandardFlowRate",
@@ -275,7 +292,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Q,sccm],sccm,[Air Flow Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.888552, 14.3]
         },
         {
             "Name": "ActualFlowRate",
@@ -284,7 +302,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([ActualFlowRate_Intermediate],sccm,[Air Flow Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.923326, 14.3]
         },
         {
             "Name": "RangeMinDisplay",
@@ -293,7 +312,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([RangeMin],[RangeUnit],[Air Flow Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0, 14.3]
         },
         {
             "Name": "RangeMaxDisplay",
@@ -302,7 +322,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([RangeMax],[RangeUnit],[Air Flow Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [0.064, 14.3]
         },
         {
             "Name": "Temperature Display",
@@ -311,7 +332,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Temperature],F,[Temperature Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [70, 14.3]
         },
         {
             "Name": "Delta Pressure Display",
@@ -320,7 +342,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Delta Pressure],psia,[Delta Pressure Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [5, 14.3]
         },
         {
             "Name": "Pressure Display",
@@ -329,7 +352,8 @@
             "CurrentValue": 0,
             "Equation": "UnitConv([Pressure],psia,[Pressure Unit])",
             "DataType": "double",
-            "Log": 0
+            "Log": 0,
+            "ValidationValue": [14.2, 14.3]
         }
     ]
 }

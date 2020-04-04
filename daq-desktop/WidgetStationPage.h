@@ -31,6 +31,7 @@ public slots:
     void loadStation();
     void getProgress(QString progressName, int index, int total);
     void enableDetailView(const QModelIndex &index);
+    void validateEquations();
 
 private:
     Ui::WidgetStationPage *ui;

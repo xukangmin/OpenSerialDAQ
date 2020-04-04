@@ -31,6 +31,7 @@ public:
     DataModel *mDataModel;
     VariableGroupModel *mVariableGroupModel;
     VariableProxyModel *mVariableProxyModel;
+    VariableProxyModel *mVariableValidationModel;
     QModelIndex mChannelIndex;
     QModelIndex mDeviceIndex;
 protected:

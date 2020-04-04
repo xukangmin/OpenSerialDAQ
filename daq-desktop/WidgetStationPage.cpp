@@ -24,9 +24,12 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
     ui->progressBar->setVisible(false);
 
     connect(Models::instance().mVariableGroupModel, &VariableGroupModel::updateProgress, this, &WidgetStationPage::getProgress);
+
     connect(ui->btnSetupStation, &QPushButton::clicked, this, &WidgetStationPage::loadStation);
 
     connect(ui->tableView, &QTableView::doubleClicked, this, &WidgetStationPage::enableDetailView);
+
+    connect(ui->btnValidate, &QPushButton::clicked, this, &WidgetStationPage::validateEquations);
 
     int subStationSize = Models::instance().mVariableGroupModel->rowCount();
 
@@ -34,11 +37,10 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
         ui->stackedWidget->setCurrentWidget(ui->emptyPage);    
     }
     else {
-        QSettings settings("Graftel", "OpenSerialDAQ");
 
-        ui->tabWidget->setTabText(0, settings.value("StationName").toString());
+        ui->tabWidget->setTabText(0, mSettings.value("StationName").toString());
 
-        setupStationQML(settings.value("StationType").toString());
+        setupStationQML(mSettings.value("StationType").toString());
 
         ui->stackedWidget->setCurrentWidget(ui->stationPage);
     }
@@ -49,6 +51,17 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
 WidgetStationPage::~WidgetStationPage()
 {
     delete ui;
+}
+
+void WidgetStationPage::validateEquations() {
+    // first creat variable group using validation values
+    QString stationType = mSettings.value("StationType").toString();
+
+    Models::instance().mVariableGroupModel->loadValidationGroups(stationType, 0);
+
+    // add data to Variable Model
+    Models::instance().mVariableModel->addValidationData();
+
 }
 
 void WidgetStationPage::setVariableGroupIndex(int index)
@@ -195,7 +208,7 @@ void WidgetStationPage::loadStation() {
 
         if (Models::instance().mVariableGroupModel->loadGroupsFromConfigFile(fileName)) {
 
-            Models::instance().mVariableGroupModel->resolveDependency();
+            //Models::instance().mVariableGroupModel->resolveAllDependency();
 
             emit sendMessage("Station Loaded.");
             ui->lbProgress->setVisible(false);
