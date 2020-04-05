@@ -21,6 +21,6 @@ Models::Models(QObject *parent) :
     mDataModel(new DataModel(parent)),
     mVariableGroupModel(new VariableGroupModel(mVariableModel,parent)),
     mVariableProxyModel(new VariableProxyModel(parent)),
-    mVariableValidationModel(new VariableProxyModel(parent))
+    mVariableValidationModel(new VariableValidationModel(parent))
 {
 }

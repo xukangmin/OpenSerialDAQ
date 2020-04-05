@@ -400,11 +400,23 @@ bool VariableGroupModel::removeRows(int row, int count, const QModelIndex& paren
     while (countLeft--) {
         const VariableGroup& VariableGroup = *mVariableGroups->at(row + countLeft);
         mDb.variableGroupDao.removeVariableGroup(VariableGroup.m_id);
+        Models::instance().mVariableModel->removeByGroupID(VariableGroup.m_id);
     }
     mVariableGroups->erase(mVariableGroups->begin() + row, mVariableGroups->begin() + row + count);
     endRemoveRows();
     return true;
 
+}
+
+bool VariableGroupModel::removeByID(int id)
+{
+    for(int i = 0; i < (int)(*mVariableGroups).size(); i++) {
+        if ((*mVariableGroups).at(i)->m_id == id) {
+            removeRows(i,1);
+            return true;
+        }
+    }
+    return false;
 }
 
 QHash<int, QByteArray> VariableGroupModel::roleNames() const {

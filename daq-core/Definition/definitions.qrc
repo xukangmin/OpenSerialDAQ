@@ -3,5 +3,7 @@
         <file>protocol.json</file>
         <file>stationconfig.json</file>
         <file>EquationLaminar.json</file>
+        <file>error.png</file>
+        <file>success.png</file>
     </qresource>
 </RCC>

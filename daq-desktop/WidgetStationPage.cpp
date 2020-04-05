@@ -31,6 +31,8 @@ WidgetStationPage::WidgetStationPage(QWidget *parent) :
 
     connect(ui->btnValidate, &QPushButton::clicked, this, &WidgetStationPage::validateEquations);
 
+    connect(ui->btnValidateClear, &QPushButton::clicked, this, &WidgetStationPage::clearValidation);
+
     int subStationSize = Models::instance().mVariableGroupModel->rowCount();
 
     if (subStationSize == 0) {
@@ -52,6 +54,14 @@ WidgetStationPage::~WidgetStationPage()
 {
     delete ui;
 }
+void WidgetStationPage::clearValidation() {
+
+    shared_ptr<VariableGroup> varG;
+
+    if (Models::instance().mVariableGroupModel->findVariableGroupByName("Validation",varG)) {
+        Models::instance().mVariableGroupModel->removeByID(varG->m_id);
+    }
+}
 
 void WidgetStationPage::validateEquations() {
     // first creat variable group using validation values
@@ -61,6 +71,25 @@ void WidgetStationPage::validateEquations() {
 
     // add data to Variable Model
     Models::instance().mVariableModel->addValidationData();
+
+    shared_ptr<VariableGroup> varG;
+
+    Models::instance().mVariableGroupModel->findVariableGroupByName("Validation",varG);
+
+    Models::instance().mVariableValidationModel->setGroupID(varG->m_id);
+
+    if (Models::instance().mVariableGroupModel->findVariableGroupByName("Validation",varG))
+    {
+        Models::instance().mVariableValidationModel->setSourceModel(Models::instance().mVariableModel);
+
+        Models::instance().mVariableValidationModel->setGroupID(varG->m_id);
+
+        ui->tableViewValidate->setModel(Models::instance().mVariableValidationModel);
+
+        ui->tableViewValidate->horizontalHeader()->show();
+
+        ui->tableViewValidate->horizontalHeader()->setModel(Models::instance().mVariableValidationModel);
+    }
 
 }
 
@@ -137,6 +166,21 @@ void WidgetStationPage::setupStationQML(QString stationType) {
     ui->tableView->verticalHeader()->hide();
 
     ui->tabWidget->setCurrentWidget(ui->display);
+
+    shared_ptr<VariableGroup> varG;
+
+    if (Models::instance().mVariableGroupModel->findVariableGroupByName("Validation",varG))
+    {
+        Models::instance().mVariableValidationModel->setSourceModel(Models::instance().mVariableModel);
+
+        Models::instance().mVariableValidationModel->setGroupID(varG->m_id);
+
+        ui->tableViewValidate->setModel(Models::instance().mVariableValidationModel);
+
+        ui->tableViewValidate->horizontalHeader()->show();
+
+        ui->tableView->horizontalHeader()->setModel(Models::instance().mVariableValidationModel);
+    }
 
     QQmlContext *ctxt = ui->quickWidget->rootContext();
 

@@ -42,6 +42,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,int role = Qt::DisplayRole) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     void removeAllRows(const QModelIndex& parent = QModelIndex());
+    bool removeByGroupID(int groupID);
     QHash<int, QByteArray> roleNames() const override;
     bool findVariablesByGroupID(int group_id, std::vector<std::shared_ptr<Variable>>& var_ret);
     QModelIndex getIndexByVariable(Variable &var);
@@ -88,7 +89,7 @@ protected:
 
 };
 
-class DAQCORESHARED_EXPORT VariableValidationModel: public QIdentityProxyModel
+class DAQCORESHARED_EXPORT VariableValidationModel: public QSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -100,11 +101,21 @@ public:
 
     VariableValidationModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void setGroupIndex(int groupIndex);
-    Q_INVOKABLE int getGroupIndex();
+    Q_INVOKABLE void setGroupID(int groupID);
     int mGroupID;
     int mGroupIndex;
 
+    QVariant data(const QModelIndex &index, int role) const noexcept override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &child) const override;
+    QModelIndex mapFromSource(const QModelIndex &source) const override;
+    QModelIndex mapToSource(const QModelIndex &proxy) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
 };
 
 #endif // VARIABLEMODEL_H

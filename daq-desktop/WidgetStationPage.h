@@ -32,6 +32,7 @@ public slots:
     void getProgress(QString progressName, int index, int total);
     void enableDetailView(const QModelIndex &index);
     void validateEquations();
+    void clearValidation();
 
 private:
     Ui::WidgetStationPage *ui;

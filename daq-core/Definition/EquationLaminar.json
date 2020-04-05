@@ -205,6 +205,16 @@
             "ValidationValue": [529.67, 14.3]
         },
         {
+            "Name": "Temperature,K",
+            "Type": "Intermediate",
+            "Unit": "K",
+            "CurrentValue": 0,
+            "Equation": "UnitConv([Temperature],F,K)",
+            "DataType": "double",
+            "Log": 0,
+            "ValidationValue": [294.26111, 14.3]
+        },
+        {
             "Name": "Tstd/T",
             "Type": "Intermediate",
             "Unit": "N/A",
@@ -229,7 +239,7 @@
             "Type": "Intermediate",
             "Unit": "N/A",
             "CurrentValue": 0,
-            "Equation": "ViscocityCF([Temperature,R],[Flow Gas Type])",
+            "Equation": "ViscocityCF([Temperature,K],[Flow Gas Type])",
             "DataType": "double",
             "Log": 0,
             "ValidationValue": [1, 14.3]
@@ -283,7 +293,7 @@
             "Equation": "[Q,cfm] * 28316.846592",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [1, 14.3]
+            "ValidationValue": [435.796269051, 14.3]
         },
         {
             "Name": "StandardFlowRate",

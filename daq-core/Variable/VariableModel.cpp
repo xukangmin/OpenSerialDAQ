@@ -164,7 +164,7 @@ bool VariableModel::calculate(Variable* var, QHash<QString,QVariant> data)
                 QList<QString> args;
                 args = inner.split(',');
 
-                double result = UnitAndConversion::instance().voscocityCF(args.at(0).toDouble(), args.at(1));
+                double result = UnitAndConversion::instance().viscocityCF(args.at(0).toDouble(), args.at(1));
 
                 eqn.replace(m,QString::number(result));
         }
@@ -177,7 +177,7 @@ bool VariableModel::calculate(Variable* var, QHash<QString,QVariant> data)
                 QList<QString> args;
                 args = inner.split(',');
 
-                double result = UnitAndConversion::instance().voscocity(args.at(0).toDouble(), args.at(1));
+                double result = UnitAndConversion::instance().viscocity(args.at(0).toDouble(), args.at(1));
 
                 eqn.replace(m,QString::number(result));
         }
@@ -477,7 +477,7 @@ bool VariableModel::resolveDependency(int variableGroupID)
 
 QModelIndex VariableModel::getIndexByVariable(Variable &var)
 {
-    for(int i = 0; i < (*mVariables).size(); i++) {
+    for(int i = 0; i < (int)(*mVariables).size(); i++) {
         if ((*mVariables).at(i)->m_id == var.m_id) {
             return index(i,7);
         }
@@ -490,7 +490,7 @@ bool VariableModel::getVariableByIndex(const QModelIndex& index, shared_ptr<Vari
         return false;
     }
 
-    for(int i = 0; i < (*mVariables).size(); i++) {
+    for(int i = 0; i < (int)(*mVariables).size(); i++) {
         if (i == index.row()) {
             var_ret = (*mVariables).at(i);
             return true;
@@ -504,7 +504,7 @@ void VariableModel::addValidationData()
 {
     shared_ptr<VariableGroup> varG;
     if(Models::instance().mVariableGroupModel->findVariableGroupByName("Validation",varG)) {
-        for(auto i = 0; i < (*mVariables).size(); i++)
+        for(auto i = 0; i < (int)(*mVariables).size(); i++)
         {
             if ((*mVariables).at(i)->getSingleProperty("VariableGroupID").toInt() == varG->m_id &&
                 (*mVariables).at(i)->getSingleProperty("Type").toString() == "DigitalInput")
@@ -523,7 +523,7 @@ void VariableModel::addValidationData()
 
 void VariableModel::addDataToVariableModel(QHash<QString,QVariant> data, int isInit)
 {
-    for(auto i = 0; i < (*mVariables).size(); i++)
+    for(auto i = 0; i < (int)(*mVariables).size(); i++)
     {
         if ((*mVariables).at(i)->m_id == data["VariableID"].toInt())
         {
@@ -654,12 +654,12 @@ bool VariableModel::setData(const QModelIndex& index, const QVariant& value, int
 
         emit dataChanged(index, this->index(index.row(),VariableColumnSize - 1));
 //         only update when variable is constant or userInput
-//        if (variable.getSingleProperty("Type").toString() == "Constant" ||
-//            variable.getSingleProperty("Type").toString() == "UserInput" ||
-//            variable.getSingleProperty("Type").toString() == "Display")
-//        {
+        if (variable.getSingleProperty("Type").toString() == "Constant" ||
+            variable.getSingleProperty("Type").toString() == "UserInput" ||
+            variable.getSingleProperty("Type").toString() == "Display")
+        {
             mDb.variableDao.updateVariable(variable);
-//        }
+        }
 
 
         return true;
@@ -706,6 +706,41 @@ bool VariableModel::removeRows(int row, int count, const QModelIndex& parent) {
 
 }
 
+bool VariableModel::removeByGroupID(int groupID)
+{
+
+     //mDb.variableDao.removeVariableByGroupID(Variable.m_id);
+
+     bool isFirst = false;
+    int startVarIndex = 0;
+    int count = 0;
+
+    for(auto i = 0; i < (int)(*mVariables).size(); i++)
+    {
+
+        if ((*mVariables).at(i)->getSingleProperty("VariableGroupID").toInt() == groupID)
+        {
+            if (!isFirst)
+            {
+                startVarIndex = i;
+                isFirst = true;
+            }
+            count++;
+        }
+        else {
+            if (isFirst) {
+                break;
+            }
+        }
+    }
+
+
+    if (count > 0) {
+        removeRows(startVarIndex, count);
+    }
+
+}
+
 QHash<int, QByteArray> VariableModel::roleNames() const {
 
     QHash<int, QByteArray> roles;
@@ -736,6 +771,7 @@ bool VariableProxyModel::filterAcceptsRow(int sourceRow,
 
 bool VariableProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
+    Q_UNUSED(source_parent);
     if (source_column == 3 || source_column == 6 || source_column == 7 || source_column == 8)
     {
         return true;
@@ -959,4 +995,221 @@ QVariant VariableProxyModel::data(const QModelIndex &index, int role) const noex
 }
 
 
+VariableValidationModel::VariableValidationModel(QObject *parent) :
+    QSortFilterProxyModel(parent)
+{
+}
+
+void VariableValidationModel::setGroupID(int groupID)
+{
+    beginResetModel();
+
+    mGroupID = groupID;
+
+    endResetModel();
+}
+
+QModelIndex VariableValidationModel::parent(const QModelIndex &child) const
+{
+    return QModelIndex();
+}
+
+QModelIndex VariableValidationModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if ( row < rowCount() ) {
+        switch ( column ) {
+            case 3:
+            case 4:
+            case 5:
+            return createIndex(row, column);
+        }
+    }
+
+    return QSortFilterProxyModel::index(row, column, parent);
+
+   // return createIndex(row, column);
+}
+
+QModelIndex VariableValidationModel::mapFromSource(const QModelIndex &source) const {
+
+    return QSortFilterProxyModel::mapFromSource(source);
+
+     //return index(source.row(), source.column(), source.parent());
+ }
+
+ QModelIndex VariableValidationModel::mapToSource(const QModelIndex &proxy) const {
+
+     if (proxy.column() == 3 || proxy.column() == 4 || proxy.column() == 5)
+         return QModelIndex();
+
+     return QSortFilterProxyModel::mapToSource(proxy);
+
+//     return (sourceModel()&&proxy.isValid())
+//         ? sourceModel()->index(proxy.row(), proxy.column(), proxy.parent())
+//         : QModelIndex();
+ }
+
+QVariant VariableValidationModel::data(const QModelIndex &index, int role) const noexcept
+{
+
+    shared_ptr<Variable> var;
+    QModelIndex proxy_in = this->index(index.row(), 0, index);
+    QModelIndex soure_in = sourceModel()->index(mapToSource(proxy_in).row(),0);
+    double currentDataDecimal,validationDataDecimal,error;
+    bool isDouble = false;
+    bool isVarValid = false;
+    QString status = "N/A";
+    if (Models::instance().mVariableModel->getVariableByIndex(soure_in,var))
+    {
+        isVarValid = true;
+        if (var->getSingleProperty("Type").toString() == "UserInput" ||
+            var->getSingleProperty("Type").toString() == "Constant" ||
+            var->getSingleProperty("Type").toString() == "DigitalInput")
+        {
+            status = "N/A";
+        }
+        else
+        {
+
+
+            if (var->getSingleProperty("DataType").toString() == "double") {
+
+                currentDataDecimal = var->getSingleProperty("CurrentValue").toDouble();
+                validationDataDecimal = var->getSingleProperty("ValidationValue").toDouble();
+
+                error = (currentDataDecimal - validationDataDecimal) / (currentDataDecimal + 0.00000001); //prevent divide by zero
+
+                error = fabs(error);
+                isDouble = true;
+                if (error < 0.01) {
+                    status = "Pass";
+                }
+                else {
+                    status = "Fail";
+                }
+            }
+            else if (var->getSingleProperty("DataType").toString() == "string"){
+                QString currentDataStr = var->getSingleProperty("CurrentValue").toString();
+                QString validationDataStr = var->getSingleProperty("ValidationValue").toString();
+
+                if (currentDataStr.toUpper() == validationDataStr.toUpper()) {
+                    status = "Pass";
+                }
+                else {
+                    status = "Fail";
+                }
+            }
+        }
+    }
+
+
+    switch (role) {
+        case Qt::DisplayRole:
+            if (index.column() <= 2)
+            {
+                QModelIndex in = sourceModel()->index(mapToSource(index).row(),mapToSource(index).column());
+                return sourceModel()->data(in);
+            }
+            else if (index.column() == 3) // target value
+            {
+                if (isVarValid) {
+                    return var->getSingleProperty("ValidationValue");
+                }
+            }
+            else if (index.column() == 4) // error
+            {
+                if (isDouble) {
+                    return error * 100;
+                }
+                else {
+                    return "N/A";
+                }
+            }
+            else if (index.column() == 5) // status
+            {
+
+                    return status;
+
+            }
+            break;
+        case Qt::DecorationRole:
+            if (index.column() == 5) {
+                if (status == "Pass") {
+                    return QIcon(":/success.png");
+                }
+                else if (status == "Fail"){
+                    return QIcon(":/error.png");
+                }
+
+            }
+            break;
+        default:
+            return QVariant();
+    }
+}
+
+
+int VariableValidationModel::columnCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return 6;
+}
+
+Qt::ItemFlags VariableValidationModel::flags(const QModelIndex &index) const
+{
+  if (!index.isValid()) return Qt::NoItemFlags;
+  if (index.column() == 3 || index.column() == 4 || index.column() == 5) return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+  return QSortFilterProxyModel::flags(index);
+}
+
+QVariant VariableValidationModel::headerData(int section, Qt::Orientation orientation, int role) const {
+
+    if (/*role != Qt::DisplayRole || */orientation != Qt::Horizontal || section > columnCount())
+        return QVariant();
+
+    if (role == Qt::DisplayRole)
+    {
+        switch (section) {
+            case 0:
+                return "Equation Name";
+            case 1:
+                return "Type";
+            case 2:
+                return "Calculated Value";
+            case 3:
+                return "Expected Value";
+            case 4:
+                return "Error (%)";
+            case 5:
+                return "Status";
+
+        }
+    }
+
+
+    return QVariant();
+}
+
+bool VariableValidationModel::filterAcceptsRow(int sourceRow,
+                                              const QModelIndex &sourceParent) const
+{
+    QModelIndex index = sourceModel()->index(sourceRow, 2, sourceParent);
+
+    QVariant tmp = sourceModel()->data(index);
+
+    return (tmp.toInt() == mGroupID);
+}
+
+bool VariableValidationModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
+{
+    Q_UNUSED(source_parent);
+    if (source_column == 3 || source_column == 4 || source_column == 6)
+    {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+
+}
 

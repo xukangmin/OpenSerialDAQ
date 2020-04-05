@@ -118,6 +118,15 @@ void VariableDao::removeVariable(int id) const {
     DatabaseManager::debugQuery(query);
 }
 
+void VariableDao::removeVariableByGroupID(int groupID) const {
+    QMutexLocker locker(&mMutex);
+    QSqlQuery query(mDatabase);
+    query.prepare("DELETE FROM Variables WHERE VariableGroupID = (:id)");
+    query.bindValue(":id", groupID);
+    query.exec();
+    DatabaseManager::debugQuery(query);
+}
+
 void VariableDao::removeAll() const {
     QMutexLocker locker(&mMutex);
     QSqlQuery query(mDatabase);

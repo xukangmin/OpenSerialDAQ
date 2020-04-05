@@ -260,21 +260,21 @@ double UnitAndConversion::evalSimpleEquation(QString eqn, double val, QString va
     return ret;
 }
 
-double UnitAndConversion::voscocity(double tempR, QString gas_type)
+double UnitAndConversion::viscocity(double tempK, QString gas_type)
 {
 
     QString eqn = viscosity_equations[gas_type.toUpper()];
 
-    return evalSimpleEquation(eqn,tempR,"x");
+    return evalSimpleEquation(eqn,tempK,"x");
 }
 
-double UnitAndConversion::voscocityCF(double tempR, QString gas_type)
+double UnitAndConversion::viscocityCF(double tempK, QString gas_type)
 {
 
 
     QString eqn = viscosity_cf_equations[gas_type.toUpper()];
 
-    return evalSimpleEquation(eqn,tempR,"x");
+    return evalSimpleEquation(eqn,tempK,"x");
 }
 
 double UnitAndConversion::MW(QString gas_type)

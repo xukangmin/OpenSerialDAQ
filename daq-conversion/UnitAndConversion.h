@@ -39,8 +39,8 @@ public:
     ~UnitAndConversion();
 
     double unitConvert(double val, QString unit_in, QString unit_out);
-    double voscocity(double tempR, QString gas_type);
-    double voscocityCF(double tempR, QString gas_type);
+    double viscocity(double tempK, QString gas_type);
+    double viscocityCF(double tempK, QString gas_type);
     double MW(QString gas_type);
     //QList<double (UnitAndConversion::*) (double, QString,QString)> funList;
     QList<QString> getFunctionNameList();
