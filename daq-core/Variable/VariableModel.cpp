@@ -738,7 +738,7 @@ bool VariableModel::removeByGroupID(int groupID)
     if (count > 0) {
         removeRows(startVarIndex, count);
     }
-
+    return true;
 }
 
 QHash<int, QByteArray> VariableModel::roleNames() const {
