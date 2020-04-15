@@ -132,7 +132,7 @@
             "Equation": "N/A",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [0.00001, 0.00001]
+            "ValidationValue": [0.000007845, 0.00001]
         },
         {
             "Name": "Calibration Constant B",
@@ -142,7 +142,7 @@
             "Equation": "N/A",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [7.58E-08, 7.58E-08]
+            "ValidationValue": [0.0000000758, 7.58E-08]
         },
         {
             "Name": "Calibration Constant C",
@@ -152,7 +152,7 @@
             "Equation": "N/A",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [1.01E-04, 1.01E-04]
+            "ValidationValue": [0.000100643, 1.01E-04]
         },
         {
             "Name": "Temperature",
@@ -232,7 +232,7 @@
             "Equation": "[Pressure] / [Standard Pressure]",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [0.996, 14.3]
+            "ValidationValue": [0.965986, 14.3]
         },
         {
             "Name": "Vstd/V",
