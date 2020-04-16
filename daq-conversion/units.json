@@ -157,17 +157,17 @@
                 {
                     "Name": "KPa",
                     "Alias": [],
-                    "Conversion": 6.89476
+                    "Conversion": 6.895
                 },
                 {
                     "Name": "Bar",
                     "Alias": [],
-                    "Conversion": 0.0689476
+                    "Conversion": 0.06805
                 },
                 {
                     "Name": "inchHg@32F",
                     "Alias": [],
-                    "Conversion": 2.03603
+                    "Conversion": 2.036
                 },
                 {
                     "Name": "inchHg@60F",
@@ -177,27 +177,27 @@
                 {
                     "Name": "torr",
                     "Alias": [],
-                    "Conversion": 51.7151
+                    "Conversion": 51.72
                 },
                 {
                     "Name": "cmHg",
                     "Alias": [],
-                    "Conversion": 5.17151
+                    "Conversion": 5.172
                 },
                 {
                     "Name": "ATM",
                     "Alias": [],
-                    "Conversion": 0.068046
+                    "Conversion": 0.06805
                 },
                 {
                     "Name": "InchH2O",
                     "Alias": [],
-                    "Conversion": 27.6807
+                    "Conversion": 27.68
                 },
                 {
                     "Name": "cmH2O@4C",
                     "Alias": [],
-                    "Conversion": 70.3089
+                    "Conversion": 70.31
                 },
                 {
                     "Name": "Pa",

@@ -293,7 +293,7 @@
             "Equation": "[Q,cfm] * 28316.846592",
             "DataType": "double",
             "Log": 0,
-            "ValidationValue": [435.796269051, 14.3]
+            "ValidationValue": [435.76093033, 14.3]
         },
         {
             "Name": "StandardFlowRate",

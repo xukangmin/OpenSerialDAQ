@@ -83,6 +83,8 @@ bool VariableModel::calculate(Variable* var, QHash<QString,QVariant> data)
 
     QString eqn = var->getSingleProperty("Equation").toString();
 
+    QString orignalEqn = eqn;
+
     foreach(auto singleID, var->toCalculate.keys()) {
         eqn.replace("{" + QString::number(singleID) + "}",var->toCalculate[singleID].toString());
     }
@@ -193,9 +195,19 @@ bool VariableModel::calculate(Variable* var, QHash<QString,QVariant> data)
         }
     }
 
+    qDebug() << "********** Start Calculation **********";
+
+    qDebug() << "Equation Name = " << var->getSingleProperty("Name").toString();
+
+    qDebug() << "Original Equation = " << orignalEqn;
+
     qDebug() << eqn;
 
     double ret = UnitAndConversion::instance().evalSimpleEquation(eqn);
+
+    qDebug() << "result=" << ret;
+
+    qDebug() << "********** End Calculation **********";
 
     var->currentData = ret;
 
