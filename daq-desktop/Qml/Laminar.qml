@@ -4,12 +4,15 @@ import QtCharts 2.3
 import QtQuick.Window 2.13
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Universal 2.0
+import QtQuick.Controls.Material 2.13
 
 Rectangle {
     id: page
     width: 1024; height: 800
     color: "#ffffff"
 
+    Material.theme: Material.Dark
+    Material.accent: Material.Purple
 
     ScrollView {
         id: mainScrollView
